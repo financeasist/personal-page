@@ -1,0 +1,36 @@
+{
+  "name": "Roman Hrupskyi",
+  "headline": "Lead Java Engineer | Senior Software Engineer",
+  "contact": {
+    "phones": ["+00 000 000 000"],
+    "email": "roman.grupskyi@gmail.com",
+    "location": "Krakow, Poland",
+    "availability": "Open to Remote & Hybrid Opportunities",
+    "links": [
+      { "label": "LinkedIn", "url": "https://linkedin.com/in/romangrupskiy" }
+    ]
+  },
+  "competencies": ["STUB — see docs/reference/cv-template-reference.pdf"],
+  "languages": [
+    { "name": "English", "level": "B2+" },
+    { "name": "Ukrainian", "level": "native" }
+  ],
+  "summary": ["STUB professional summary — content reconciliation is a specify open question (idea-brief §8)."],
+  "skills": [
+    { "category": "Frameworks / Libraries", "items": ["STUB"] }
+  ],
+  "education": [
+    { "degree": "Physics — Master degree", "institution": "Ivan Franko National University", "year": "2004" }
+  ],
+  "experience": [
+    {
+      "role": "STUB role",
+      "company": "STUB company",
+      "companyUrl": "https://example.com",
+      "dateRange": "2023 - 2026",
+      "description": "STUB — real experience entries are personal-landing feature work.",
+      "bullets": ["STUB bullet"],
+      "techStack": ["Java 21", "Spring Boot"]
+    }
+  ]
+}

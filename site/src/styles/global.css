@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+/* Design tokens — the first UI feature fleshes these out (architecture-map.md
+   "Frontend / UI foundation"). Navy accent matches the CV template. */
+@theme {
+  --color-navy: #2b3a55;
+  --color-navy-dark: #1f2a3f;
+  --color-ink: #1a1a1a;
+  --color-muted: #5b6472;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Print route (cv.astro) renders to A4 via headless Chromium at build time. */
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}

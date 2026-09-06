@@ -1,0 +1,66 @@
+---
+import { getCollection } from 'astro:content';
+import '../styles/global.css';
+
+// Stub print route — enough to build + render to PDF at build time.
+// The real cv.astro is a FIXED reproduction of
+// docs/reference/cv-template-reference.pdf (two-column, navy accent, A4);
+// only section data changes, never this layout. That reproduction is
+// personal-landing feature work, not scaffold.
+const profiles = await getCollection('profile');
+const { data: profile } = profiles[0];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{profile.name} — CV</title>
+  </head>
+  <body class="font-sans text-ink">
+    <article class="mx-auto max-w-[210mm] p-[15mm]">
+      <header class="bg-navy p-6 text-white">
+        <h1 class="text-2xl font-bold uppercase">{profile.name}</h1>
+        <p class="uppercase">{profile.headline}</p>
+      </header>
+
+      <section class="mt-6">
+        <h2 class="text-navy font-bold uppercase">Professional summary</h2>
+        {profile.summary.map((p) => <p class="mt-2">{p}</p>)}
+      </section>
+
+      <section class="mt-6">
+        <h2 class="text-navy font-bold uppercase">Experience</h2>
+        {
+          profile.experience.map((e) => (
+            <div class="mt-3">
+              <p class="font-semibold">
+                {e.role} — {e.company} <span class="text-muted">({e.dateRange})</span>
+              </p>
+              {e.description && <p>{e.description}</p>}
+              <ul class="list-disc pl-5">
+                {e.bullets.map((b) => (
+                  <li>{b}</li>
+                ))}
+              </ul>
+              {e.techStack.length > 0 && (
+                <p class="text-muted text-sm">Tech: {e.techStack.join(', ')}</p>
+              )}
+            </div>
+          ))
+        }
+      </section>
+
+      <section class="mt-6">
+        <h2 class="text-navy font-bold uppercase">Education</h2>
+        {
+          profile.education.map((ed) => (
+            <p class="mt-2">
+              {ed.degree}, {ed.institution} {ed.year && <span class="text-muted">({ed.year})</span>}
+            </p>
+          ))
+        }
+      </section>
+    </article>
+  </body>
+</html>

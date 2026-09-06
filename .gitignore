@@ -1,0 +1,25 @@
+# Node / Astro
+node_modules/
+site/dist/
+site/.astro/
+npm-debug.log*
+# generated CV PDF(s) — build artifacts, never committed (site is source of truth)
+site/dist/*.pdf
+*-CV.pdf
+Roman_Hrupskyi_*.pdf
+
+# Java / Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+*.class
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# Local env / secrets
+.env
+.env.*
+!.env.example

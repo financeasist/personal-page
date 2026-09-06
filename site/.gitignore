@@ -1,0 +1,13 @@
+# build output
+dist/
+.astro/
+
+# deps
+node_modules/
+
+# generated CV PDF(s) — build artifacts (postbuild)
+*.pdf
+
+# env
+.env
+.env.production

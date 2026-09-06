@@ -7,7 +7,7 @@ reflects_commit: "a647c5d"
 # This is a monorepo with two independent stacks; keys carry both, downstream skills narrow per feature.
 language: "java 21 (tracker); node 20 / astro 5 + typescript (site)"
 build_cmd: "site: npm --prefix site run build | tracker: ./mvnw -f tracker/pom.xml package"
-test_cmd: "site: npm --prefix site test | tracker: ./mvnw -f tracker/pom.xml test"
+test_cmd: "site: npm --prefix site run check | tracker: ./mvnw -f tracker/pom.xml test"
 lint_cmd: "site: npm --prefix site run lint | tracker: ./mvnw -f tracker/pom.xml spotless:check"
 migration_tool: "flyway (run by spring-boot on boot; tracker/src/main/resources/db/migration)"
 frontend: "astro 5 + tailwind v4"

@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import '../styles/global.css';
+
+// Stub landing page — enough to build + render the profile stub. The real
+// recruiter landing page (sections, components, tracked contact actions) is
+// personal-landing feature work.
+const profiles = await getCollection('profile');
+const { data: profile } = profiles[0];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{profile.name} — {profile.headline}</title>
+  </head>
+  <body class="font-sans text-ink">
+    <main class="mx-auto max-w-2xl p-8">
+      <h1 class="text-3xl font-bold text-navy">{profile.name}</h1>
+      <p class="text-muted">{profile.headline}</p>
+      <p class="mt-4">{profile.summary[0]}</p>
+      <p class="mt-6">
+        <a class="text-navy underline" href="/cv">View / download CV</a>
+      </p>
+    </main>
+  </body>
+</html>
