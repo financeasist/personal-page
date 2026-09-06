@@ -25,7 +25,7 @@ A recruiter opens one link, judges Roman's fit in ~10 seconds, taps to call / em
 | 4 | CV PDF route — `cv.astro` as a faithful reproduction of `docs/reference/cv-template-reference.pdf`, fed by the same `profile` collection; meaningfully-named PDF emitted at build | `architecture-map.md §Stack` (PDF generation) + `docs/adr/0004` | M | idea |
 | 5 | Labelled-link redirect — `/t/{label}` → 302 to the site, appends a visit event; `recruiter_link` rows seeded by hand, one per outreach | `idea-brief.md §7 Recommendation` + `idea-brief.md §5 Out of scope` | M | idea |
 | 6 | Cookieless event ingest — `/e` endpoint: page-view, contact-click (per channel), `cv_download`; city / referrer derivation; append-only | `idea-brief.md §7 Recommendation` | M | idea |
-| 7 | View notification — Telegram "page viewed" message to Roman when the page is opened | `idea-brief.md §7 Recommendation` + `architecture-map.md §Stack` (Notifications) | S | idea |
+| 7 | View notification — Telegram "page viewed" message to Roman on every visit; a labelled visit names the recruiter, an unlabelled one carries city / referrer | `idea-brief.md §7 Recommendation` + `architecture-map.md §Stack` (Notifications) | S | idea |
 | 8 | Site → tracker wiring — the inline `<script>` that beacons page-view + contact-click + `cv_download` to `/e`; the CV download proceeds regardless of the beacon (fire-and-forget) | `architecture-map.md §Frontend / UI foundation` (State / data-fetching) + `idea-brief.md §7 Recommendation` | S | idea |
 | 9 | Per-recruiter "why I fit you" intro → see [Not yet specified](#not-yet-specified) | `idea-brief.md §6 Risks` | fog | idea |
 
@@ -88,6 +88,7 @@ flowchart LR
   s2 -->|"template dictates schema fields; PDF needs real data"| s4
   s5 -->|"shared visit_event write path + domain record in tracker/"| s6
   s6 -->|"the ingested page-view event triggers the Telegram send"| s7
+  s5 -->|"labelled visits let the ping name the recruiter"| s7
   s3 -->|"the contact / Download-CV buttons must exist"| s8
   s6 -->|"the /e endpoint must exist to beacon to"| s8
 ```
@@ -101,7 +102,7 @@ flowchart LR
 | Wave | Steps | Zone per step (why parallel-safe) | Unlocks |
 |:---:|---|---|---|
 | 1 | 1 | whole repo `(new)` — runs solo, nothing to parallelise against | 2, 3, 4, 5, 6 |
-| 2 | 2 ∥ 5 | 2: `site/src/content/` `(new)` · 5: `tracker/` `(new)` — disjoint stacks | 3, 4, 6 |
+| 2 | 2 ∥ 5 | 2: `site/src/content/` `(new)` · 5: `tracker/` `(new)` — disjoint stacks | 3, 4, 6, 7 |
 | 3 | 3 ∥ 4 ∥ 6 | 3: `site/src/components/` + `site/src/pages/index.astro` `(new)` · 4: `site/src/pages/cv.astro` + print styles `(new)` · 6: `tracker/src/main/java/.../web` + `.../app` `(new)` — schema frozen in wave 2, so the two `site/` lanes touch only their own page files | 7, 8 |
 | 4 | 7 ∥ 8 | 7: `tracker/src/main/java/.../app` + `.../infra` `(new)` · 8: `site/` inline `<script>` + component props `(new)` — disjoint stacks | — |
 
