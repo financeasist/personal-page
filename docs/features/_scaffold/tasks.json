@@ -2,7 +2,7 @@
   "slug": "_scaffold",
   "mode": "greenfield-bootstrap",
   "reflects_map": "docs/architecture-map.md",
-  "smoke_test": "site builds (astro build) + cv.pdf is generated (postbuild) + tracker boots (@SpringBootTest context loads) + empty test suites run green + Flyway applies the initial migration against a Testcontainers Postgres",
+  "smoke_test": "site builds (astro build) + the named CV pdf is generated (postbuild) + tracker boots (@SpringBootTest context loads) + empty test suites run green + Flyway applies the initial migration against a Testcontainers Postgres",
   "tasks": [
     {
       "id": "S1",
@@ -65,7 +65,7 @@
       "layer": "scaffold",
       "deps": ["S2"],
       "acs": [],
-      "dod": "site/scripts/generate-pdf.mjs uses Playwright (Chromium) to serve site/dist, load /cv, and write dist/cv.pdf as A4 with printBackground:true; it is wired as the `postbuild` npm script so `npm --prefix site run build` yields dist/cv.pdf; the output opens as a valid 1-2 page PDF; playwright is a devDependency; cv.pdf is gitignored",
+      "dod": "site/scripts/generate-pdf.mjs uses Playwright (Chromium) to serve site/dist, load /cv, and write a MEANINGFULLY-NAMED pdf into dist/ (derived from the profile name + headline, e.g. Roman-Hrupskyi-Lead-Java-Engineer-CV.pdf — not cv.pdf) as A4 with printBackground:true; wired as the `postbuild` npm script so `npm --prefix site run build` yields the named pdf in dist/; output opens as a valid PDF; playwright is a devDependency; generated pdf(s) are gitignored",
       "files_hint": ["site/scripts/generate-pdf.mjs", "site/package.json"]
     },
     {

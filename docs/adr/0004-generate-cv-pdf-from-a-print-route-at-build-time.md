@@ -40,7 +40,8 @@ section is editable; the template and layout are not a design decision left open
 
 1. **Print route + headless Chromium at build time** — `site/src/pages/cv.astro` consumes the same
    `profile` content collection with a print/CV layout; `site/scripts/generate-pdf.mjs` (Playwright)
-   renders it to `dist/cv.pdf` in a `postbuild` step; CI installs Chromium.
+   renders it into `dist/` under a meaningful name (e.g. `Roman-Hrupskyi-Lead-Java-Engineer-CV.pdf`,
+   not `cv.pdf`) in a `postbuild` step; CI installs Chromium.
 2. **Typst/LaTeX template from the same YAML** — render the content data through a separate Typst
    template. Excellent typography, lightweight, but a second layout language and the CV design lives
    apart from the web components.

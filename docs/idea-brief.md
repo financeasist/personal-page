@@ -3,6 +3,7 @@ status: Draft
 owner: "Roman (roman.grupskyi@gmail.com)"
 updated_at: "2026-09-06"
 depth: "medium"
+# §8 open questions extended by survey 2026-09-06 (CV-download scope, download-button wiring, PDF filename); one hosting question resolved.
 ---
 
 # Idea brief — personal-landing
@@ -52,7 +53,10 @@ Build one static, fast landing page whose content lives in a single structured f
 - Which CV variant is the base for the page — the three-page "Classic" version? — owner: Roman
 - How should the iGaming / EveryMatrix experience be framed for gambling-averse employers? — owner: Roman
 - What are the corrected employment dates, and how is the 2004→2017 sales / project-management period presented (shown, summarised, or omitted)? — owner: Roman
-- Where is the page hosted, and does that host also run the tracking service or is it a separate deployment? — owner: Roman / design stage
+- ~~Where is the page hosted, and does that host also run the tracking service or is it a separate deployment?~~ — **resolved by `survey` (2026-09-06):** site on GitHub Pages, tracker on Fly.io (`waw`), Postgres on Supabase — separate deployments in one monorepo. See `docs/architecture-map.md` + `docs/adr/0002`–`0003`.
 - Is salary or rate expectation shown on the page? — owner: Roman
 - Is informal storage of named-recruiter visit logs acceptable as-is, or is a retention / notice line needed? — owner: Roman
 - Which contact channel is primary — the CV lists two phone numbers plus email plus LinkedIn? — owner: Roman
+- Who can download the CV, and is it gated? Recommendation: **public, ungated** — a form/email wall works against the ten-second scan, and the file is public on static hosting regardless. — owner: Roman / specify
+- Does the "Download CV" button route through the tracking service (so a download is a first-class event tied to the recruiter label) or is a plain link + client-side event enough? — owner: specify / design
+- What is the downloaded file named? Not `cv.pdf` — something specific, e.g. `Roman-Hrupskyi-Lead-Java-Engineer-CV.pdf`. Exact form depends on the canonical surname spelling (first open question above). — owner: Roman

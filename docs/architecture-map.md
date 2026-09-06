@@ -100,10 +100,12 @@ C4Container
   `.astro` components in `site/src/components/`; zero client JS by default (one small inline script
   posts contact-click events).
 - **PDF generation:** `site/src/pages/cv.astro` is a print route consuming the same `profile`
-  content; `site/scripts/generate-pdf.mjs` (Playwright, Chromium) renders it to `dist/cv.pdf` in the
-  `build` script's `postbuild` hook. A CV content change is a content-collection edit only — never a
-  hand-edited PDF, and never a `cv.astro` layout change (the layout is locked to
-  `docs/reference/cv-template-reference.pdf`).
+  content; `site/scripts/generate-pdf.mjs` (Playwright, Chromium) renders it in the `build` script's
+  `postbuild` hook. The **output filename is meaningful, not `cv.pdf`** — derived from the profile's
+  name + headline, e.g. `Roman-Hrupskyi-Lead-Java-Engineer-CV.pdf` (exact form pending the canonical
+  surname decision — idea-brief §8). The route stays `/cv`; the download link points at the named
+  file. A CV content change is a content-collection edit only — never a hand-edited PDF, and never a
+  `cv.astro` layout change (locked to `docs/reference/cv-template-reference.pdf`).
 
 ## Datastores
 
