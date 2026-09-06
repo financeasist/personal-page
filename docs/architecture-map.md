@@ -168,6 +168,14 @@ C4Container
   bullets + tech-stack line).
 - **Deferred: browser admin panel.** v1 content is file + git only. The tracker must not grow into
   that backend (idea-brief §5).
+- **Deferred but foundation-compatible: multi-language.** v1 is English-only (idea-brief §5). Adding
+  locales later is additive, not a rewrite: enable Astro `i18n` routing, make the `profile`
+  content-collection entry per-locale (keep the Zod schema single-shaped so this stays non-breaking),
+  parameterize `index.astro` / `cv.astro` by locale, and loop the PDF generator over locales
+  (`cv.pdf`, `cv-uk.pdf`). Tracker is locale-agnostic — optionally add a `locale` column to
+  `visit_event` via a later migration. The real cost is content upkeep across N languages, not the
+  wiring. **Implication for now:** keep the schema and templates locale-clean (no English strings
+  hard-coded in components that aren't content-driven).
 
 ## Reconciliation with the authored architecture doc
 
