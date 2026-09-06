@@ -1,6 +1,6 @@
 ---
 status: Living
-updated_at: "2026-09-06"
+updated_at: "2026-09-07"
 ---
 
 # Domain Context — personal-landing
@@ -15,7 +15,7 @@ and win on conflict. NO implementation detail here — only domain words and the
 - **Recruiter** — a technical recruiter or hiring manager evaluating Roman for a senior / lead Java or backend role; the landing page's primary, anonymous audience. NOT an authenticated user (the page is public, no login) and NOT a recruitment agency as an organisation.
 - **Roman** — the site owner: authors profile content via git and reads the visit analytics. The page's secondary actor (editor / analytics reader), never a page visitor in the KPI sense.
 - **Profile content** — the single typed content-collection entry (`site/src/data/profile/*.json`, Zod schema in `site/src/content/config.ts`) that BOTH the landing page and the CV route render from. NOT page-specific copy embedded in components, and NOT a hand-edited PDF.
-- **Availability block** — the compact panel of hiring-relevant status: availability status (carries the remote-work stance), location, and optional work authorisation. NOT a calendar or a booking widget.
+- **Availability block** — the compact panel of hiring-relevant status: availability status (carries the remote-work / relocation stance), location, notice period, and optional work authorisation. NOT a calendar or a booking widget. (Field list per ADR-0005.)
 - **Contact action** — one above-the-fold tap target (phone, email, LinkedIn, Download CV) that opens the corresponding channel and fires a tracked click event. On the landing page the underlying phone number / email / URL is never shown as text — the action is the only way to reach it (the CV PDF is exempt). NOT a contact form and NOT a message-sending feature.
 - **Above-the-fold scan** — everything a Recruiter can see and act on without scrolling, designed for a ~20-second fit judgement. NOT the whole page — depth (experience, projects) sits below it. The reference viewports for "fits above the fold" are 1280×800 (laptop) and 390×844 (phone).
 - **Labelled link** — a per-recruiter URL (`/t/{label}`) Roman sends in outreach; the tracker 302-redirects it to the site and records who opened it. NOT a public share link and NOT a tracking cookie.
@@ -24,19 +24,21 @@ and win on conflict. NO implementation detail here — only domain words and the
 - **Headline** — the short pipe-separated positioning line under Roman's name (currently "Senior Java Engineer | Lead Backend Engineer"); a required Profile field, also the source string for the CV PDF filename. NOT the page `<title>` and NOT a full sentence.
 - **Tagline** — an optional single sentence shown below the **Headline** in the hero. NOT required, NOT the Headline, NOT a summary paragraph.
 - **Positioning block** — an optional short paragraph (two to three sentences, length-capped ~280 chars) shown in the hero, giving a fuller sense of Roman's focus than the **Tagline**. Landing-page only. NOT the **Headline**, NOT the **Tagline**, NOT the CV `summary` array (a separate field rendered only on the CV route).
-- **Top stack** — a curated list of at most eight technologies shown in the above-the-fold scan, chosen by Roman in the Profile content. NOT the full skills matrix (that lives below the fold and in the CV).
-- **Experience timeline** — the below-the-fold list of Roman's roles from 2017 on, most-recent first, each with company, date range, and contribution. NOT the pre-2017 **earlier background** line, which is a single summary sentence, not a timeline entry.
-- **Selected project** — one of three-to-five flagship pieces of work called out below the fold with an **impact statement**. NOT the same as an **Experience timeline** role (a project is curated and impact-led; a role is chronological).
-- **Impact statement** — the one- or two-line "what changed because of Roman's work" attached to a **Selected project**, quantified where a real number exists. NOT a responsibilities list and NOT a job description.
+- **Top stack** — a curated list of four to eight technologies shown in the above-the-fold scan, chosen by Roman in the Profile content. Build-enforced: min 4, max 8. NOT the full skills matrix (deferred to v2; it also lives in the CV).
+- **Experience timeline** — _v2 (cut from the v1 landing page 2026-09-07)._ The below-the-fold list of Roman's roles from 2017 on, most-recent first, each with company, date range, and contribution. NOT the pre-2017 **earlier background** line, which is a single summary sentence, not a timeline entry.
+- **Selected project** — _v2 (cut from the v1 landing page 2026-09-07)._ One of three-to-five flagship pieces of work called out below the fold with an **impact statement**. NOT the same as an **Experience timeline** role (a project is curated and impact-led; a role is chronological).
+- **Impact statement** — _v2 (with **Selected project**)._ The one- or two-line "what changed because of Roman's work" attached to a **Selected project**, quantified where a real number exists. NOT a responsibilities list and NOT a job description.
 
 ## Invariants
 
-- The landing page and the CV PDF always render from the same **Profile content** entry — they can never present contradictory facts.
+- The landing page and the CV must present one reconciled professional history — same surname, headline, and dates. This is **structurally guaranteed** once the CV is generated from the **Profile content** entry (the target — roadmap step 4 / v2). In **v1** the CV is a committed static PDF, so the guarantee is held by a **manual page-vs-CV parity check at each release and content edit** (accepted debt; see spec §1, §7, §8).
 - The landing page never exposes data outside the Recruiter's need-to-know: salary / rate expectations and exact home address are never shown, and phone / email / LinkedIn are reachable only through a **Contact action**, never as visible text. This is a **landing-page** rule only — the generated CV PDF renders the contact details as visible text by design (a CV without them is useless). Same **Profile content**, two renderers, two exposure rules.
-- Components carry no hard-coded English in non-content-driven markup — copy comes from **Profile content** or is structural only (keeps multi-language additive).
+- Components carry no hard-coded English in non-content-driven markup — copy comes from **Profile content** or is structural only (keeps multi-language additive). **"Structural only"** = fixed UI chrome that never names Roman's data: section headings, control captions ("Download CV"), aria labels, visually-hidden helper text. Anything that names or describes Roman's specifics — including the per-phone-line labels ("Call — Poland") — is **Profile content**, not a component string, and not derived from the data (e.g. not inferred from a country code).
 
 ## Out of scope
 
 - Browser-based content admin — v1 content is file + git only (idea-brief §5).
 - Identifying anonymous visitors by name / company — "who" comes only from a **Labelled link** (idea-brief §5).
 - Blog / articles / personal-life content — deferred to v2 (roadmap step 9 territory).
+- Below-the-fold depth on the v1 landing page — the **Experience timeline**, **Selected project**s, the pre-2017 earlier-background line, the full skills matrix, and recommendations are all v2 (cut 2026-09-07; spec §1 / §3). v1 is the above-the-fold scan only.
+- CV generation on the v1 landing page — v1 links to a committed static PDF; `cv.astro` build-time generation is v2 (spec §8 follow-up; amends ADR-0004).

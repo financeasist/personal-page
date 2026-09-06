@@ -2,8 +2,8 @@
 status: Draft
 owner: "Roman (Architect / Tech Lead)"
 reviewers: ["Roman"]
-updated_at: "2026-09-06"
-feature_size: "M"
+updated_at: "2026-09-07"
+feature_size: "S"
 target_surfaces: [web-frontend]  # single static web front-end; read (never re-derived) by api/sequences/tasks/plan-tests/review → _shared/surfaces.md
 ---
 
