@@ -1,305 +1,291 @@
 ---
 status: Draft
-owner: "<Architect / Tech Lead>"
-reviewers: ["<Tech Lead>", "<Security Lead>"]
-updated_at: "<today YYYY-MM-DD>"
-feature_size: "<from .size: XS/S/M/L/XL>"
-target_surfaces: []  # filled in §4 — subset of: backend-service | web-frontend | mobile-app | desktop-app | cli | worker | library-sdk. Read (never re-derived) by api/sequences/tasks/plan-tests/review → _shared/surfaces.md
+owner: "Roman (Architect / Tech Lead)"
+reviewers: ["Roman"]
+updated_at: "2026-09-06"
+feature_size: "M"
+target_surfaces: [web-frontend]  # single static web front-end; read (never re-derived) by api/sequences/tasks/plan-tests/review → _shared/surfaces.md
 ---
 
-# Software Architecture Document — <slug>
+# Software Architecture Document — personal-landing
 
-<!-- 12 Arc42 sections. Empty section → <!-- N/A: <one-line reason> -->. -->
-<!-- C4 Context (L1) lives inline in §3. C4 Container (L2) lives inline in §5. -->
-<!-- Numbers in §10 come VERBATIM from spec.md §6 NFR — no inventing, no rounding. -->
+<!-- 12 Arc42 sections. C4 Context (L1) inline in §3, C4 Container (L2) inline in §5.
+     Numbers in §10 come VERBATIM from spec.md §6 NFR. -->
 
 ## 1. Introduction and goals
 
-<!-- 🎯 Why: durable memory of «what + the three dominant qualities + who cares». A year from
-     now nobody recalls which three qualities were critical for this system.
-     📋 Write: 1 ¶ intent + 3 lines of top-3 quality goals + a stakeholders table.
-     ¶4 is the override slot — critic `Override` resolutions emit «Decision override: <headline>
-     — rationale: <reason>» bullets here so downstream skills see the deliberate choice. -->
-
-**Intent.** <One paragraph from spec §2 Goals — what we're building and for whom.>
+**Intent.** Build one static landing page (`site/src/pages/index.astro`) that lets a **Recruiter** judge Roman's fit in a ten-second above-the-fold scan and reach him through phone, email, LinkedIn, or a CV download in one tap, and lets **Roman** publish every change by committing a single content file. The page renders entirely from the one typed **Profile content** entry that also feeds the CV print route (roadmap step 4). This feature is roadmap step 3; the stack (Astro 5 static site, Tailwind v4, typed content collection, zero client JS) is fixed upstream by `docs/architecture-map.md` and ADR-0001–0004.
 
 **Top-3 quality goals (1-liners; full scenarios in §10):**
 
-1. <e.g. "Availability under partial failure of a downstream module">
-2. <e.g. "Read performance for the dashboard under data-scale growth">
-3. <e.g. "Recoverability with <30 min RTO">
+1. **Above-the-fold render speed** — the scan is usable within 2.5 s on a mid-tier phone over 4G.
+2. **Never ship a broken or incomplete page** — missing or malformed Profile content fails the build; nothing incomplete deploys.
+3. **Zero-JavaScript, accessible delivery** — the page and every contact action work with no client script, at ≥ 95 Lighthouse accessibility.
 
 **Stakeholders.**
 
 | Role | Interest | Sign-off owner? |
 |---|---|---|
-| <author role from glossary> | <feature usage> | No |
-| <consumer role from glossary> | <read usage> | No |
-| Tech Lead | SAD approval | Yes |
+| Recruiter | Opens the link, scans fit, makes contact | No |
+| Roman | Authors the Profile content, owns the page, reads analytics later | Yes |
+| Tech Lead (Roman) | SAD approval | Yes |
 
 <!-- Decision overrides (¶4) — populated by the critic resolution loop, empty otherwise. -->
 
 ## 2. Constraints
 
-<!-- 🎯 Why: §4 strategy only works when §2 has fixed WHAT IS ALREADY FIXED — stack, versions,
-     deadline, regulatory. This is an input, not an output.
-     📋 Write: four blocks — Technical / Organisational / Conventions / Regulatory.
-     📌 Pin versions («<datastore> 18», not «<datastore>»); «Q3 deadline — hard», not «ideally».
-     Never N/A — every feature inherits at least Conventions + Technical. -->
-
 **Technical.**
-- <Language + version>
-- <Framework(s) + version>
-- <Datastore(s) + version>
-- <Architecture convention — e.g. the layering style from the project convention file>
+- Node 20+; Astro 5 (static output); TypeScript; Tailwind v4 with `@theme` tokens in `site/src/styles/global.css`.
+- Content in a typed Astro content collection — `site/src/data/profile/*.json`, Zod schema in `site/src/content/config.ts`. One `profile` entry is the single source of truth for the landing page **and** the CV route.
+- Zero client JavaScript by default (ADR-0001); the click-tracking beacon is roadmap step 8, not this feature.
+- The CV print route (`site/src/pages/cv.astro`) layout is locked to `docs/reference/cv-template-reference.pdf` (ADR-0004) — this feature does not touch it, but shares the content entry and the CV-filename helper with it.
+- Build/test/lint: `npm --prefix site run build` / `check` (`astro check`) / `lint`.
 
 **Organisational.**
-- <Effort budget — e.g. 3 person-weeks>
-- <Deadline — e.g. 2026-Q3 hard>
-- <Team composition>
+- Solo developer (Roman). Effort budget: about one week.
+- Deadline: "live within the week" — soft; ship-fast beats ship-complete.
+- Roadmap step 4 (CV PDF route) is sequenced to land together with this feature.
 
 **Conventions.**
-- <Link to the project's convention file>
-- <Naming, ID strategy, error-handling pattern>
+- `CLAUDE.md` (repo root) + `docs/architecture-map.md` §Conventions.
+- Hand-rolled `.astro` components in `site/src/components/`; no component kit.
+- Locale-clean: no hard-coded English in non-content-driven markup — copy comes from Profile content or is structural.
 
 **Regulatory / external.**
-- <e.g. data-retention / deletion behaviour per ADR-NNNN>
-- <e.g. applicable compliance controls, or N/A with a reason>
+- EU data protection: the only personal data is Roman's own, self-published. No visitor data is collected by this feature (tracking is roadmap steps 6–8). Security review N/A (spec §6.1).
 
 ## 3. Context and scope
 
-<!-- 🎯 Why: draws the SYSTEM BOUNDARY — who talks to it from outside, where the trust zone ends.
-     Without §3, §5 and §8 (authorization) blur — unclear what's «inside» vs «outside».
-     📋 Write: 2–3 sentences of business context + an external-systems table + a C4Context block.
-     📌 «External: none (deliberate, no third-party in v1)» is itself a decision worth stating.
-     Trust boundary — the line past which you don't trust data without checking it.
-     Never N/A — greenfield still draws the planned actors + external systems. -->
+The landing site is a public, statically-hosted page. A **Recruiter** reaches it through a link Roman puts in his CV, LinkedIn, or outreach email (or, later, a labelled `/t/{label}` redirect — roadmap step 5, not part of this feature) and interacts with it entirely client-side: reading, scrolling, and activating contact actions that hand off to the recruiter's own phone, mail client, or browser. **Roman** changes what the page shows only by editing the Profile content entry and committing; GitHub Actions builds and deploys. There is no runtime backend and no external service call from the delivered page. The trust boundary is the git repository: the only input that shapes the page is content Roman commits, validated at build time.
 
-<Business context in 2–3 sentences. What the system does for whom.>
-
-<!-- brownfield: <one-line scan summary> (or «N/A — greenfield repo» if no source existed) -->
+<!-- brownfield: the Astro site skeleton, the `profile` content collection + Zod schema, `index.astro`/`cv.astro` stubs, and the GitHub Pages deploy workflow already exist (scaffold, commit b1583df). This feature fills them in. `docs/architecture-map.md` reflects_commit a647c5d (pre-scaffold) but describes the same target baseline. -->
 
 **External systems (in / out):**
 
 | Actor or system | Type | Interaction |
 |---|---|---|
-| <author role> | Person | <what they do> |
-| <external service> | System (internal/external) | <interaction> |
-| <identity provider> | System (external) | <provides auth tokens> |
+| Recruiter | Person | Opens the page over HTTPS; reads; activates contact actions (all client-side) |
+| Roman | Person | Edits the Profile content entry, commits to the repo |
+| GitHub Actions | System (external) | Builds the site on push to `main`, renders the CV PDF, deploys |
+| GitHub Pages | System (external) | Serves the static page over HTTPS |
+| Recruiter's device apps | System (external) | Dialer, mail client, browser — receive the contact-action hand-offs (`tel:` / `mailto:` / new tab / file download) |
 
-**C4 Context (L1):** <!-- syntax → references/c4-mermaid-syntax.md. Real names, no <placeholder> stubs. -->
+**C4 Context (L1):**
 
 ```mermaid
 C4Context
-    title <feature> — System Context
+    title personal-landing — System Context
 
-    Person(actor, "<Actor role>", "<intent>")
-    System(app, "<Our system>", "<one-sentence description>")
-    System_Ext(ext, "<External system>", "<one-sentence description>")
+    Person(recruiter, "Recruiter", "Scans Roman's fit in ~10s, wants one-tap contact")
+    Person(roman, "Roman", "Edits the Profile content entry and commits")
 
-    Rel(actor, app, "<interaction>", "<protocol>")
-    Rel(app, ext, "<interaction>", "<protocol>")
+    System(site, "Landing site", "Static Astro page on GitHub Pages, rendered from one Profile content entry")
+
+    System_Ext(actions, "GitHub Actions", "Builds, validates content, renders the CV PDF, deploys on push to main")
+    System_Ext(pages, "GitHub Pages", "Serves the static page over HTTPS")
+    System_Ext(devices, "Recruiter device apps", "Dialer / mail client / browser that receive contact hand-offs")
+
+    Rel(roman, site, "Edits content, commits", "git")
+    Rel(site, actions, "Built and deployed by", "CI on push")
+    Rel(actions, pages, "Publishes static output to", "deploy")
+    Rel(recruiter, pages, "Reads the page", "HTTPS")
+    Rel(recruiter, devices, "Contact action opens a channel", "tel / mailto / https / download")
 ```
 
 ## 4. Solution strategy
 
-<!-- 🎯 Why: the 3–4 STRATEGIC PILLARS every ADR grows from. Without §4 each ADR looks random —
-     there's no umbrella. ⭐ The densest section — the blast-radius gate fires almost always here
-     (decisions are irreversible + multi-module).
-     📋 Write: 3–4 choices; each a heading + 2–3 sentences of rationale.
-     📌 «Store content as a table of typed blocks» is a pillar — ADR-0001 grows from it. -->
+**Target surface:** `web-frontend` — one statically-generated web page. No backend, no API, no other surface. (The CV PDF route is a sibling feature; the tracker is a separate service.) **UI architecture:** static site generation (SSG) — the page is fully rendered at build time; there is no SPA, no hydration, no client router. This is inherited from ADR-0001, restated here as this feature's UI-architecture decision; it does not cross the blast-radius gate (already locked upstream) so it is recorded inline, not as a new ADR.
 
 **Top strategic choices (the seeds for ADRs):**
 
-1. **<e.g. Module isolation through events>** — <2–3 sentences citing quality goals + constraints>.
-2. **<e.g. Single-store persistence>** — <2–3 sentences>.
-3. **<e.g. Server-rendered read side>** — <2–3 sentences>.
+1. **One Profile content entry, extended with landing-specific structured fields** — the landing page needs data the CV template does not carry (a `tagline`, a curated `topStack`, `selectedProjects` with impact, a structured availability block, labelled phone lines, an `earlierBackground` line). These are added as fields on the same `profile` entry rather than a separate collection or derived implicitly from CV fields, so the "one source, two renderers" invariant holds and nothing drifts. → **ADR-0005**.
+2. **Contact details are actionable-only, in link attributes, zero client JavaScript** — phone / email / LinkedIn never render as visible text on the page; each is a plain link (`tel:` / `mailto:` / `https:` new tab) and the phone chooser is a native `<details>` disclosure. No script assembles or obfuscates the values in v1. → **ADR-0006** (resolves spec §8 Q3).
+3. **Content invariants enforced at build time in the content-collection schema** — required fields, all four contact channels present, a non-placeholder impact statement per selected project, non-overlapping experience dates: expressed as Zod schema rules (`.refine`) so `astro check` / the build fails and names the offending field. No incomplete page can deploy. → **ADR-0007**.
 
-Each tactical decision in later sections should trace to one of these seeds. Tactical decisions that *contradict* a strategic choice are red flags — surface them in §11.
+Tactical decisions (hand-rolled components, the shared CV-filename helper, image optimisation via `astro:assets`) trace to these seeds and to the repo conventions; they are recorded in §5 / §8, not as ADRs.
 
 ## 5. Building block view
 
-<!-- 🎯 Why: INTERNAL DECOMPOSITION — modules, containers, datastores. The static topology: who
-     may talk to whom. Without §5, §6 (the flows) has no vocabulary of participants.
-     📋 Write: 1 ¶ on the style (layered / hexagonal / clean / event-driven) + a folder tree + a
-     C4Container block.
-     📌 Draw ONE Container per declared `target_surface` (frontmatter): a fullstack
-     [backend-service, web-frontend] = a backend-API container + a web/SPA container; a
-     [backend-service, mobile-app] = the API + the mobile app. The Container(web, …) line below is
-     just one surface's container — swap/add per what was declared in §4. → _shared/surfaces.md
-     📌 e.g. «web app, content API, media worker, datastore, object store, CDN». -->
-
-<One paragraph: layered / hexagonal / clean / event-driven, and why.>
+Layered by responsibility within a single static-site build: **content** (the typed entry + schema + invariants), **presentation** (page + hand-rolled components), **shared helpers** (CV filename, content-invariant checks), **assets** (the optimised headshot). There is no domain/app/infra split — nothing runs at request time.
 
 **Internal decomposition:**
 
 ```
-<e.g. modules/<feature>/>
-├── domain/       <entities + sentinel errors>
-├── app/          <use cases / services>
-├── infra/        <repository + integration impl>
-├── ports/        <handlers, DTOs, error mapping>
-└── wiring        <self-wiring entry point>
+site/
+├── src/
+│   ├── data/profile/roman.json         one Profile content entry (single source of truth)
+│   ├── content/config.ts               Zod schema + .refine() content invariants  (ADR-0007)
+│   ├── pages/
+│   │   ├── index.astro                 the landing page — THIS feature
+│   │   └── cv.astro                    CV print route — roadmap step 4 (shares content + helper)
+│   ├── components/
+│   │   ├── Section.astro               below-the-fold section wrapper
+│   │   ├── Hero.astro                  above-the-fold: headshot, name, headline, tagline
+│   │   ├── AvailabilityBlock.astro     status / location / remote / notice / work auth
+│   │   ├── ContactActions.astro        the four labelled controls (ADR-0006); each carries a stable data-* hook for step 8
+│   │   ├── PhoneChooser.astro          native <details> — two labelled call controls
+│   │   ├── ExperienceTimeline.astro    most-recent-first roles
+│   │   ├── SelectedProjects.astro      3–5 project entries
+│   │   └── ProjectCard.astro           one project + impact statement
+│   ├── lib/
+│   │   ├── cv-filename.ts              name + headline → "Roman-Hrupskyi-…-CV.pdf"  (shared with cv.astro + generate-pdf.mjs)
+│   │   └── content-checks.ts           placeholder/overlap helpers used by config.ts refinements
+│   ├── assets/roman.jpg                optimised headshot (via astro:assets)
+│   └── styles/global.css               Tailwind v4 @theme tokens
+└── scripts/generate-pdf.mjs            roadmap step 4 — consumes cv.astro + cv-filename.ts
 ```
 
-**C4 Container (L2):** <!-- syntax → references/c4-mermaid-syntax.md. Real names, no <placeholder> stubs. ONE Container per declared target_surface (frontmatter); the web container below is one example surface. -->
+**C4 Container (L2):**
 
 ```mermaid
 C4Container
-    title <feature> — Containers
+    title personal-landing — Containers
 
-    Person(actor, "<Actor>")
+    Person(recruiter, "Recruiter")
+    Person(roman, "Roman")
 
-    Container_Boundary(app, "<Our system>") {
-        Container(web, "<Web/UI>", "<technology>", "<purpose>")
-        Container(api, "<API/handler>", "<technology>", "<purpose>")
-        ContainerDb(db, "<Datastore>", "<technology>", "<purpose>")
+    Container_Boundary(build, "Site build (GitHub Actions)") {
+        Container(content, "Profile content + schema", "JSON + Zod (astro:content)", "One typed entry; build-time invariant checks")
+        Container(astro, "Astro static build", "Astro 5 / Tailwind v4", "Renders index.astro (+ cv.astro) to static HTML/CSS/img")
+        Container(pdf, "CV PDF generator", "Playwright / Chromium (postbuild)", "roadmap step 4 — renders cv.astro to a named PDF")
     }
 
-    System_Ext(ext, "<External>", "<purpose>")
+    Container(pages, "Static page", "HTML + CSS + images on GitHub Pages", "The delivered landing page — zero JavaScript")
 
-    Rel(actor, web, "<interaction>", "<protocol>")
-    Rel(web, api, "<calls>")
-    Rel(api, db, "<reads/writes>", "<driver>")
-    Rel(api, ext, "<emits>", "<protocol>")
+    System_Ext(devices, "Recruiter device apps", "Dialer / mail client / browser")
+
+    Rel(roman, content, "Edits + commits", "git")
+    Rel(content, astro, "Validated content feeds the render")
+    Rel(astro, pdf, "cv.astro + shared filename helper")
+    Rel(astro, pages, "Publishes static output", "deploy")
+    Rel(recruiter, pages, "Reads the page", "HTTPS")
+    Rel(recruiter, devices, "Contact action opens a channel", "tel / mailto / https / download")
 ```
 
 ## 6. Runtime view
 
-<!-- 🎯 Why: the RUNTIME FLOW of 1–2 critical scenarios — who talks to whom, when, in what order.
-     Without §6, §5 is just boxes with no life.
-     📋 Write: a Mermaid sequenceDiagram. Participants are names from §5 (don't invent new ones).
-     Messages are semantic («saves a draft»), NO HTTP verbs / paths / status codes — endpoint-level
-     sequences arrive at the `api` stage.
-     📌 e.g. «author → web: composes draft → web → content API: save». Seed the primary flow(s) here;
-     the `sequences` stage then covers every §5 AC (no cap). Never N/A for M+; XS/S keeps ≥1 happy-path flow. -->
-
-**Critical flow 1: <flow name>**
+**Critical flow 1: Publish a content change**
 
 ```mermaid
 sequenceDiagram
-    actor Actor
-    participant Web
-    participant Service
-    participant Store
-    Actor->>Web: <action>
-    Web->>Service: <call>
-    Service->>Store: <write>
-    Store-->>Service: ok
-    Service-->>Web: result
-    Web-->>Actor: confirmation
+    actor Roman
+    participant Repo as Git repo
+    participant CI as GitHub Actions
+    participant Content as Profile content + schema
+    participant Build as Astro build
+    participant Pages as GitHub Pages
+    Roman->>Repo: commit an edit to roman.json
+    Repo->>CI: push to main
+    CI->>Content: validate (schema + invariants)
+    alt content invalid
+        Content-->>CI: fail, naming the field
+        CI-->>Roman: build fails; nothing deploys
+    else content valid
+        Content-->>Build: typed content
+        Build->>Build: render index.astro (+ cv.astro, postbuild PDF)
+        Build->>Pages: deploy static output
+        Pages-->>Roman: page live
+    end
 ```
 
-**Critical flow 2: <e.g. async event propagation>** — <if applicable, otherwise N/A>.
+**Critical flow 2: Recruiter visit and contact**
+
+```mermaid
+sequenceDiagram
+    actor Recruiter
+    participant Pages as GitHub Pages
+    participant Page as Landing page (static)
+    participant Device as Recruiter device app
+    Recruiter->>Pages: open the shared link
+    Pages-->>Recruiter: static HTML + CSS + headshot (no JS)
+    Recruiter->>Page: read the above-the-fold scan
+    Recruiter->>Page: activate a contact action
+    Page->>Device: hand off (tel: / mailto: / new tab / file download)
+    Device-->>Recruiter: dialer / mail / LinkedIn / saved PDF
+```
+
+The `sequences` stage expands these into one flow per critical §5 AC.
 
 ## 7. Deployment view
 
-<!-- 🎯 Why: the TOPOLOGY DevOps must know without reading the deploy charts — how many replicas,
-     where the background worker lives, AT WHAT NUMBERS we scale.
-     📋 Write: 2–3 sentences on topology + monitoring + concrete threshold numbers.
-     📌 e.g. «500 authors → partition by quarter» (not «we'll think about scale later»).
-     🎯 N/A allowed for XS/S that reuses an existing deployment unit with no change.
-     Deployment-diagram scaffold → templates/deployment.md. -->
-
-<Topology in 2–3 sentences. Where it runs, replicas, scaling thresholds.>
+Reuses the scaffold's deployment unit unchanged: GitHub Actions builds `site/` on push to `main` (`npm --prefix site run build` = `astro build` + the `postbuild` Playwright/Chromium PDF step) and deploys the static output to GitHub Pages. `astro build` validates the `profile` content collection against the Zod schema **and its `.refine()` invariants** and fails on any violation — this is what gates the deploy (ADR-0007). `astro check` (type-checking) and `astro` lint run as separate CI steps on pull requests only (`ci.yml`), not on the deploy path; `tasks` should add `npm run check` + the invariant unit tests to `deploy.yml` so a direct push to `main` is also type-gated. No server, no container, no datastore for this feature. The build job already installs Chromium for the PDF (scaffold).
 
 **Monitoring:**
-- <Metrics — e.g. `<metric_name>`>
-- <Alerts — e.g. «worker lag > 10 min → page on-call»>
-- <Tracing — e.g. spans on the request boundary>
+- No runtime monitoring — the page is static files on a CDN.
+- Build health: the GitHub Actions run is the signal; a red build blocks the deploy.
+- Lighthouse (LCP, weight, accessibility) is run manually pre-launch and after significant content changes; wiring it into CI is a later improvement (§11).
 
 **Scaling thresholds:**
-- <e.g. comfortable in one table up to N rows/year>
-- <e.g. partition by quarter above N rows/year>
-
-<!-- For XS/S with no deployment change: <!-- N/A: reuses existing deployment unit, no infra change --> -->
+- Static hosting on GitHub Pages — effectively unbounded read traffic; no scaling action for this feature at any realistic recruiter volume.
+- Page weight budget ≤ 500 KB transferred (§10) — the headshot is the only large asset and is optimised at build (§8).
 
 ## 8. Crosscutting concepts
 
-<!-- 🎯 Why: CROSS-CUTTING PATTERNS spanning several modules: logging, errors, authorization, ID
-     strategy, events, caching. ⭐ The second-densest section. A pattern inside one module is NOT
-     here; a project-wide convention belongs in the convention file.
-     📋 Write: a table — concept / convention / where defined. One row per concept.
-     📌 e.g. «sortable time-based IDs generated in the app layer» as a default from the convention file. -->
-
 | Concept | Convention | Where defined |
 |---|---|---|
-| Logging | <e.g. structured, fields `module=<name>`> | <convention file §X or here> |
-| Authentication | <e.g. token-based via middleware> | <convention file §X> |
-| Error handling | <e.g. domain sentinel → ports error mapping → JSON> | <convention file §X> |
-| ID strategy | <e.g. sortable time-based ID in the app layer> | <convention file §X> |
-| Internationalisation | <e.g. N/A, single language> | — |
-| Observability | <e.g. tracing on the request boundary> | — |
-| Events | <module-specific patterns, if any> | <here> |
+| Single source of truth | The landing page and the CV route both render from one `profile` entry; no page-specific copy in components | `CONTEXT.md` invariant · ADR-0005 |
+| Content validation | Zod schema + `.refine()` invariants (required fields, all four contact channels, non-placeholder impact, non-overlapping dates) fail the build and name the field | ADR-0007 · `site/src/content/config.ts` |
+| Client JavaScript | None. Progressive enhancement only; phone chooser is a native `<details>`; contact actions are plain links | ADR-0001 · ADR-0006 |
+| Contact-detail exposure | Phone / email / LinkedIn never rendered as visible text on the page; values live only in link attributes; not obfuscated in v1 (revisit — §11) | ADR-0006 · `CONTEXT.md` invariant |
+| Images | Headshot processed by `astro:assets` — responsive sizes, modern format, explicit dimensions, eager + high fetch-priority for the LCP element | §5 `src/assets/` · here |
+| Accessibility | Semantic HTML, one `<h1>`, keyboard-operable controls, body text ≥ 16 px, interactive targets ≥ 44×44 px (WCAG 2.5.8), Lighthouse a11y ≥ 95 | spec §6 · here |
+| Tracking hooks (for step 8) | Every contact control carries a stable `data-contact-channel` (`phone` / `email` / `linkedin`) or `data-cv-download` attribute; roadmap step 8's inline beacon script binds to these — no markup change needed then | spec §3 · `architecture-map.md` §Frontend · here |
+| Error handling | Build-time only — a validation failure stops the build with a named field. No runtime error path exists (static delivery) | ADR-0007 |
+| Localisation | Single language (English) in v1; schema and components stay locale-clean so a per-locale entry is additive later | `architecture-map.md` §Constraints |
+| Observability / logging | N/A at runtime (static files); build logs are the GitHub Actions run | — |
+| CV filename | Derived from `name` + `headline` by `site/src/lib/cv-filename.ts`, shared by `index.astro`, `cv.astro`, and `generate-pdf.mjs` — never hand-copied. Roadmap step 4 owns the derivation rule; this feature consumes the same helper | §5 `lib/cv-filename.ts` · `docs/adr/0004` |
 
 ## 9. Architecture decisions
 
-<!-- 🎯 Why: the REVERSE INDEX onto the adr/ folder. `ls adr/` gives the files; §9 gives the
-     semantics — why they exist, which SAD section they attach to, what status.
-     📋 Write: a 4-column table, one row per ADR. Mixed status is fine.
-     📌 e.g. «0001 | Store content as a table of typed blocks | Accepted | §4». -->
-
 | # | Title | Status | Section |
 |---|---|---|---|
-| <NNNN> | <imperative — e.g. "Use a sliding-window counter for rate limiting"> | Accepted | §<N> |
-| <NNNN> | <imperative — e.g. "Co-locate the worker in the API process"> | Accepted | §<N> |
+| 0005 | Extend the single profile entry with landing-specific structured fields | Accepted | §4 |
+| 0006 | Contact details as actionable-only link attributes, zero client JavaScript | Accepted | §4 |
+| 0007 | Enforce content invariants in the content-collection schema at build time | Accepted | §4 |
 
-ADR files live under `docs/features/<slug>/adr/NNNN-<title>.md`.
+Inherited foundational ADRs (not re-decided here): `docs/adr/0001` (Astro static site + typed content collection), `0004` (CV PDF generated from a print route at build time).
+
+ADR files live under `docs/features/personal-landing/adr/NNNN-<title>.md`.
 
 ## 10. Quality requirements
 
-<!-- 🎯 Why: the QUALITY TREE — take a goal from §1 and break it into concrete leaves: tests,
-     metrics, configs, drills. ⭐ Without §10, §1 is a manifesto. With §10 each declaration maps
-     to something PROVABLE.
-     📋 Write: per §1 goal — When / Then / How-verify. Numbers from spec §6 NFR VERBATIM (don't
-     round ≤250ms to ≤300ms — that's a critic F6 hit).
-     📌 e.g. «p95 ≤ 500 ms on a block update, verified by a 100 req/s load test». -->
+**QG-1. Above-the-fold render speed**
+- **When:** a Recruiter opens the page on a mid-tier mobile device over throttled 4G (Lighthouse "mobile" preset).
+- **Then:** Largest Contentful Paint ≤ 2.5 s; initial page weight ≤ 500 KB transferred; 0 KB of client JavaScript shipped by this feature.
+- **How verify:** Lighthouse mobile audit run manually pre-launch; build-output inspection for the JS figure; build size report for weight.
 
-Each top-3 goal from §1 expanded into a full scenario:
+**QG-2. Never ship a broken or incomplete page**
+- **When:** the Profile content is missing or has a malformed required field — no headline, no availability, any of the four contact channels absent, an empty/placeholder project impact statement, or overlapping experience dates.
+- **Then:** 100% of missing / malformed required fields fail the build, which names the offending field; nothing is published.
+- **How verify:** `astro build` enforces the content-collection schema and its `.refine()` invariants and gates the deploy (ADR-0007); unit tests over the invariant predicates with fixture profiles; `astro check` on pull requests (and, once `tasks` adds it, on the deploy path).
 
-**QG-1. <quality attribute>**
-- **When:** <trigger condition>
-- **Then:** <expected behaviour with numbers from spec §6 NFR>
-- **How verify:** <test / chaos drill / load test / metric>
-
-**QG-2. <quality attribute>**
-- **When:** <trigger>
-- **Then:** <expected>
-- **How verify:** <how>
-
-**QG-3. <quality attribute>**
-- **When:** <trigger>
-- **Then:** <expected>
-- **How verify:** <how>
+**QG-3. Zero-JavaScript, accessible, correctly-scaled delivery**
+- **When:** a Recruiter uses the page with JavaScript disabled, or with a keyboard / screen reader, on any viewport from 360 to 1920 px wide.
+- **Then:** every contact action works; Lighthouse Accessibility ≥ 95; every interactive element is keyboard-reachable and operable; body text ≥ 16 px; interactive targets ≥ 44×44 px; no horizontal scroll at 360 / 768 / 1280 / 1920 px width; and every above-the-fold essential is visible with no scrolling at 1280×800 (reference laptop) and 390×844 (reference phone).
+- **How verify:** Lighthouse mobile audit + manual keyboard pass + manual responsive check at the four widths + manual above-the-fold check at 1280×800 and 390×844, all pre-launch.
 
 ## 11. Risks and technical debt
 
-<!-- 🎯 Why: ⭐ collects EVERYTHING that can break — not only the technical. Without §11 risks get
-     discussed at standups and lost; debt lives only in the head of whoever accepted it.
-     📋 Write: a risk/debt table — severity — mitigation — owner. Accepted debt in its own block.
-     📌 The first risk is often a product risk, not a technical one. That's normal. -->
-
-<!-- Severity literals: Low / Medium / High for regular risks; "Open question" for rows created by
-     a Save-as-OQ resolution during the Socratic walk (see references/socratic.md). -->
-
 | Risk / debt | Severity | Mitigation | Owner |
 |---|---|---|---|
-| <e.g. Worker lag may reach hours during a downstream outage> | Medium | <alert >10 min, on-call playbook, retry backoff> | <DevOps> |
-| <e.g. No event-schema versioning in v1> | Medium | <ADR-NNNN planned for v2, tolerate unknown fields> | <Backend> |
-| Open architectural decision: <decision-headline> | Open question | Resolve before <stage trigger or YYYY-MM-DD>; <inline rationale from the Save-as-OQ> | <owner> |
+| Roadmap step 4 (CV PDF) slips — the Download-CV control has no file | Medium | Steps 3 and 4 sequenced together; a missing generated PDF fails the build (postbuild assertion) so a dead link never ships | Roman |
+| Headshot asset is ~2 MB — blows the 500 KB page-weight budget if shipped raw | Medium | `astro:assets` optimisation, responsive sizes, target < 100 KB at display size; checked in the QG-1 Lighthouse pass | Roman |
+| Lighthouse checks (and `astro check` on the deploy path) are manual / PR-only, not on push to `main` — quality can regress silently on a later direct content edit | Low | `tasks` adds `npm run check` + invariant unit tests to `deploy.yml`; document the pre-launch Lighthouse checklist; wire Lighthouse CI as a later improvement | Roman |
+| Open question: exact non-overlapping employment date ranges | Open question | Resolve before `sdd:tasks`; spec §8 — default is the CV-template ranges with the EveryMatrix overlap collapsed | Roman |
+| Open question: per-project impact statements + the build-time placeholder-detection rule | Open question | Resolve before `sdd:implement`; spec §8 — Roman supplies statements; rule default is non-empty + ≥ 40 chars + blocked-words list | Roman / design |
 
 **Accepted debt (acceptable in v1, plan to fix later):**
-- <e.g. the entity is immutable / unversioned — OK for v1, may need audit versioning in v2>
+- Contact values obfuscation: **resolved for v1 by ADR-0006** — link-attributes-only, no script. Casual scraping is still possible (the values are in the `href`s); the same data is in Roman's public CV. Revisit trigger: observed scraping abuse → switch to script-assembled-on-click (spec §8 Q3).
+- No automated visual-regression or Lighthouse gate in CI — manual pre-launch checks only.
 
 ## 12. Glossary
 
-<!-- 🎯 Why: ⭐ the DOMAIN GLOSSARY that ends arguments a year later («checkpoint — weekly or
-     biweekly? quarter — calendar or fiscal?»).
-     📋 Write: a term / meaning table. Business + technical terms mixed.
-     📌 e.g. «Lesson | a unit inside a course made of blocks (text, video)». -->
+Domain terms are canonical in `CONTEXT.md` (Recruiter, Roman, Profile content, Availability block, Contact action, Above-the-fold scan, Headline, Tagline, Top stack, Experience timeline, Selected project, Impact statement, Labelled link). SAD-specific terms:
 
 | Term | Meaning |
 |---|---|
-| <e.g. domain object A> | <its meaning in this domain> |
-| <e.g. domain object B> | <its meaning> |
-| <e.g. domain invariant name> | <the rule, in plain language> |
+| SSG (static site generation) | The whole page is rendered to HTML/CSS/images at build time; no server rendering, no client hydration, no router |
+| Content invariant | A rule the Profile content must satisfy to build — e.g. "all four contact channels present", "no placeholder impact statement", "experience dates do not overlap"; expressed as a Zod `.refine()` |
+| Actionable-only | A contact detail exposed only as an activatable control (a link), never as readable text on the page |
+| Reference viewport | 1280×800 (laptop) and 390×844 (phone) — the sizes "fits above the fold" and "no horizontal scroll" are checked against |
+| LCP | Largest Contentful Paint — the render-speed metric in QG-1, target ≤ 2.5 s on the Lighthouse mobile preset |
