@@ -330,8 +330,9 @@ Reuses the scaffold's deployment unit unchanged: GitHub Actions builds `site/` o
 | 0005 | Extend the single profile entry with landing-specific structured fields | Accepted | §4 |
 | 0006 | Contact details as actionable-only link attributes, zero client JavaScript | Accepted | §4 |
 | 0007 | Enforce content invariants in the content-collection schema at build time | Accepted | §4 |
+| 0008 | CV delivery is a committed static PDF in v1 | Accepted | §4, §11 |
 
-Inherited foundational ADRs (not re-decided here): `docs/adr/0001` (Astro static site + typed content collection), `0004` (CV PDF generated from a print route at build time).
+Inherited foundational ADRs (not re-decided here): `docs/adr/0001` (Astro static site + typed content collection), `0004` (CV PDF generated from a print route at build time — **amended for v1 by ADR-0008**: v1 ships a committed static PDF; build-time generation resumes at roadmap step 4).
 
 ADR files live under `docs/features/personal-landing/adr/NNNN-<title>.md`.
 

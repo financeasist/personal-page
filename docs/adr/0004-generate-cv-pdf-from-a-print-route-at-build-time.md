@@ -2,7 +2,7 @@
 status: Accepted
 owner: "Roman (roman.grupskyi@gmail.com)"
 reviewers: []
-updated_at: "2026-09-06"
+updated_at: "2026-09-07"
 feature_size: "greenfield-foundation"
 ticket: "docs/idea-brief.md"
 ---
@@ -12,6 +12,11 @@ ticket: "docs/idea-brief.md"
 - **Status:** Accepted
 - **Date:** 2026-09-06
 - **Deciders:** Roman + survey (greenfield foundation session)
+
+> **v1 exception (2026-09-07):** `personal-landing` v1 ships a hand-committed static CV PDF
+> under `site/public/` and does **not** run the build-time generation described here — see
+> `docs/features/personal-landing/adr/0008-cv-delivery-is-a-committed-static-pdf-in-v1.md`.
+> This decision resumes in full at roadmap step 4 (CV PDF generation).
 
 ## Context
 
@@ -90,3 +95,4 @@ the same content collection.
 - Reference: `docs/reference/cv-template-reference.pdf` (the locked layout) + `docs/reference/README.md`
 - Architecture map: [[../architecture-map.md]] §Stack (PDF generation), §Conventions, §Constraints
 - Related ADR: [[0001-astro-static-site-with-typed-content-collection]]
+- Amended for v1 by: [[../features/personal-landing/adr/0008-cv-delivery-is-a-committed-static-pdf-in-v1]]

@@ -20,10 +20,11 @@ The two build, test and deploy independently. No direct code sharing — the bro
 - **Content is the single source of truth.** Profile data lives in one typed Astro content
   collection (`site/src/data/profile/*.json`, schema in `site/src/content/config.ts`). The landing
   page (`index.astro`) and the CV print route (`cv.astro`) both render from it.
-- **CV PDF is generated, never committed.** `npm --prefix site run build` runs a `postbuild`
-  step (`site/scripts/generate-pdf.mjs`, Playwright/Chromium) that renders `/cv` to a
-  meaningfully-named A4 PDF in `dist/` (e.g. `Roman-Hrupskyi-Lead-Java-Engineer-CV.pdf`, not
-  `cv.pdf`). A CV content change is a content-collection edit only.
+- **CV PDF is committed (v1).** v1 ships a hand-maintained static PDF under `site/public/`; the
+  Download-CV control links to it. Build-time generation from `cv.astro` (a `postbuild`
+  Playwright/Chromium step) is deferred to roadmap step 4 — see `docs/adr/0004` and its v1
+  amendment `docs/features/personal-landing/adr/0008-...`. Until then: a CV content change means
+  regenerating that PDF by hand and a manual page-vs-CV parity check each release.
 - **`cv.astro` layout is locked** to `docs/reference/cv-template-reference.pdf` — reproduce it,
   don't reshape it. Only section data changes.
 - **Styling:** Tailwind v4 with `@theme` tokens in `site/src/styles/global.css`; hand-rolled
