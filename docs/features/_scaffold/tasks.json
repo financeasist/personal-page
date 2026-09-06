@@ -1,0 +1,71 @@
+{
+  "slug": "_scaffold",
+  "mode": "greenfield-bootstrap",
+  "reflects_map": "docs/architecture-map.md",
+  "smoke_test": "site builds (astro build) + tracker boots (@SpringBootTest context loads) + empty test suites run green + Flyway applies the initial migration against a Testcontainers Postgres",
+  "tasks": [
+    {
+      "id": "S1",
+      "title": "Create the monorepo layout + root tooling",
+      "layer": "scaffold",
+      "deps": [],
+      "acs": [],
+      "dod": "top-level tree exists (site/, tracker/, docs/, .github/workflows/); root .gitignore covers Node, Java/Maven target, and IDE files; root README.md explains the two apps and how to run each",
+      "files_hint": [".gitignore", "README.md", "site/", "tracker/", ".github/workflows/"]
+    },
+    {
+      "id": "S2",
+      "title": "Scaffold the Astro site skeleton with Tailwind v4 and a typed content collection",
+      "layer": "scaffold",
+      "deps": ["S1"],
+      "acs": [],
+      "dod": "npm --prefix site install && npm --prefix site run build produces site/dist; astro check passes; site/src/content/config.ts defines a Zod `profile` schema; a stub profile data file + site/src/pages/index.astro render it; site/public/cv.pdf placeholder present; Node engine pinned to >=20 in site/package.json",
+      "files_hint": ["site/package.json", "site/astro.config.mjs", "site/src/content/config.ts", "site/src/pages/index.astro", "site/src/styles/global.css", "site/public/cv.pdf"]
+    },
+    {
+      "id": "S3",
+      "title": "Scaffold the Spring Boot tracker skeleton",
+      "layer": "scaffold",
+      "deps": ["S1"],
+      "acs": [],
+      "dod": "./mvnw -f tracker/pom.xml test runs green with a @SpringBootTest context-load test using Testcontainers Postgres; app boots locally; package layout web/app/infra/domain under com.grupskyi.tracker; GET /healthz returns 200; Java 21, Spring Web + Spring Data JDBC + Flyway + postgresql + Testcontainers on the classpath; Maven wrapper committed",
+      "files_hint": ["tracker/pom.xml", "tracker/mvnw", "tracker/src/main/java/com/grupskyi/tracker/TrackerApplication.java", "tracker/src/main/resources/application.yml", "tracker/src/test/java/com/grupskyi/tracker/ContextLoadTest.java"]
+    },
+    {
+      "id": "S4",
+      "title": "Add the initial Flyway migration for the analytics schema",
+      "layer": "scaffold",
+      "deps": ["S3"],
+      "acs": [],
+      "dod": "V1__init.sql creates recruiter_link (label pk, description, created_at) and visit_event (id bigint generated always as identity, link_label nullable fk, kind, city, referrer, user_agent, created_at timestamptz default now()); Flyway applies it cleanly on boot against a Testcontainers Postgres in an integration test; no UPDATE/DELETE grants assumed on visit_event",
+      "files_hint": ["tracker/src/main/resources/db/migration/V1__init.sql", "tracker/src/test/java/com/grupskyi/tracker/MigrationTest.java"]
+    },
+    {
+      "id": "S5",
+      "title": "Add the tracker Dockerfile + Fly.io config",
+      "layer": "scaffold",
+      "deps": ["S3", "S4"],
+      "acs": [],
+      "dod": "multi-stage Dockerfile (maven build stage -> eclipse-temurin:21-jre runtime) builds locally with `docker build tracker/`; fly.toml sets primary_region=waw, min_machines_running=1, an http health check on /healthz, and reads DATABASE_URL + TELEGRAM_* from Fly secrets; no secrets committed",
+      "files_hint": ["tracker/Dockerfile", "tracker/fly.toml", "tracker/.dockerignore"]
+    },
+    {
+      "id": "S6",
+      "title": "Add CI + deploy GitHub Actions workflows",
+      "layer": "scaffold",
+      "deps": ["S2", "S3"],
+      "acs": [],
+      "dod": "ci.yml (on PR): a site job runs Node 20 + astro check + build; a tracker job runs ./mvnw -f tracker/pom.xml verify. deploy.yml (on push to main): deploys site/dist to GitHub Pages and deploys the tracker to Fly.io (flyctl deploy) using repository secrets. Both YAML files are valid and the commands match the map's frontmatter.",
+      "files_hint": [".github/workflows/ci.yml", ".github/workflows/deploy.yml"]
+    },
+    {
+      "id": "S7",
+      "title": "Write CLAUDE.md from the chosen conventions",
+      "layer": "scaffold",
+      "deps": ["S1"],
+      "acs": [],
+      "dod": "CLAUDE.md restates the architecture-map conventions a contributor must follow: monorepo layout, Astro content-collection + Tailwind v4 for site, constructor injection + Spring Data JDBC + append-only visit_event for tracker, Flyway V<n>__ naming, JUnit 5 + Testcontainers, the per-app build/test/lint commands, and the fire-and-forget error convention",
+      "files_hint": ["CLAUDE.md"]
+    }
+  ]
+}
