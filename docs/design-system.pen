@@ -1,0 +1,678 @@
+{
+  "version": "2.17",
+  "children": [
+    {
+      "type": "frame",
+      "id": "c7kvI",
+      "x": 0,
+      "y": 0,
+      "name": "DS · Foundations",
+      "width": 900,
+      "height": 1180,
+      "fill": "$color/surface",
+      "layout": "vertical",
+      "gap": 28,
+      "padding": 40,
+      "children": [
+        {
+          "type": "text",
+          "id": "n9IHBA",
+          "fill": "$color/ink",
+          "content": "Foundations",
+          "fontFamily": "Roboto",
+          "fontSize": 30,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "text",
+          "id": "T4V4Eq",
+          "fill": "$color/ink",
+          "content": "Design canon: docs/design-system.md · colours sourced from site/src/styles/global.css @theme",
+          "fontFamily": "Roboto",
+          "fontSize": 13,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "yaKns",
+          "fill": "$color/ink",
+          "content": "Colour — light (source of truth: code)",
+          "fontFamily": "Roboto",
+          "fontSize": 18,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "frame",
+          "id": "UbJXR",
+          "name": "Swatches/light",
+          "width": 814,
+          "height": 150,
+          "layout": "none",
+          "children": [
+            {
+              "type": "frame",
+              "id": "VYexa",
+              "x": 0,
+              "y": 0,
+              "name": "Swatch/navy",
+              "width": 150,
+              "height": 150,
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 8,
+                  "id": "gqUeV",
+                  "fill": "$color/navy",
+                  "width": 150,
+                  "height": 76
+                },
+                {
+                  "type": "text",
+                  "id": "E2J0n",
+                  "fill": "$color/ink",
+                  "content": "navy",
+                  "fontFamily": "Roboto",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "i4WcqZ",
+                  "fill": "$color/muted",
+                  "content": "$color/navy",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "OobgY",
+                  "fill": "$color/muted",
+                  "content": "#2b3a55",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "FfIQv",
+              "x": 166,
+              "y": 0,
+              "name": "Swatch/navy-dark",
+              "width": 150,
+              "height": 150,
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 8,
+                  "id": "I5OfjP",
+                  "fill": "$color/navy-dark",
+                  "width": 150,
+                  "height": 76
+                },
+                {
+                  "type": "text",
+                  "id": "h526Zx",
+                  "fill": "$color/ink",
+                  "content": "navy-dark",
+                  "fontFamily": "Roboto",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "Y7zgrj",
+                  "fill": "$color/muted",
+                  "content": "$color/navy-dark",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "WE6Ya",
+                  "fill": "$color/muted",
+                  "content": "#1f2a3f",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Hl7PK",
+              "x": 332,
+              "y": 0,
+              "name": "Swatch/ink",
+              "width": 150,
+              "height": 150,
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 8,
+                  "id": "Y3HqCL",
+                  "fill": "$color/ink",
+                  "width": 150,
+                  "height": 76
+                },
+                {
+                  "type": "text",
+                  "id": "e1OHD",
+                  "fill": "$color/ink",
+                  "content": "ink",
+                  "fontFamily": "Roboto",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "hCwKx",
+                  "fill": "$color/muted",
+                  "content": "$color/ink",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "TN56K",
+                  "fill": "$color/muted",
+                  "content": "#1a1a1a",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "kWjk8",
+              "x": 498,
+              "y": 0,
+              "name": "Swatch/muted",
+              "width": 150,
+              "height": 150,
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 8,
+                  "id": "YOsNO",
+                  "fill": "$color/muted",
+                  "width": 150,
+                  "height": 76
+                },
+                {
+                  "type": "text",
+                  "id": "u7cUk",
+                  "fill": "$color/ink",
+                  "content": "muted",
+                  "fontFamily": "Roboto",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "UTpTE",
+                  "fill": "$color/muted",
+                  "content": "$color/muted",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "O1kv3e",
+                  "fill": "$color/muted",
+                  "content": "#5b6472",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "AnIL5",
+              "x": 664,
+              "y": 0,
+              "name": "Swatch/surface·derived",
+              "width": 150,
+              "height": 150,
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 8,
+                  "id": "srPQ9",
+                  "fill": "$color/surface",
+                  "width": 150,
+                  "height": 76
+                },
+                {
+                  "type": "text",
+                  "id": "Rdy7z",
+                  "fill": "$color/ink",
+                  "content": "surface·derived",
+                  "fontFamily": "Roboto",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "s6n3Jq",
+                  "fill": "$color/muted",
+                  "content": "$color/surface",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "OF2tV",
+                  "fill": "$color/muted",
+                  "content": "#ffffff",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "Mns1e",
+          "fill": "$color/ink",
+          "content": "Colour — dark (derived, not sourced)",
+          "fontFamily": "Roboto",
+          "fontSize": 18,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "frame",
+          "id": "ENPtE",
+          "name": "Swatches/dark",
+          "width": 846,
+          "height": 182,
+          "fill": "$color/dark/surface",
+          "layout": "none",
+          "children": [
+            {
+              "type": "frame",
+              "id": "GJqyv",
+              "x": 16,
+              "y": 16,
+              "name": "Swatch/surface",
+              "width": 150,
+              "height": 150,
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 8,
+                  "id": "oktlX",
+                  "fill": "$color/dark/surface",
+                  "width": 150,
+                  "height": 76
+                },
+                {
+                  "type": "text",
+                  "id": "ADhak",
+                  "fill": "$color/dark/ink",
+                  "content": "surface",
+                  "fontFamily": "Roboto",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "abp1n",
+                  "fill": "$color/dark/muted",
+                  "content": "$color/dark/surface",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "ma3jN",
+                  "fill": "$color/dark/muted",
+                  "content": "#141b29",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "UnUyZ",
+              "x": 182,
+              "y": 16,
+              "name": "Swatch/surface-raised",
+              "width": 150,
+              "height": 150,
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 8,
+                  "id": "qfkHY",
+                  "fill": "$color/dark/surface-raised",
+                  "width": 150,
+                  "height": 76
+                },
+                {
+                  "type": "text",
+                  "id": "M0W5bD",
+                  "fill": "$color/dark/ink",
+                  "content": "surface-raised",
+                  "fontFamily": "Roboto",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "EEcuH",
+                  "fill": "$color/dark/muted",
+                  "content": "$color/dark/surface-raised",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "zRWvX",
+                  "fill": "$color/dark/muted",
+                  "content": "#1f2a3f",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "NcGCs",
+              "x": 348,
+              "y": 16,
+              "name": "Swatch/ink",
+              "width": 150,
+              "height": 150,
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 8,
+                  "id": "OwZOH",
+                  "fill": "$color/dark/ink",
+                  "width": 150,
+                  "height": 76
+                },
+                {
+                  "type": "text",
+                  "id": "Ro7by",
+                  "fill": "$color/dark/ink",
+                  "content": "ink",
+                  "fontFamily": "Roboto",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "lxjAN",
+                  "fill": "$color/dark/muted",
+                  "content": "$color/dark/ink",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "nhp8j",
+                  "fill": "$color/dark/muted",
+                  "content": "#f4f6f8",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "F63j4k",
+              "x": 514,
+              "y": 16,
+              "name": "Swatch/muted",
+              "width": 150,
+              "height": 150,
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 8,
+                  "id": "Z2Ifv",
+                  "fill": "$color/dark/muted",
+                  "width": 150,
+                  "height": 76
+                },
+                {
+                  "type": "text",
+                  "id": "y4rs0",
+                  "fill": "$color/dark/ink",
+                  "content": "muted",
+                  "fontFamily": "Roboto",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "pRrys",
+                  "fill": "$color/dark/muted",
+                  "content": "$color/dark/muted",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "pnz0n",
+                  "fill": "$color/dark/muted",
+                  "content": "#9aa4b2",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "fCswM",
+              "x": 680,
+              "y": 16,
+              "name": "Swatch/navy",
+              "width": 150,
+              "height": 150,
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 8,
+                  "id": "W31jTW",
+                  "fill": "$color/dark/navy",
+                  "width": 150,
+                  "height": 76
+                },
+                {
+                  "type": "text",
+                  "id": "nQh3l",
+                  "fill": "$color/dark/ink",
+                  "content": "navy",
+                  "fontFamily": "Roboto",
+                  "fontSize": 13,
+                  "fontWeight": "bold"
+                },
+                {
+                  "type": "text",
+                  "id": "tmQEe",
+                  "fill": "$color/dark/muted",
+                  "content": "$color/dark/navy",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "y7ouTa",
+                  "fill": "$color/dark/muted",
+                  "content": "#7d97c4",
+                  "fontFamily": "Roboto",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "U6a01x",
+          "fill": "$color/ink",
+          "content": "Type ramp — $font/sans (system-ui stack; Roboto renders as proxy in Pencil)",
+          "fontFamily": "Roboto",
+          "fontSize": 18,
+          "fontWeight": "bold"
+        },
+        {
+          "type": "frame",
+          "id": "tRNPK",
+          "name": "TypeRamp",
+          "width": 700,
+          "height": 240,
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            {
+              "type": "text",
+              "id": "LvY5U",
+              "fill": "$color/ink",
+              "content": "Display · 30 / bold",
+              "fontFamily": "Roboto",
+              "fontSize": 30,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "h6enp0",
+              "fill": "$color/ink",
+              "content": "Heading · 24 / bold",
+              "fontFamily": "Roboto",
+              "fontSize": 24,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "HX9yb",
+              "fill": "$color/ink",
+              "content": "Subheading · 20 / bold",
+              "fontFamily": "Roboto",
+              "fontSize": 20,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "UZQQt",
+              "fill": "$color/ink",
+              "content": "Body · 16 / normal — minimum body size on phone (AC-08)",
+              "fontFamily": "Roboto",
+              "fontSize": 16,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "bryjV",
+              "fill": "$color/muted",
+              "content": "Small · 14 / normal",
+              "fontFamily": "Roboto",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "SCZL1",
+              "fill": "$color/muted",
+              "content": "Caption · 12 / normal",
+              "fontFamily": "Roboto",
+              "fontSize": 12,
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variables": {
+    "font/sans": {
+      "type": "string",
+      "value": "ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif"
+    },
+    "color/navy": {
+      "type": "color",
+      "value": "#2b3a55"
+    },
+    "color/navy-dark": {
+      "type": "color",
+      "value": "#1f2a3f"
+    },
+    "color/ink": {
+      "type": "color",
+      "value": "#1a1a1a"
+    },
+    "color/muted": {
+      "type": "color",
+      "value": "#5b6472"
+    },
+    "color/surface": {
+      "type": "color",
+      "value": "#ffffff"
+    },
+    "color/dark/surface": {
+      "type": "color",
+      "value": "#141b29"
+    },
+    "color/dark/surface-raised": {
+      "type": "color",
+      "value": "#1f2a3f"
+    },
+    "color/dark/ink": {
+      "type": "color",
+      "value": "#f4f6f8"
+    },
+    "color/dark/muted": {
+      "type": "color",
+      "value": "#9aa4b2"
+    },
+    "color/dark/navy": {
+      "type": "color",
+      "value": "#7d97c4"
+    }
+  },
+  "fileToken": "4f2ce489-2f0e-4c69-b130-fa0d0a04108e"
+}

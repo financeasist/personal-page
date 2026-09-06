@@ -1,8 +1,8 @@
 ---
 status: Living
-tool: code
+tool: pencil
 figma_file: ""
-pen_file: ""
+pen_file: "docs/design-system.pen"
 updated_at: "2026-09-06"
 ---
 
@@ -17,43 +17,45 @@ updated_at: "2026-09-06"
 
 ## Platform posture
 
-- **Posture:** responsive, mobile-first content priority — recruiters reach the page from
-  outreach and CVs and often open it first from a phone inbox, so the phone layout is the
-  primary target and the laptop layout is the widened version of it
+- **Posture:** responsive-both — recruiters reach the page from phone inboxes (outreach, CV
+  footers) and from a laptop while writing up a candidate, so neither viewport is a second-class
+  reflow of the other; both are designed as first-class targets
   (`docs/features/personal-landing/ux-flows.md`).
 - **Breakpoints / device classes:** two fixed reference viewports — **390×844** (phone) and
-  **1280×800** (laptop). No horizontal scroll at any width between them. Tailwind v4 default
-  breakpoints (`sm 640` / `md 768` / `lg 1024` …); the landing page realistically only needs a
-  single phone→laptop step. The `cv.astro` print route is **A4 only** and locked to
+  **1280×800** (laptop); no horizontal scroll at any width between them. Tailwind v4 default
+  breakpoints (`sm 640` / `md 768` / `lg 1024` …); a one-screen landing page realistically needs
+  a single phone→laptop step. The `cv.astro` print route is **A4 only**, locked to
   `docs/reference/cv-template-reference.pdf` — not part of the responsive posture.
 
 ## Design tool
 
-- **Tool:** `code` — screens are markdown wireframes inline in each feature's `screens.md`. No
-  Figma/Pencil MCP in use, and a hand-rolled ~one-screen Astro site does not justify a design
-  file separate from the components themselves.
-- **Library location:** «the in-repo components are the library» — `site/src/components/*.astro`,
-  composed into `site/src/pages/index.astro`. There is no external design file to keep in sync.
+- **Tool:** `pencil` — screens are drawn in a `.pen` file and each feature's `screens.md`
+  references the nodes. The Pencil MCP is in the session; a shared `.pen` library holds the token
+  variables and the foundations frame every screen composes from.
+- **Library location:** `docs/design-system.pen` — the token variables (light + dark) and a
+  **Foundations** frame with the core primitives. Per-feature screens live in
+  `docs/features/{slug}/screens.pen`, drawn against this library.
 
 ## Token source
 
 - **Colors:** Tailwind v4 `@theme` block — `site/src/styles/global.css`
   (`--color-navy #2b3a55`, `--color-navy-dark #1f2a3f`, `--color-ink #1a1a1a`,
-  `--color-muted #5b6472`). Navy accent matches the CV template. A screen never re-declares a
-  colour inline.
+  `--color-muted #5b6472`). Navy accent matches the CV template. Seeded into the `.pen` library as
+  variables; the code file stays the source of truth and a screen never re-declares a colour
+  inline.
 - **Spacing / sizing:** Tailwind v4 default spacing scale (utility classes in `.astro`
-  templates). No custom spacing tokens; the first UI feature may add `@theme` entries if a
-  rhythm value is reused across sections.
+  templates). No custom spacing tokens; the first UI feature may add `@theme` entries if a rhythm
+  value is reused across sections.
 - **Typography:** `--font-sans` in `site/src/styles/global.css` (system UI stack) + Tailwind v4
   default font-size scale. Body text ≥16 px on phone (AC-08). No web fonts.
 
 ## Component inventory
 
-> Greenfield: `site/src/components/` is empty today. The rows below are the first shared
-> primitives, all created by **personal-landing** (`docs/features/personal-landing/screens.md`
-> §New components). `implement` replaces `pending` with the real `file:line` anchor as it
-> registers each one; a later UI feature reuses these names or declares `NEW: <name>` with a
-> why-no-primitive-fits justification and registers it back here.
+> `site/src/components/` is empty today. The rows below are the first shared primitives, all
+> created by **personal-landing** (`docs/features/personal-landing/screens.md` §New components).
+> `implement` replaces `pending` with the real `file:line` anchor as it registers each one; the
+> `.pen` node id is filled in as `screens` draws it. A later UI feature reuses these names or
+> declares `NEW: <name>` with a why-no-primitive-fits justification and registers it back here.
 
 | Component | Source (`file:line` / node / URL) | States it supports | Notes |
 |---|---|---|---|
