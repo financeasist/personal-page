@@ -164,47 +164,135 @@ C4Container
 
 ## 6. Runtime view
 
-**Critical flow 1: Publish a content change**
+The runtime view has two theatres: the **client side** (a Recruiter reading a static page and handing off to their own apps — Flows 1–4) and the **build/deploy pipeline** (Roman publishes a content change — Flow 5). There is no request-time service and no datastore; every error the spec demands is a build-time gate (Flow 5) or an accepted unresolved hand-off (Flow 2). Participants are concrete, matching the §3 / §5 C4 models.
 
-```mermaid
-sequenceDiagram
-    actor Roman
-    participant Repo as Git repo
-    participant CI as GitHub Actions
-    participant Content as Profile content + schema
-    participant Build as Astro build
-    participant Pages as GitHub Pages
-    Roman->>Repo: commit an edit to roman.json
-    Repo->>CI: push to main
-    CI->>Content: validate (schema + invariants)
-    alt content invalid
-        Content-->>CI: fail, naming the field
-        CI-->>Roman: build fails; nothing deploys
-    else content valid
-        Content-->>Build: typed content
-        Build->>Build: render index.astro (+ cv.astro, postbuild PDF)
-        Build->>Pages: deploy static output
-        Pages-->>Roman: page live
-    end
-```
+### Flow 1 — Recruiter scans the landing page
 
-**Critical flow 2: Recruiter visit and contact**
+*Realises US-01, US-06. Covers AC-01 (laptop scan) and AC-08 (phone viewport).*
 
 ```mermaid
 sequenceDiagram
     actor Recruiter
     participant Pages as GitHub Pages
     participant Page as Landing page (static)
-    participant Device as Recruiter device app
+    Note over Page: Precondition: a completed build published the page (Flow 5) — every above-the-fold essential is present
     Recruiter->>Pages: open the shared link
-    Pages-->>Recruiter: static HTML + CSS + headshot (no JS)
-    Recruiter->>Page: read the above-the-fold scan
-    Recruiter->>Page: activate a contact action
-    Page->>Device: hand off (tel: / mailto: / new tab / file download)
-    Device-->>Recruiter: dialer / mail / LinkedIn / saved PDF
+    Pages-->>Recruiter: static HTML + CSS + optimised headshot (0 KB JavaScript)
+    Recruiter->>Page: scan above the fold
+    alt reference laptop viewport 1280x800
+        Page-->>Recruiter: headshot, name, headline, availability (location + remote stance), top stack — no scrolling
+    else phone viewport 390x844
+        Page-->>Recruiter: same essentials, single column, tap targets at least 44x44 px, no horizontal scroll
+    end
+    Note over Recruiter,Page: Postcondition: Recruiter can state seniority, stack, location, availability — continues to Flow 2 or Flow 4, or leaves
 ```
 
-The `sequences` stage expands these into one flow per critical §5 AC.
+### Flow 2 — Recruiter makes contact
+
+*Realises US-02, US-05. Covers AC-02 (email), AC-13 (LinkedIn tab, CV download), AC-04 (download side), AC-10 (no visible contact text).*
+
+```mermaid
+sequenceDiagram
+    actor Recruiter
+    participant Page as Landing page (static)
+    participant Device as Recruiter device app
+    Note over Page: Precondition: all four contact controls rendered — phone, email and LinkedIn values live only in link attributes, never as visible text (ADR-0006, AC-10)
+    Recruiter->>Page: activate a contact action
+    alt email
+        Page->>Device: hand off mailto addressed to Roman
+        Device-->>Recruiter: mail client opens a pre-addressed message, no further steps
+    else LinkedIn
+        Page->>Device: hand off https link opening in a new tab
+        Device-->>Recruiter: LinkedIn profile opens in a new tab and the landing page stays open
+    else Download CV
+        Page->>Device: hand off the build-generated PDF as a file download
+        Device-->>Recruiter: named PDF saved to the device, not opened inline
+    else phone
+        Page->>Page: expand the native disclosure chooser — continues in Flow 3
+    end
+    alt the channel has no handler app on the device
+        Device-->>Recruiter: action does not resolve — accepted, with no copyable-text fallback (ADR-0006)
+    end
+    Note over Recruiter,Device: Postcondition: Recruiter continues in their own tool
+```
+
+### Flow 3 — Recruiter chooses a phone line
+
+*Realises US-03. Covers AC-03 and AC-10.*
+
+```mermaid
+sequenceDiagram
+    actor Recruiter
+    participant Page as Landing page (static)
+    participant Device as Recruiter device app
+    Note over Page: Precondition: Roman has more than one published phone line, and digits live only in tel attributes, never rendered as text (AC-10)
+    Recruiter->>Page: activate the phone action
+    Page-->>Recruiter: native disclosure expands with no JavaScript — one labelled control per line
+    alt Call — Poland
+        Recruiter->>Page: activate "Call — Poland"
+        Page->>Device: hand off tel for the Polish line
+        Device-->>Recruiter: dialer starts a call to the Polish line
+    else Call — international
+        Recruiter->>Page: activate "Call — international"
+        Page->>Device: hand off tel for the international line
+        Device-->>Recruiter: dialer starts a call to the international line
+    else changes mind
+        Recruiter->>Page: collapse the disclosure
+        Page-->>Recruiter: back to the hero, unchanged
+    end
+```
+
+### Flow 4 — Recruiter reads the depth sections
+
+*Realises US-04, US-09. Covers AC-09 (experience timeline) and AC-11 (selected projects).*
+
+```mermaid
+sequenceDiagram
+    actor Recruiter
+    participant Page as Landing page (static)
+    Note over Page: Precondition: the build enforced non-overlapping experience dates (AC-09) and a non-placeholder impact per selected project (AC-12)
+    Recruiter->>Page: scroll below the fold
+    alt experience timeline
+        Page-->>Recruiter: roles most-recent-first with company, date range and contribution — a current role may read "start to present" — plus a single pre-2017 "earlier background" line
+    else selected projects
+        Page-->>Recruiter: 3 to 5 projects — name, Roman's role, impact statement quantified where a number exists
+    end
+    Note over Recruiter,Page: Postcondition: Recruiter scrolls back to a contact action (Flow 2) or leaves
+```
+
+### Flow 5 — Roman publishes a content change
+
+*Realises US-07, US-08. Covers AC-05 (missing essential), AC-06 (malformed field), AC-12 (placeholder impact), AC-04 (named-PDF generation at build).*
+
+```mermaid
+sequenceDiagram
+    actor Roman
+    participant Repo as Profile content (git)
+    participant CI as GitHub Actions
+    participant Pages as GitHub Pages
+    Note over Roman,Repo: Precondition: the edit is confined to the one profile entry (roman.json) — no code change
+    Roman->>Repo: commit an edit to the Profile content
+    Repo->>CI: push to main triggers the build
+    CI->>CI: validate content — Zod schema + refine() invariants (ADR-0007)
+    alt a required above-the-fold field is missing (headline, availability, or any of the four contact channels)
+        CI-->>Roman: build fails, naming the missing field — nothing deploys (AC-05)
+    else a field is malformed (email without an @, empty positioning line, malformed link)
+        CI-->>Roman: build fails, naming the field and why — nothing deploys (AC-06)
+    else a selected project's impact statement is empty or a placeholder
+        CI-->>Roman: build fails, naming the project — nothing deploys (AC-12)
+    else content valid
+        CI->>CI: render index.astro and cv.astro
+        Note over CI: persists a name-derived CV PDF — postbuild renders /cv via the shared cv-filename helper (AC-04). A missing PDF fails the build
+        CI->>Pages: deploy static output (HTML + CSS + images + the named CV PDF)
+        Pages-->>Roman: page live
+    end
+```
+
+### Flagged for `data-model` / follow-up
+
+- **No datastore, no schema.** The only "persist" step in any flow is the build-time generation of the named CV PDF (Flow 5). `data-model` has no entity, column, or index to design for this feature — expect an N/A skip to `api`.
+- **Pipeline trigger, drawn as sync.** Flow 5's `push to main triggers the build` is event-driven, but it is an internal CI trigger, not a third-party callback — no idempotency key, retry note, or dead-letter branch is warranted. GitHub Actions' own re-run semantics are outside this view.
+- **AC-07 is only partly runtime.** The "no visible contact text" half is the `Note` in Flows 2 and 3. The "no salary / no home address / no per-recruiter link labels anywhere in the delivered source" half is a build-output / source-inspection property with no runtime flow — verified by `plan-tests`, not shown here.
 
 ## 7. Deployment view
 
