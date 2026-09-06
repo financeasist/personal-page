@@ -57,6 +57,7 @@ Build one static, fast landing page whose content lives in a single structured f
 - Is salary or rate expectation shown on the page? — owner: Roman
 - Is informal storage of named-recruiter visit logs acceptable as-is, or is a retention / notice line needed? — owner: Roman
 - Which contact channel is primary — the CV lists two phone numbers plus email plus LinkedIn? — owner: Roman
+- The landing page has a prominent **"Download CV" button** among the primary above-the-fold actions (phone / email / LinkedIn / Download CV); the click fires a tracked `cv_download` event. (Decided 2026-09-06.)
 - Who can download the CV, and is it gated? Recommendation: **public, ungated** — a form/email wall works against the ten-second scan, and the file is public on static hosting regardless. — owner: Roman / specify
 - Does the "Download CV" button route through the tracking service (so a download is a first-class event tied to the recruiter label) or is a plain link + client-side event enough? — owner: specify / design
 - What is the downloaded file named? Not `cv.pdf` — something specific, e.g. `Roman-Hrupskyi-Lead-Java-Engineer-CV.pdf`. Exact form depends on the canonical surname spelling (first open question above). — owner: Roman

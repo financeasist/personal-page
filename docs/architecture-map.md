@@ -122,8 +122,12 @@ C4Container
 - **Styling approach:** Tailwind v4 utility classes in `.astro` templates; no CSS-in-JS, no CSS modules.
 - **Shared primitives:** to be established by the first UI feature — expect `Section.astro`,
   `ContactButton.astro`, `AvailabilityBlock.astro`, `ProjectCard.astro` under `site/src/components/`.
+  The primary above-the-fold actions are phone, email, LinkedIn, **and a "Download CV" button**
+  (points at the named PDF); each is a tracked click event (`contact_click` with a channel, and
+  `cv_download`).
 - **State / data-fetching:** none — the page is static HTML. A single inline `<script>` fires
-  `fetch()` calls to the tracker for contact-button clicks.
+  `fetch()` calls to the tracker for contact-button and Download-CV clicks (the download proceeds
+  regardless of whether the beacon succeeds — fire-and-forget).
 - **Closest UI precedent:** for the landing page, none yet — the first `specify → … → implement`
   cycle sets it. For the CV print route (`cv.astro`), the precedent IS
   `docs/reference/cv-template-reference.pdf` — reproduce it, don't reinterpret it.
