@@ -31,9 +31,12 @@ frontend: "astro 5 + tailwind v4"
   "single structured file Roman edits and commits" from the brief. **The site is the single source
   of truth**: the landing page AND `cv.pdf` are both rendered from the same content collection.
 - **PDF generation** — a print-optimized Astro route (`site/src/pages/cv.astro`) is rendered to
-  `dist/cv.pdf` by headless Chromium (Playwright) as a `postbuild` step. Same data as the landing
-  page, distinct CV-shaped A4 layout. Runs in CI on every deploy, so the PDF can never drift from
-  the page. See `docs/adr/0004`.
+  `dist/cv.pdf` by headless Chromium (Playwright) as a `postbuild` step. Same content collection as
+  the landing page; `cv.astro`'s layout is a **fixed reproduction of
+  `docs/reference/cv-template-reference.pdf`** (two-column: dark header + light sidebar for contact /
+  competencies / languages / education; main column for summary / categorized skills / work-experience
+  timeline; navy accent; A4). Only section data changes — the template does not. Runs in CI on every
+  deploy, so the PDF can never drift from the page. See `docs/adr/0004`.
 - **Tracking service** — Java 21, Spring Boot 3.5.x, **Maven** (wrapper `./mvnw`). Spring Web (MVC),
   **Spring Data JDBC** (no JPA/Hibernate), Flyway, PostgreSQL driver, Spring `RestClient` for the
   Telegram Bot API. Tests: JUnit 5 + Testcontainers (Postgres).
@@ -99,7 +102,8 @@ C4Container
 - **PDF generation:** `site/src/pages/cv.astro` is a print route consuming the same `profile`
   content; `site/scripts/generate-pdf.mjs` (Playwright, Chromium) renders it to `dist/cv.pdf` in the
   `build` script's `postbuild` hook. A CV content change is a content-collection edit only — never a
-  hand-edited PDF.
+  hand-edited PDF, and never a `cv.astro` layout change (the layout is locked to
+  `docs/reference/cv-template-reference.pdf`).
 
 ## Datastores
 
@@ -118,8 +122,9 @@ C4Container
   `ContactButton.astro`, `AvailabilityBlock.astro`, `ProjectCard.astro` under `site/src/components/`.
 - **State / data-fetching:** none — the page is static HTML. A single inline `<script>` fires
   `fetch()` calls to the tracker for contact-button clicks.
-- **Closest UI precedent:** none yet — the first `specify → … → implement` cycle for the landing
-  page itself sets the precedent.
+- **Closest UI precedent:** for the landing page, none yet — the first `specify → … → implement`
+  cycle sets it. For the CV print route (`cv.astro`), the precedent IS
+  `docs/reference/cv-template-reference.pdf` — reproduce it, don't reinterpret it.
 
 ## Where things live / closest precedents
 
@@ -132,8 +137,8 @@ C4Container
 - A **content field** on the profile → extend the Zod schema in `site/src/content/config.ts`, then
   the data file, then the component that renders it on `index.astro` **and** its treatment in
   `cv.astro` (both consume the same collection).
-- A change to **how the CV PDF looks** → `site/src/pages/cv.astro` + its print styles; the generator
-  script and page content stay untouched.
+- A change to **how the CV PDF looks** → out of scope: the layout is locked to
+  `docs/reference/cv-template-reference.pdf`. Only `site/src/content/` data changes.
 
 ## Constraints & known tech-debt
 
@@ -155,6 +160,12 @@ C4Container
   truth. Cost: the site CI job installs Chromium (`npx playwright install --with-deps chromium`),
   and `cv.astro` is a second layout to maintain alongside `index.astro`. The PDF is only as complete
   as the reconciled content — the content-reconciliation constraint above gates it. See ADR 0004.
+- **The CV layout is locked, not designed.** `cv.astro` reproduces
+  `docs/reference/cv-template-reference.pdf` exactly; `design`/`screens` do not get to reshape it.
+  The `profile` content-collection schema is therefore partly dictated by that template's sections
+  (contact, competencies, languages, education, professional summary, skills as named categories →
+  bullet lists, experience entries with company + URL + project + date range + description +
+  bullets + tech-stack line).
 - **Deferred: browser admin panel.** v1 content is file + git only. The tracker must not grow into
   that backend (idea-brief §5).
 
