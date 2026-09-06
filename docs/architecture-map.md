@@ -52,7 +52,7 @@ frontend: "astro 5 + tailwind v4"
 ```mermaid
 C4Container
     title Target containers — personal-landing (greenfield baseline)
-    Person(recruiter, "Recruiter", "Screens Roman in ~10s, wants one-tap contact")
+    Person(recruiter, "Recruiter", "Screens Roman in ~20s, wants one-tap contact")
     Person(roman, "Roman", "Edits page content; reads visit analytics")
 
     Container(site, "Landing site", "Astro 5 static site on GitHub Pages", "Recruiter-facing profile + contact actions; also renders cv.pdf from the same content at build time")

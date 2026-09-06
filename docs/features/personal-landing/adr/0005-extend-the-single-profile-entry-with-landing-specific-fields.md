@@ -15,7 +15,7 @@ ticket: "roadmap step 3 — personal-landing"
 
 ## Context
 
-The scaffold's `profile` content collection (`site/src/content/config.ts`) mirrors the locked CV template's sections. The landing page needs data the CV template does not carry: an optional `tagline`, a curated `topStack` (≤ 8 technologies for the hero), `selectedProjects` (3–5 entries, each with an impact statement), a structured availability block (status / location / remote-relocation / notice period / work authorisation), labelled phone lines (for the no-digit chooser), and a one-line `earlierBackground`. The spec's invariant is "one Profile content entry, two renderers (landing page + CV)".
+The scaffold's `profile` content collection (`site/src/content/config.ts`) mirrors the locked CV template's sections. The landing page needs data the CV template does not carry: an optional `tagline`, an optional short `positioning` block, a curated `topStack` (≤ 8 technologies for the hero), `selectedProjects` (3–5 entries, each with an impact statement), a structured availability block (`status` plus optional `workAuthorization`; location stays on `contact`), labelled phone lines (for the no-digit chooser), and a one-line `earlierBackground`. (Final field shapes — including the fields dropped from this candidate list, e.g. a discrete relocation field — are settled by `data-model`.) The spec's invariant is "one Profile content entry, two renderers (landing page + CV)".
 
 ## Decision drivers
 

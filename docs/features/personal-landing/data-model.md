@@ -59,6 +59,7 @@ erDiagram
         string name
         string headline
         string tagline "*"
+        string positioning "* max 280"
         string_array topStack "* 1..8"
         string_array summary "min 1"
         string earlierBackground "*"
@@ -123,6 +124,7 @@ are embedded shapes, not separate entities.
 | `name` | `z.string()` | non-empty | feeds CV filename helper + hero |
 | `headline` | `z.string().min(1)` | **required, non-empty** (INV-01) | pipe-separated positioning line; source for CV filename |
 | `tagline` | `z.string().optional()` | — | **NEW** — optional one-liner under the headline (spec §1) |
+| `positioning` | `z.string().max(280).optional()` | ≤ 280 chars | **NEW** — optional short positioning paragraph (2–3 sentences) in the hero, fuller than `tagline`; landing-page only (`summary` stays CV-route). Length-capped so it does not break the above-the-fold fit (AC-01/AC-08) — spec §1 |
 | `topStack` | `z.array(z.string()).min(1).max(8)` | **1–8 items** (INV-07) | **NEW** — hand-curated hero technology chips; *not* derived from `skills` (ADR-0005) |
 | `earlierBackground` | `z.string().optional()` | — | **NEW** — single "earlier background" line rendered once after the timeline; exempt from AC-09 |
 | `contact` | `z.object({…})` | required | embedded — see below |
@@ -159,7 +161,7 @@ source. Documented, not runtime-checked.
 
 | Field | Type | Constraints | Notes |
 |---|---|---|---|
-| `status` | `z.string().min(1)` | **required, non-empty** (INV-02) | free text; carries the remote / hybrid stance (e.g. "Open to Remote & Hybrid Opportunities"). AC-05 required essential; satisfies AC-01's "remote/relocation stance" |
+| `status` | `z.string().min(1)` | **required, non-empty** (INV-02) | free text; carries the remote / hybrid stance (e.g. "Open to Remote & Hybrid Opportunities"). AC-05 required essential; satisfies AC-01's "remote-work stance" |
 | `workAuthorization` | `z.string().optional()` | — | optional (e.g. "EU work permit — Poland") |
 
 *Deliberately dropped from ADR-0005's candidate list (per Roman, 2026-09-06):* a separate
@@ -222,7 +224,7 @@ offending field** (AC-05, AC-06, AC-12).
 No SQL. `implement` applies this under the ADR-0005 / ADR-0007 tasks:
 
 1. **`site/src/content/config.ts`** — extend the `profile` Zod schema:
-   - add `tagline?`, `topStack` (1–8), `earlierBackground?`, `availability { status, workAuthorization? }`, `selectedProjects` (3–5 × `{ name, role, impact }`);
+   - add `tagline?`, `positioning?` (`.max(280)`), `topStack` (1–8), `earlierBackground?`, `availability { status, workAuthorization? }`, `selectedProjects` (3–5 × `{ name, role, impact }`);
    - change `contact.phones` from `z.array(z.string())` to `z.array(phoneLine)` where `phoneLine = { label, e164 }`;
    - require `contact.links.min(1)`;
    - in `experienceEntry`: add `startYear` / `endYear` (nullable), remove `dateRange`;
@@ -241,7 +243,7 @@ Current → target deltas:
   *(note: the current first number "+38 063 199 08484" has a digit-count problem — Roman to confirm the correct E.164 value.)*
 - `contact.availability: "Open to Remote & Hybrid Opportunities"` (string)
   → `availability: { "status": "Open to Remote & Hybrid Opportunities" }`
-- add `topStack`, `tagline?`, `earlierBackground?`, `selectedProjects` (3–5).
+- add `topStack`, `tagline?`, `positioning?`, `earlierBackground?`, `selectedProjects` (3–5).
 - each `experience[]` entry: replace `"dateRange": "2023 - 2026"` with `"startYear": 2023, "endYear": null` (or a real end year).
 
 ## Test fixtures
@@ -256,6 +258,7 @@ form the test tasks adopt (`tasks` / `plan-tests` decide the harness). PII guard
 - `placeholderImpactProfile()` — one `selectedProjects` entry with `impact: "TODO"` / a 12-char string → asserts INV-05 names that project (AC-12).
 - `overlappingExperienceProfile()` — two entries `2021–2024` and `2023–2026` → asserts INV-06 (AC-09).
 - `oversizeTopStackProfile()` — 9 `topStack` entries → asserts INV-07.
+- `oversizePositioningProfile()` — a `positioning` string > 280 chars → asserts the `.max(280)` bound (spec §1 fold-fit guard).
 
 ## Drift check
 
@@ -263,7 +266,7 @@ The `explorer` step compared the target schema against the live `config.ts` + `r
 
 | Kind | Finding |
 |---|---|
-| field-without-column | `tagline`, `topStack`, `earlierBackground`, `availability{}`, `selectedProjects[]`, `experience[].startYear/endYear` — all NEW, absent from live schema. Added by ADR-0005 task. |
+| field-without-column | `tagline`, `positioning`, `topStack`, `earlierBackground`, `availability{}`, `selectedProjects[]`, `experience[].startYear/endYear` — all NEW, absent from live schema. Added by ADR-0005 task. |
 | shape-mismatch | `contact.phones` is `string[]` live, target `{label,e164}[]`. `contact.availability` is a live string, target is the `availability{}` object. `experienceEntry.dateRange` (live string) removed in favour of `startYear`/`endYear`. |
 | column-without-field | `experienceEntry.dateRange` — intentionally removed (display now derived). `contact.availability` string — replaced. No orphan left after the ADR-0005 task. |
 | content (not schema) drift | `roman.json` is almost entirely STUB (`competencies`, `summary`, `skills`, `experience`). `languages[2]` reads `{ "name": "Poland", "level": "basic" }` — likely meant "Polish". Out of this stage's scope — roadmap step 2 / spec §8 content reconciliation; flagged for `implement`'s content task. |

@@ -14,7 +14,7 @@ target_surfaces: [web-frontend]  # single static web front-end; read (never re-d
 
 ## 1. Introduction and goals
 
-**Intent.** Build one static landing page (`site/src/pages/index.astro`) that lets a **Recruiter** judge Roman's fit in a ten-second above-the-fold scan and reach him through phone, email, LinkedIn, or a CV download in one tap, and lets **Roman** publish every change by committing a single content file. The page renders entirely from the one typed **Profile content** entry that also feeds the CV print route (roadmap step 4). This feature is roadmap step 3; the stack (Astro 5 static site, Tailwind v4, typed content collection, zero client JS) is fixed upstream by `docs/architecture-map.md` and ADR-0001–0004.
+**Intent.** Build one static landing page (`site/src/pages/index.astro`) that lets a **Recruiter** judge Roman's fit in a twenty-second above-the-fold scan and reach him through phone, email, LinkedIn, or a CV download in one tap, and lets **Roman** publish every change by committing a single content file. The page renders entirely from the one typed **Profile content** entry that also feeds the CV print route (roadmap step 4). This feature is roadmap step 3; the stack (Astro 5 static site, Tailwind v4, typed content collection, zero client JS) is fixed upstream by `docs/architecture-map.md` and ADR-0001–0004.
 
 **Top-3 quality goals (1-liners; full scenarios in §10):**
 
@@ -76,7 +76,7 @@ The landing site is a public, statically-hosted page. A **Recruiter** reaches it
 C4Context
     title personal-landing — System Context
 
-    Person(recruiter, "Recruiter", "Scans Roman's fit in ~10s, wants one-tap contact")
+    Person(recruiter, "Recruiter", "Scans Roman's fit in ~20s, wants one-tap contact")
     Person(roman, "Roman", "Edits the Profile content entry and commits")
 
     System(site, "Landing site", "Static Astro page on GitHub Pages, rendered from one Profile content entry")
@@ -120,7 +120,7 @@ site/
 │   │   └── cv.astro                    CV print route — roadmap step 4 (shares content + helper)
 │   ├── components/
 │   │   ├── Section.astro               below-the-fold section wrapper
-│   │   ├── Hero.astro                  above-the-fold: headshot, name, headline, tagline
+│   │   ├── Hero.astro                  above-the-fold: headshot, name, headline, tagline, positioning
 │   │   ├── AvailabilityBlock.astro     status / location / remote / notice / work auth
 │   │   ├── ContactActions.astro        the four labelled controls (ADR-0006); each carries a stable data-* hook for step 8
 │   │   ├── PhoneChooser.astro          native <details> — two labelled call controls
@@ -358,6 +358,7 @@ ADR files live under `docs/features/personal-landing/adr/NNNN-<title>.md`.
 |---|---|---|---|
 | Roadmap step 4 (CV PDF) slips — the Download-CV control has no file | Medium | Steps 3 and 4 sequenced together; a missing generated PDF fails the build (postbuild assertion) so a dead link never ships | Roman |
 | Headshot asset is ~2 MB — blows the 500 KB page-weight budget if shipped raw | Medium | `astro:assets` optimisation, responsive sizes, target < 100 KB at display size; checked in the QG-1 Lighthouse pass | Roman |
+| Optional `positioning` block + tagline together push the contact actions off the fold at 390×844 (AC-08) | Low | Schema caps `positioning` at 280 chars (`data-model`); manual above-the-fold check at 390×844 in the QG-3 pass; both fields are optional so the tight layout is opt-in | Roman |
 | Lighthouse checks (and `astro check` on the deploy path) are manual / PR-only, not on push to `main` — quality can regress silently on a later direct content edit | Low | `tasks` adds `npm run check` + invariant unit tests to `deploy.yml`; document the pre-launch Lighthouse checklist; wire Lighthouse CI as a later improvement | Roman |
 | Open question: exact non-overlapping employment date ranges | Open question | Resolve before `sdd:tasks`; spec §8 — default is the CV-template ranges with the EveryMatrix overlap collapsed | Roman |
 | Open question: per-project impact statements + the build-time placeholder-detection rule | Open question | Resolve before `sdd:implement`; spec §8 — Roman supplies statements; rule default is non-empty + ≥ 40 chars + blocked-words list | Roman / design |

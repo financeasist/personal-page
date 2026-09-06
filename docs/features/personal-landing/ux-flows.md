@@ -32,7 +32,7 @@ updated_at: "2026-09-06"
 
 | ID | Screen | Purpose | Entry | Exit |
 |---|---|---|---|---|
-| SCR-01 | Landing hero (above the fold) | The ten-second scan: headshot, name, headline, optional tagline, availability block, top stack, four contact actions | The shared link (CV / LinkedIn / email / a labelled `/t/{label}` redirect — the redirect is roadmap step 5) | Mail client · dialer (via SCR-04) · LinkedIn tab · CV download · scroll to SCR-02 |
+| SCR-01 | Landing hero (above the fold) | The twenty-second scan: headshot, name, headline, optional tagline, optional positioning block, availability block, top stack, four contact actions | The shared link (CV / LinkedIn / email / a labelled `/t/{label}` redirect — the redirect is roadmap step 5) | Mail client · dialer (via SCR-04) · LinkedIn tab · CV download · scroll to SCR-02 |
 | SCR-02 | Experience timeline (below the fold) | Most-recent-first roles with company, date range, contribution; the single pre-2017 "earlier background" line | Scroll down from SCR-01 | Scroll to SCR-03 · scroll back to SCR-01 · leave |
 | SCR-03 | Selected projects (below the fold) | Three to five flagship projects, each with name, Roman's role, and an impact statement | Scroll down from SCR-02 | Scroll back up to a contact action · leave |
 | SCR-04 | Phone-line chooser (expanded state of SCR-01) | Two labelled call controls — "Call — Poland" / "Call — international" — no digits shown | Activate the phone action on SCR-01 | Dialer · collapse back to SCR-01 |
@@ -44,13 +44,13 @@ updated_at: "2026-09-06"
 ```mermaid
 flowchart TD
     A["Recruiter opens the shared link"] --> B["SCR-01 landing hero"]
-    B --> C{"Ten-second scan: seniority, stack, location, availability clear enough?"}
+    B --> C{"Twenty-second scan: seniority, stack, location, availability clear enough?"}
     C -->|"fit looks right"| D["Make contact — Flow US-02"]
     C -->|"want to verify first"| E["Scroll down — Flow US-04 / US-09"]
     C -->|"not a fit"| F["Leave"]
 ```
 
-A Recruiter opens the link Roman placed in his CV, LinkedIn, or outreach email and lands on the hero (SCR-01). Without scrolling they see the headshot, name, headline, availability block, and top stack. From that scan they either judge the fit good enough to contact Roman (into Flow US-02), decide to check his history first (scroll down into Flow US-04 / US-09), or decide it is not a fit and leave. There is no error branch in front of the Recruiter — the page is static and always renders; a missing above-the-fold essential is caught at build time (AC-05), never shown.
+A Recruiter opens the link Roman placed in his CV, LinkedIn, or outreach email and lands on the hero (SCR-01). Without scrolling they see the headshot, name, headline, the optional tagline and positioning block, availability block, and top stack. From that scan they either judge the fit good enough to contact Roman (into Flow US-02), decide to check his history first (scroll down into Flow US-04 / US-09), or decide it is not a fit and leave. There is no error branch in front of the Recruiter — the page is static and always renders; a missing above-the-fold essential is caught at build time (AC-05), never shown.
 
 ### Flow: US-02 — Reach Roman in one tap
 
@@ -145,7 +145,7 @@ Continuing past the timeline the Recruiter reaches the selected-projects section
 
 | AC | Shown by | Notes |
 |---|---|---|
-| AC-01 | Flow US-01 → SCR-01, decision "ten-second scan" | The above-the-fold scan itself |
+| AC-01 | Flow US-01 → SCR-01, decision "twenty-second scan" | The above-the-fold scan itself |
 | AC-02 | Flow US-02 → "Email" branch | Mail client opens addressed to Roman |
 | AC-03 | Flow US-02 → "Phone" → SCR-04; Flow US-03 | Labelled call controls, no digits as text |
 | AC-04 | Flow US-05 → "File name" decision; Flow US-02 → "Download CV" | Filename derivation is build-time (step 4); the flow shows the download UX |
