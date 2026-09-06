@@ -2,6 +2,7 @@
 status: living
 updated_at: "2026-09-06"
 # 2026-09-06: step 3 (personal-landing) spec'd — re-sized L→M, recommendations→v2, D1/D2/D3/D5/D7/D8 resolved.
+# 2026-09-06: steps 5/6/7 (tracking-system) spec'd as one bundled M feature; D6 resolved.
 ---
 
 # Roadmap — personal-landing
@@ -24,9 +25,9 @@ A recruiter opens one link, judges Roman's fit in ~20 seconds, taps to call / em
 | 2 | Canonical profile content — reconcile surname / employment dates / years-of-experience / the 2004→2017 period into one content-collection entry; lock the Zod schema to the reference template's sections | `idea-brief.md §2 Problem` + `idea-brief.md §6 Risks` + `idea-brief.md §8 Open questions` | S | idea |
 | 3 | Recruiter landing page — `index.astro`: name, one-line positioning, availability block, top stack, above-the-fold contact actions (phone / email / LinkedIn / Download CV); experience + selected projects below the fold; the shared `Section` / `ContactButton` / `AvailabilityBlock` / `ProjectCard` primitives. Recommendations block deferred to v2. → [`docs/features/personal-landing/spec.md`](features/personal-landing/spec.md) | `idea-brief.md §7 Recommendation` + `idea-brief.md §3 Users` | M | **spec'd** |
 | 4 | CV PDF route — `cv.astro` as a faithful reproduction of `docs/reference/cv-template-reference.pdf`, fed by the same `profile` collection; meaningfully-named PDF emitted at build | `architecture-map.md §Stack` (PDF generation) + `docs/adr/0004` | M | idea |
-| 5 | Labelled-link redirect — `/t/{label}` → 302 to the site, appends a visit event; `recruiter_link` rows seeded by hand, one per outreach | `idea-brief.md §7 Recommendation` + `idea-brief.md §5 Out of scope` | M | idea |
-| 6 | Cookieless event ingest — `/e` endpoint: page-view, contact-click (per channel), `cv_download`; city / referrer derivation; append-only | `idea-brief.md §7 Recommendation` | M | idea |
-| 7 | View notification — Telegram "page viewed" message to Roman on every visit; a labelled visit names the recruiter, an unlabelled one carries city / referrer | `idea-brief.md §7 Recommendation` + `architecture-map.md §Stack` (Notifications) | S | idea |
+| 5 | Labelled-link redirect — `/t/{label}` → 302 to the site, appends a visit event; `recruiter_link` rows seeded by hand, one per outreach → [`docs/features/tracking-system/spec.md`](features/tracking-system/spec.md) | `idea-brief.md §7 Recommendation` + `idea-brief.md §5 Out of scope` | M | **spec'd** |
+| 6 | Cookieless event ingest — `/e` endpoint: page-view, contact-click (per channel), `cv_download`; city / referrer derivation; append-only → [`docs/features/tracking-system/spec.md`](features/tracking-system/spec.md) | `idea-brief.md §7 Recommendation` | M | **spec'd** |
+| 7 | View notification — Telegram "page viewed" message to Roman on every visit; a labelled visit names the recruiter, an unlabelled one carries city / referrer → [`docs/features/tracking-system/spec.md`](features/tracking-system/spec.md) | `idea-brief.md §7 Recommendation` + `architecture-map.md §Stack` (Notifications) | S | **spec'd** |
 | 8 | Site → tracker wiring — the inline `<script>` that beacons page-view + contact-click + `cv_download` to `/e`; the CV download proceeds regardless of the beacon (fire-and-forget) | `architecture-map.md §Frontend / UI foundation` (State / data-fetching) + `idea-brief.md §7 Recommendation` | S | idea |
 | 9 | Per-recruiter "why I fit you" intro → see [Not yet specified](#not-yet-specified) | `idea-brief.md §6 Risks` | fog | idea |
 
@@ -54,7 +55,7 @@ A recruiter opens one link, judges Roman's fit in ~20 seconds, taps to call / em
 | D3 | ~~How is the iGaming / EveryMatrix experience framed?~~ **Resolved (revised 2026-09-06): no content constraint** — Roman dropped the special framing rule; the iGaming / EveryMatrix work is described like any other role, on its engineering substance, with no requirement to downplay or foreground the domain. | grilling | human | 2 |
 | D4 | What are the corrected, non-overlapping employment dates, and how is the 2004→2017 period presented? **Partially resolved:** 2004→2017 shown as a single "earlier background" line; exact date ranges still open (personal-landing spec §8). | grilling | human | 2 |
 | D5 | ~~Is salary or rate expectation shown on the page?~~ **Resolved: no** — not shown; handled in conversation. | grilling | human | 3 |
-| D6 | Is informal storage of named-recruiter visit logs acceptable as-is, or is a retention / notice line needed? | grilling | human | 5 |
+| D6 | ~~Is informal storage of named-recruiter visit logs acceptable as-is, or is a retention / notice line needed?~~ **Resolved (tracking-system spec, 2026-09-06): indefinite retention**, offset by a manual, Roman-only erase-by-label operation (a hand-run database operation, not automatic expiry). | grilling | human | 5 |
 | D7 | ~~Which contact channel is primary?~~ **Resolved: four equal above-the-fold actions** (phone / email / LinkedIn / Download CV); the phone action expands to two labelled call controls (Poland / international). | grilling | human | 3 |
 | D8 | ~~Does the Download-CV click route through the tracking service?~~ **Resolved: no** — plain link + inline-script fire-and-forget beacon; the action never waits on the tracker. | task | agent | 6 |
 
@@ -68,6 +69,7 @@ A recruiter opens one link, judges Roman's fit in ~20 seconds, taps to call / em
 - The "Download CV" button is a primary above-the-fold action firing a tracked `cv_download` event → [`docs/idea-brief.md §8`](idea-brief.md)
 - Recruiter landing page: no salary shown; four equal contact actions with a two-line phone chooser; contact details never shown as visible text (actionable controls only); recommendations block → v2; step 4 (CV PDF route) sequenced to land with step 3 → [`docs/features/personal-landing/spec.md`](features/personal-landing/spec.md)
 - Step 3 re-sized L → M after the scaffold established the component/styling conventions the "L" estimate assumed → [`docs/features/personal-landing/spec.md`](features/personal-landing/spec.md)
+- Steps 5+6+7 bundled into one `tracking-system` feature (M): a recruiter's labelled visit propagates its label via the redirect URL through to the event-ingest/notification path; every visit notifies in real time with no dedup; known link-preview crawlers are filtered and never counted; visit history is indefinite, offset by a manual Roman-only erase-by-label operation; both public endpoints carry a basic per-source rate limit → [`docs/features/tracking-system/spec.md`](features/tracking-system/spec.md)
 
 ## Dependency graph
 
