@@ -1,7 +1,7 @@
 ---
 status: draft
-feature_size: "M"
-updated_at: "2026-09-06"
+feature_size: "S"
+updated_at: "2026-09-07"
 ---
 
 # UX flows — personal-landing
@@ -10,21 +10,26 @@ updated_at: "2026-09-06"
 > `design`) and read by `design` (evidence for the target-surface + UI-architecture decisions),
 > `sequences`, `screens` and `plan-tests`. Markdown + mermaid `flowchart` — flow-altitude, not
 > visual design.
+>
+> **Re-synced 2026-09-07** to the current spec: below-the-fold depth cut to v2 (US-04 / US-09);
+> the phone control removed from the landing page entirely (US-03 / AC-03 withdrawn — not
+> deferred); a short **About section** added below the fold (US-10 / AC-14). Contact actions are
+> now three: email, LinkedIn, Download CV.
 
 ## Platform decisions
 
-- **Posture:** responsive, mobile-first content priority — no `docs/design-system.md` exists yet
-  (run `/sdd:design-system`); assumed from `docs/architecture-map.md` (Astro static site, Tailwind,
-  hand-rolled components, "~one-screen recruiter page") and the fact that the link is shared in
-  outreach and CVs and is often opened first from a phone inbox. Reference viewports: 390×844
-  (phone), 1280×800 (laptop).
-- **Single page, no routing.** The whole feature is one document; "screens" below are sections and
-  one expanded-disclosure state of that page, not separate routes. The only navigations are
-  in-page scroll and four hand-offs that leave the page (mail client, dialer, LinkedIn tab, file
-  download).
-- **No client JavaScript.** The phone-line chooser is a native disclosure (open/close with no
-  script); every other interaction is a plain link. (`design` owns the formal call; this is the
-  flow-level assumption the flows are drawn against.)
+- **Posture:** responsive-both — from `docs/design-system.md` (§Platform posture): recruiters open
+  the link from a phone inbox (outreach, CV footers) and from a laptop while writing up a
+  candidate, so neither viewport is a second-class reflow of the other. Two fixed reference
+  viewports: **390×844** (phone) and **1280×800** (laptop); no horizontal scroll at any width
+  between them (and at 360 / 768 / 1920, §6 NFR).
+- **Single page, two sections, no routing.** The whole feature is one document: the **hero**
+  (above the fold) and the **About section** (one scroll below it). "Screens" below are those two
+  sections of the page, not separate routes. The only navigations are in-page vertical scroll and
+  three hand-offs that leave the page (mail client, LinkedIn tab, file download).
+- **No client JavaScript.** Every interaction is a plain link or a scroll. (The old no-script
+  phone-line disclosure is gone with the phone control.) `design` owns the formal call; this is
+  the flow-level assumption the flows are drawn against.
 - **No back-navigation to manage.** Leaving the page is always into another app/tab; the browser
   Back button returns to the page unchanged.
 
@@ -32,10 +37,12 @@ updated_at: "2026-09-06"
 
 | ID | Screen | Purpose | Entry | Exit |
 |---|---|---|---|---|
-| SCR-01 | Landing hero (above the fold) | The twenty-second scan: headshot, name, headline, optional tagline, optional positioning block, availability block, top stack, four contact actions | The shared link (CV / LinkedIn / email / a labelled `/t/{label}` redirect — the redirect is roadmap step 5) | Mail client · dialer (via SCR-04) · LinkedIn tab · CV download · scroll to SCR-02 |
-| SCR-02 | Experience timeline (below the fold) | Most-recent-first roles with company, date range, contribution; the single pre-2017 "earlier background" line | Scroll down from SCR-01 | Scroll to SCR-03 · scroll back to SCR-01 · leave |
-| SCR-03 | Selected projects (below the fold) | Three to five flagship projects, each with name, Roman's role, and an impact statement | Scroll down from SCR-02 | Scroll back up to a contact action · leave |
-| SCR-04 | Phone-line chooser (expanded state of SCR-01) | Two labelled call controls — "Call — Poland" / "Call — international" — no digits shown | Activate the phone action on SCR-01 | Dialer · collapse back to SCR-01 |
+| SCR-01 | Landing hero (above the fold) | The twenty-second scan: headshot, name, headline, optional tagline, optional positioning block, availability block, top stack, three contact actions (email · LinkedIn · Download CV) | The shared link (CV / LinkedIn / email / a labelled `/t/{label}` redirect — the redirect is roadmap step 5) | Mail client · LinkedIn tab · CV download · scroll to SCR-05 |
+| SCR-05 | About section (below the fold) | A short prose `narrative` + a `highlights` bullet list, both rendered straight from Profile content — a fuller sense of Roman's focus in his own words | Scroll down from SCR-01 | Scroll back up to a contact action · leave |
+
+**Retired ids (kept, not reused):** `SCR-02` (experience timeline) and `SCR-03` (selected
+projects) are **v2**; `SCR-04` (phone-line chooser) was **removed** with US-03. `SCR-05` keeps the
+number `screens` already drew the About artboard under.
 
 ## Flows
 
@@ -46,115 +53,132 @@ flowchart TD
     A["Recruiter opens the shared link"] --> B["SCR-01 landing hero"]
     B --> C{"Twenty-second scan: seniority, stack, location, availability clear enough?"}
     C -->|"fit looks right"| D["Make contact — Flow US-02"]
-    C -->|"want to verify first"| E["Scroll down — Flow US-04 / US-09"]
+    C -->|"want a fuller picture first"| E["Scroll down — Flow US-10 (About)"]
     C -->|"not a fit"| F["Leave"]
 ```
 
-A Recruiter opens the link Roman placed in his CV, LinkedIn, or outreach email and lands on the hero (SCR-01). Without scrolling they see the headshot, name, headline, the optional tagline and positioning block, availability block, and top stack. From that scan they either judge the fit good enough to contact Roman (into Flow US-02), decide to check his history first (scroll down into Flow US-04 / US-09), or decide it is not a fit and leave. There is no error branch in front of the Recruiter — the page is static and always renders; a missing above-the-fold essential is caught at build time (AC-05), never shown.
+A Recruiter opens the link Roman placed in his CV, LinkedIn, or outreach email and lands on the
+hero (SCR-01). Without scrolling they see the headshot, name, headline, the optional tagline and
+positioning block, the availability block, the top stack, and the three contact actions. From that
+scan they either judge the fit good enough to contact Roman (into Flow US-02), scroll down to read
+the About section first (Flow US-10), or decide it is not a fit and leave. There is no error branch
+in front of the Recruiter — the page is static and always renders; a missing required field is
+caught at build time (AC-05), never shown.
 
 ### Flow: US-02 — Reach Roman in one tap
 
 ```mermaid
 flowchart TD
     A["SCR-01 contact actions"] --> B{"Which channel?"}
-    B -->|"Email"| C["Mail client opens a new message to Roman"]
-    B -->|"Phone"| D["SCR-04 phone-line chooser expands (no script)"]
-    D --> E{"Which line?"}
-    E -->|"Poland"| F["Dialer starts a call to the PL line"]
-    E -->|"International"| G["Dialer starts a call to the international line"]
-    B -->|"LinkedIn"| H["LinkedIn profile opens in a new tab; landing page stays open"]
-    B -->|"Download CV"| I["Named PDF downloads to the device"]
-    C --> J["Recruiter continues in their own tool"]
-    F --> J
-    G --> J
-    H --> J
-    I --> J
+    B -->|"Email"| C["Mail client opens a new message addressed to Roman"]
+    B -->|"LinkedIn"| D["LinkedIn profile opens in a new tab — landing page stays open"]
+    B -->|"Download CV"| E["Named PDF saves to the device as a file download"]
+    C --> F["Recruiter continues in their own tool"]
+    D --> F
+    E --> F
+    B -->|"device has no mail handler"| G["mailto is inert — no copyable-text fallback per ADR-0006 — LinkedIn and CV still work"]
 ```
 
-From the four contact actions at the top of SCR-01 the Recruiter picks a channel. **Email** opens their mail client with a message already addressed to Roman (AC-02). **Phone** expands a no-script disclosure (SCR-04) with two labelled call controls; picking one starts a call and no phone digits are ever shown as text (AC-03, AC-10). **LinkedIn** opens Roman's profile in a new browser tab, leaving the landing page open (AC-13). **Download CV** saves the meaningfully-named PDF as a file download rather than opening it inline (AC-13, AC-04). Every branch hands the Recruiter to their own tool. On a device with no mail client or dialer the matching action may not resolve — accepted, because the rejected alternative was to print the raw value as copyable text, which breaks the actionable-only rule.
-
-### Flow: US-03 — Choose which number to call
-
-```mermaid
-flowchart TD
-    A["SCR-01 phone action"] -->|"activate"| B["SCR-04 chooser expands — native disclosure, no script"]
-    B --> C{"Recruiter reads the labels"}
-    C -->|"Call — Poland"| D["Dialer opens the PL number"]
-    C -->|"Call — international"| E["Dialer opens the international number"]
-    C -->|"changes mind"| F["Collapse the chooser — back to SCR-01 unchanged"]
-```
-
-Activating the phone action expands a native disclosure control (SCR-04) that needs no JavaScript, so it works on any browser. The Recruiter sees one labelled control per line — "Call — Poland", "Call — international" — with no digits rendered as text, and picking one hands off to the dialer (AC-03, AC-10). Collapsing the disclosure returns them to the hero unchanged.
-
-### Flow: US-04 — Verify the headline claims
-
-```mermaid
-flowchart TD
-    A["SCR-01 hero"] -->|"scroll down"| B["SCR-02 experience timeline"]
-    B --> C{"Roles, dates, contributions back the headline?"}
-    C -->|"claims check out"| D["Scroll back up or on to SCR-03 — make contact"]
-    C -->|"want project detail"| E["Scroll on — Flow US-09"]
-    C -->|"does not match expectations"| F["Leave"]
-```
-
-From the hero the Recruiter scrolls to the experience timeline (SCR-02): each role most-recent-first with company, date range, and contribution, plus the single pre-2017 "earlier background" line (AC-09). If the history backs the headline they move toward contact or scroll on to the selected projects; if not, they leave. Nothing interactive — it is a read.
+From the three contact actions at the top of SCR-01 the Recruiter picks a channel. **Email** opens
+their mail client with a message already addressed to Roman (AC-02). **LinkedIn** opens Roman's
+profile in a new browser tab, leaving the landing page open (AC-13). **Download CV** saves the
+meaningfully-named PDF as a file download rather than opening it inline (AC-13, AC-04). The email
+address and the LinkedIn URL never appear as visible text — they live only in the controls' link
+attributes (AC-07, AC-10); the phone is not on the landing page at all in v1. On a device with no
+mail client the `mailto:` activation is simply inert — accepted, because the rejected alternative
+was to print the raw value as copyable text, which breaks the actionable-only rule; LinkedIn and
+the CV download cover that case.
 
 ### Flow: US-05 — Download an identifiable CV
 
 ```mermaid
 flowchart TD
-    A["SCR-01 Download CV action"] -->|"activate"| B["Browser saves the file"]
+    A["SCR-01 Download CV action"] -->|"activate"| B["Browser saves the file as a download, not inline"]
     B --> C{"File name"}
-    C -->|"Roman-Hrupskyi-…-CV.pdf"| D["Recognisable in the downloads folder and the ATS"]
-    B --> E["Recruiter opens it later, offline"]
+    C -->|"Roman-Hrupskyi-...-CV.pdf"| D["Recognisable in the downloads folder and the ATS"]
+    B --> E["Recruiter opens it later, offline — contact details visible in the PDF by design"]
 ```
 
-Activating Download CV saves the build-generated PDF whose filename is derived from Roman's name and headline — not a generic "cv" name — so it is recognisable in a downloads folder and an applicant tracking system (AC-04). The file is the same content as the page, generated by roadmap step 4; a missing PDF fails the build rather than shipping a dead action.
+Activating Download CV saves the PDF whose filename is derived from Roman's name and headline
+through the shared filename helper — not a generic "cv" name — so it is recognisable in a downloads
+folder and an applicant tracking system (AC-04). In v1 the file is a **committed static PDF** under
+`site/public/` (the reconciled "Classic" variant — ADR-0008), not generated from `/cv`; a missing
+file fails the build rather than shipping a dead action. The download is the one place a Recruiter
+sees Roman's full contact details, and they initiate it deliberately.
 
 ### Flow: US-06 — Review the page on my phone
 
 ```mermaid
 flowchart TD
-    A["Recruiter opens the link on a phone"] --> B["SCR-01 hero at 390×844"]
+    A["Recruiter opens the link on a phone"] --> B["SCR-01 hero at 390x844"]
     B --> C{"Above-the-fold essentials fit with no horizontal scroll?"}
-    C -->|"yes"| D["Same contact + scroll options as desktop — Flow US-02 / US-04"]
-    C -->|"more content than one screen"| E["Scroll vertically; never horizontally, at any width"]
+    C -->|"yes"| D["Same contact + scroll options as desktop — Flow US-02 / US-10"]
+    C -->|"more content than one screen"| E["Scroll vertically, never horizontally, at any width"]
     E --> D
 ```
 
-Opening the link on a phone lands on the same SCR-01, verified at the 390×844 reference viewport: body text stays ≥16px, every contact action is a ≥44×44px tap target, and there is never horizontal scrolling at any width (AC-08). If the essentials do not all fit one phone screen the Recruiter scrolls vertically; the contact and depth flows are identical to desktop.
+Opening the link on a phone lands on the same SCR-01, verified at the 390×844 reference viewport:
+body text stays ≥ 16 px, every contact action is a ≥ 44×44 px tap target, and there is never
+horizontal scrolling at any width (AC-08). If the essentials do not all fit one phone screen the
+Recruiter scrolls vertically; the contact and About flows are identical to desktop. At 360 px only
+the no-horizontal-scroll guarantee is binding — optional elements (positioning block → tagline →
+top-stack wrap) may drop below the fold in that order (§6).
 
-### Flow: US-09 — Gauge the scale and outcome of his work
+### Flow: US-10 — Read a short "about" in Roman's own words
 
 ```mermaid
 flowchart TD
-    A["SCR-02 experience timeline"] -->|"scroll on"| B["SCR-03 selected projects"]
-    B --> C{"3–5 projects with impact — scale and outcomes convincing?"}
-    C -->|"convincing"| D["Scroll up to a contact action — Flow US-02"]
+    A["SCR-01 hero"] -->|"scroll down one screen"| B["SCR-05 About section"]
+    B --> C{"Narrative + highlights: focus and strengths convincing?"}
+    C -->|"convinced"| D["Scroll back up to a contact action — Flow US-02"]
     C -->|"not convinced"| E["Leave"]
 ```
 
-Continuing past the timeline the Recruiter reaches the selected-projects section (SCR-03): three to five flagship pieces of work, each with its name, Roman's role, and a one- or two-line impact statement, quantified where a real number exists (AC-11). Every published project has a real outcome — a placeholder impact fails the build (AC-12). Convinced, the Recruiter scrolls back up to a contact action; unconvinced, they leave.
+One scroll below the fold the Recruiter reaches the About section (SCR-05): a short prose narrative
+(reconciled from `docs/reference/linkedin-about.md`) and a highlights bullet list (Roman's own
+text), both rendered straight from the Profile content — no hard-coded copy (AC-14). Both fields
+are build-required; a missing narrative or an empty highlights list fails the build (AC-05, AC-06),
+never ships blank. On the phone viewport the section reflows to a single column, body text ≥ 16 px,
+no horizontal scroll. Nothing interactive — it is a read; convinced, the Recruiter scrolls back up
+to a contact action, otherwise they leave.
 
-## Out of scope (backend / authoring — no screens)
+## Out of scope
 
-- **US-07 — Publish by committing one file.** Roman edits the Profile content entry, commits, and CI builds and deploys the site. No application screen — a git + CI flow.
-- **US-08 — Never ship a broken page.** The build validates the required Profile fields and fails with a message naming the missing or malformed one (AC-05, AC-06, AC-12). Roman or CI sees a build log, not a UI screen.
+### Removed from v1 (not deferred)
+
+- **US-03 — Choose which number to call.** The phone is not a landing-page channel in v1 — no
+  `tel:` control, no line chooser, no phone value in the delivered HTML. `contact.phones` stays in
+  the Profile content and renders only on the CV route. AC-03 withdrawn. (`SCR-04` retired.)
+
+### Deferred to v2
+
+- **US-04 — Verify the headline claims** (experience timeline, `SCR-02`, AC-09). In v1 a Recruiter
+  verifies history via the committed CV.
+- **US-09 — Gauge the scale and outcome of his work** (selected projects, `SCR-03`, AC-11 / AC-12).
+
+### Backend / authoring — no screens
+
+- **US-07 — Publish by committing one file.** Roman edits the Profile content entry, commits, and
+  CI builds and deploys the site. No application screen — a git + CI flow.
+- **US-08 — Never ship a broken page.** The build validates the required Profile fields (including
+  `about.narrative` + `about.highlights`) and fails with a message naming the missing or malformed
+  one (AC-05, AC-06). Roman or CI sees a build log, not a UI screen.
 
 ## AC coverage
 
 | AC | Shown by | Notes |
 |---|---|---|
-| AC-01 | Flow US-01 → SCR-01, decision "twenty-second scan" | The above-the-fold scan itself |
+| AC-01 | Flow US-01 → SCR-01, decision "twenty-second scan" | The above-the-fold scan itself; three contact actions |
 | AC-02 | Flow US-02 → "Email" branch | Mail client opens addressed to Roman |
-| AC-03 | Flow US-02 → "Phone" → SCR-04; Flow US-03 | Labelled call controls, no digits as text |
-| AC-04 | Flow US-05 → "File name" decision; Flow US-02 → "Download CV" | Filename derivation is build-time (step 4); the flow shows the download UX |
-| AC-05 | — | N/A: build-time gate, no Recruiter-facing screen (see Out of scope, US-08) |
+| AC-03 | — | WITHDRAWN with US-03 (phone removed from v1) |
+| AC-04 | Flow US-05 → "File name" decision; Flow US-02 → "Download CV" | Filename derivation is build-time; the flow shows the download UX. Committed static PDF in v1 (ADR-0008) |
+| AC-05 | — | N/A: build-time gate, no Recruiter-facing screen (see Out of scope, US-08). Now also covers `about.narrative` / `about.highlights` |
 | AC-06 | — | N/A: build-time, Roman/CI-facing, no screen |
-| AC-07 | Flow US-02 → SCR-01 / SCR-04 | Contact only via controls; the "not in delivered source" part is a source-inspection property, not a flow |
+| AC-07 | Flow US-02 → SCR-01 | Contact only via controls; phone absent entirely; the "not in delivered source" part is a source-inspection property, not a flow |
 | AC-08 | Flow US-06 | Legibility, tap-target size, no horizontal scroll at the phone viewport |
-| AC-09 | Flow US-04 → SCR-02 | Timeline roles + the "earlier background" line |
-| AC-10 | Flow US-02 → SCR-04; Flow US-03 | Contact details actionable-only on the page |
-| AC-11 | Flow US-09 → SCR-03 | 3–5 projects with impact statements |
-| AC-12 | — | N/A: build-time gate, no screen |
+| AC-09 | — | WITHDRAWN with US-04 (deferred to v2) |
+| AC-10 | Flow US-02 → SCR-01 | Email + profile URL actionable-only on the page |
+| AC-11 | — | WITHDRAWN with US-09 (deferred to v2) |
+| AC-12 | — | WITHDRAWN with US-09 (deferred to v2) |
 | AC-13 | Flow US-02 → "LinkedIn" and "Download CV" branches | New tab / file download |
+| AC-14 | Flow US-10 → SCR-05 | About renders narrative + highlights from Profile content; reflows to one column on phone |
