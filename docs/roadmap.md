@@ -1,6 +1,7 @@
 ---
 status: living
 updated_at: "2026-09-06"
+# 2026-09-06: step 3 (personal-landing) spec'd — re-sized L→M, recommendations→v2, D1/D2/D3/D5/D7/D8 resolved.
 ---
 
 # Roadmap — personal-landing
@@ -21,7 +22,7 @@ A recruiter opens one link, judges Roman's fit in ~10 seconds, taps to call / em
 |---|---|---|:---:|---|
 | 1 | Scaffold the skeleton — monorepo, Astro site + Tailwind v4 + typed `profile` collection, Spring Boot tracker + Flyway V1, CI/deploy workflows, build-time PDF generator | `architecture-map.md` §Module inventory + `docs/features/_scaffold/tasks.json` | M | idea |
 | 2 | Canonical profile content — reconcile surname / employment dates / years-of-experience / iGaming framing / the 2004→2017 period into one content-collection entry; lock the Zod schema to the reference template's sections | `idea-brief.md §2 Problem` + `idea-brief.md §6 Risks` + `idea-brief.md §8 Open questions` | S | idea |
-| 3 | Recruiter landing page — `index.astro`: name, one-line positioning, availability block, top stack, above-the-fold contact actions (phone / email / LinkedIn / Download CV); experience, selected projects, recommendations below the fold; the shared `Section` / `ContactButton` / `AvailabilityBlock` / `ProjectCard` primitives | `idea-brief.md §7 Recommendation` + `idea-brief.md §3 Users` | L | idea |
+| 3 | Recruiter landing page — `index.astro`: name, one-line positioning, availability block, top stack, above-the-fold contact actions (phone / email / LinkedIn / Download CV); experience + selected projects below the fold; the shared `Section` / `ContactButton` / `AvailabilityBlock` / `ProjectCard` primitives. Recommendations block deferred to v2. → [`docs/features/personal-landing/spec.md`](features/personal-landing/spec.md) | `idea-brief.md §7 Recommendation` + `idea-brief.md §3 Users` | M | **spec'd** |
 | 4 | CV PDF route — `cv.astro` as a faithful reproduction of `docs/reference/cv-template-reference.pdf`, fed by the same `profile` collection; meaningfully-named PDF emitted at build | `architecture-map.md §Stack` (PDF generation) + `docs/adr/0004` | M | idea |
 | 5 | Labelled-link redirect — `/t/{label}` → 302 to the site, appends a visit event; `recruiter_link` rows seeded by hand, one per outreach | `idea-brief.md §7 Recommendation` + `idea-brief.md §5 Out of scope` | M | idea |
 | 6 | Cookieless event ingest — `/e` endpoint: page-view, contact-click (per channel), `cv_download`; city / referrer derivation; append-only | `idea-brief.md §7 Recommendation` | M | idea |
@@ -48,14 +49,14 @@ A recruiter opens one link, judges Roman's fit in ~10 seconds, taps to call / em
 
 | # | Question | Type | Owner | Blocks |
 |---|---|:---:|:---:|:---:|
-| D1 | Which surname spelling is canonical — Hrupskyi / Grupskyi / Grupskiy? | grilling | human | 2 |
-| D2 | Which CV variant is the content base — the three-page "Classic" version or the reference template? | grilling | human | 2 |
-| D3 | How is the iGaming / EveryMatrix experience framed for gambling-averse employers? | grilling | human | 2 |
-| D4 | What are the corrected employment dates, and how is the 2004→2017 sales / project-management period presented — shown, summarised, or omitted? | grilling | human | 2 |
-| D5 | Is salary or rate expectation shown on the page? | grilling | human | 3 |
+| D1 | ~~Which surname spelling is canonical?~~ **Resolved (personal-landing spec, 2026-09-06): Hrupskyi**; email stays `roman.grupskyi@gmail.com`. | grilling | human | 2 |
+| D2 | ~~Which CV variant is the content base?~~ **Resolved: the reference template** (`cv-template-reference.pdf`); the "Classic" variant is reconciliation input only. | grilling | human | 2 |
+| D3 | ~~How is the iGaming / EveryMatrix experience framed?~~ **Resolved: by engineering substance** (RGS platform — reactive microservices, high-throughput distributed systems); domain named plainly once, not foregrounded. | grilling | human | 2 |
+| D4 | What are the corrected, non-overlapping employment dates, and how is the 2004→2017 period presented? **Partially resolved:** 2004→2017 shown as a single "earlier background" line; exact date ranges still open (personal-landing spec §8). | grilling | human | 2 |
+| D5 | ~~Is salary or rate expectation shown on the page?~~ **Resolved: no** — not shown; handled in conversation. | grilling | human | 3 |
 | D6 | Is informal storage of named-recruiter visit logs acceptable as-is, or is a retention / notice line needed? | grilling | human | 5 |
-| D7 | Which contact channel is primary — the CV lists two phone numbers plus email plus LinkedIn? | grilling | human | 3 |
-| D8 | Does the Download-CV click route through the tracking service, or is a plain link + client-side event enough? (`architecture-map.md §Frontend / UI foundation` leans plain link + inline-script beacon — confirm in `specify`) | task | agent | 6 |
+| D7 | ~~Which contact channel is primary?~~ **Resolved: four equal above-the-fold actions** (phone / email / LinkedIn / Download CV); the phone action expands to two labelled call controls (Poland / international). | grilling | human | 3 |
+| D8 | ~~Does the Download-CV click route through the tracking service?~~ **Resolved: no** — plain link + inline-script fire-and-forget beacon; the action never waits on the tracker. | task | agent | 6 |
 
 ## Decisions so far
 
@@ -65,6 +66,8 @@ A recruiter opens one link, judges Roman's fit in ~10 seconds, taps to call / em
 - `cv.pdf` generated from a print route at build time (not the committed "Classic" PDF) → [`docs/adr/0004`](adr/0004-generate-cv-pdf-from-a-print-route-at-build-time.md)
 - Hosting: site on GitHub Pages, tracker on Fly.io (`waw`), Postgres on Supabase → [`docs/architecture-map.md §Stack`](architecture-map.md)
 - The "Download CV" button is a primary above-the-fold action firing a tracked `cv_download` event → [`docs/idea-brief.md §8`](idea-brief.md)
+- Recruiter landing page: no salary shown; four equal contact actions with a two-line phone chooser; contact details never shown as visible text (actionable controls only); recommendations block → v2; step 4 (CV PDF route) sequenced to land with step 3 → [`docs/features/personal-landing/spec.md`](features/personal-landing/spec.md)
+- Step 3 re-sized L → M after the scaffold established the component/styling conventions the "L" estimate assumed → [`docs/features/personal-landing/spec.md`](features/personal-landing/spec.md)
 
 ## Dependency graph
 
