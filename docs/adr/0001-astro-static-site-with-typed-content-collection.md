@@ -57,9 +57,11 @@ runtime weight with no benefit here.
 **Neutral**
 - Tailwind v4 is the paired styling choice; swapping it later is a restyle, not a rebuild.
 - Moving off Astro later means porting `.astro` templates, but the content files (YAML/MD) carry over.
+- The same content collection also feeds the generated `cv.pdf` (ADR 0004) — the site is the single
+  source of truth for both the page and the CV.
 
 ## Links
 
 - Idea brief: [[../idea-brief.md]]
 - Architecture map: [[../architecture-map.md]] §Stack, §Frontend / UI foundation
-- Related ADR: [[0003-monorepo-layout-for-site-and-tracker]]
+- Related ADR: [[0003-monorepo-layout-for-site-and-tracker]], [[0004-generate-cv-pdf-from-a-print-route-at-build-time]]

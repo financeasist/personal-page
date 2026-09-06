@@ -22,13 +22,18 @@ frontend: "astro 5 + tailwind v4"
 > brownfield map. Refresh with `survey` once the repo drifts past `reflects_commit`.
 >
 > Source of intent: [[../docs/idea-brief.md]] (`docs/idea-brief.md`). Foundational ADRs:
-> `docs/adr/0001`–`0003`.
+> `docs/adr/0001`–`0004`.
 
 ## Stack
 
 - **Site** — Astro 5 (static output), TypeScript, Tailwind v4. Node 20+ to build. Package manager: npm.
   Content lives in a typed Astro **content collection** (`site/src/content/`) with a Zod schema — the
-  "single structured file Roman edits and commits" from the brief.
+  "single structured file Roman edits and commits" from the brief. **The site is the single source
+  of truth**: the landing page AND `cv.pdf` are both rendered from the same content collection.
+- **PDF generation** — a print-optimized Astro route (`site/src/pages/cv.astro`) is rendered to
+  `dist/cv.pdf` by headless Chromium (Playwright) as a `postbuild` step. Same data as the landing
+  page, distinct CV-shaped A4 layout. Runs in CI on every deploy, so the PDF can never drift from
+  the page. See `docs/adr/0004`.
 - **Tracking service** — Java 21, Spring Boot 3.5.x, **Maven** (wrapper `./mvnw`). Spring Web (MVC),
   **Spring Data JDBC** (no JPA/Hibernate), Flyway, PostgreSQL driver, Spring `RestClient` for the
   Telegram Bot API. Tests: JUnit 5 + Testcontainers (Postgres).
@@ -47,7 +52,7 @@ C4Container
     Person(recruiter, "Recruiter", "Screens Roman in ~10s, wants one-tap contact")
     Person(roman, "Roman", "Edits page content; reads visit analytics")
 
-    Container(site, "Landing site", "Astro 5 static site on GitHub Pages", "Recruiter-facing profile, availability block, contact actions, CV download")
+    Container(site, "Landing site", "Astro 5 static site on GitHub Pages", "Recruiter-facing profile + contact actions; also renders cv.pdf from the same content at build time")
     Container(tracker, "Tracking service", "Java 21 / Spring Boot on Fly.io (waw)", "Labelled-link redirect, cookieless event ingest, view notifications")
     ContainerDb(db, "Analytics DB", "PostgreSQL 16 (Supabase)", "Recruiter link labels, visit + contact-click events (append-only)")
     System_Ext(telegram, "Telegram Bot API", "Delivers real-time 'page viewed' messages to Roman")
@@ -65,7 +70,7 @@ C4Container
 
 | Module | Path | Layers | Wired at | Responsibility |
 |---|---|---|---|---|
-| site | `site/` | content (Zod schema) / pages / components / public assets | `site/astro.config.mjs` | Static recruiter landing page + `cv.pdf` download |
+| site | `site/` | content (Zod schema) / pages (incl. `cv.astro` print route) / components / scripts (`generate-pdf.mjs`) / public assets | `site/astro.config.mjs` | Static recruiter landing page + build-time-generated `cv.pdf`, both from one content collection |
 | tracker | `tracker/` | web (controllers) / app (services) / infra (JDBC repos, Telegram client) / domain (records) | `tracker/src/main/java/com/grupskyi/tracker/TrackerApplication.java` | Labelled-link redirect, event ingest, Telegram notify, health |
 | migrations | `tracker/src/main/resources/db/migration/` | — | Flyway auto-runs on tracker boot | Schema for `recruiter_link`, `visit_event` |
 
@@ -91,6 +96,10 @@ C4Container
 - **UI / styling:** Tailwind v4 with `@theme` tokens in `site/src/styles/global.css`; hand-rolled
   `.astro` components in `site/src/components/`; zero client JS by default (one small inline script
   posts contact-click events).
+- **PDF generation:** `site/src/pages/cv.astro` is a print route consuming the same `profile`
+  content; `site/scripts/generate-pdf.mjs` (Playwright, Chromium) renders it to `dist/cv.pdf` in the
+  `build` script's `postbuild` hook. A CV content change is a content-collection edit only — never a
+  hand-edited PDF.
 
 ## Datastores
 
@@ -121,7 +130,10 @@ C4Container
 - A new **tracker endpoint** → controller in `tracker/.../web/` + service in `tracker/.../app/`,
   constructor-injected.
 - A **content field** on the profile → extend the Zod schema in `site/src/content/config.ts`, then
-  the data file, then the component that renders it.
+  the data file, then the component that renders it on `index.astro` **and** its treatment in
+  `cv.astro` (both consume the same collection).
+- A change to **how the CV PDF looks** → `site/src/pages/cv.astro` + its print styles; the generator
+  script and page content stay untouched.
 
 ## Constraints & known tech-debt
 
@@ -138,8 +150,11 @@ C4Container
 - **Free-tier limits.** Supabase pauses inactive free projects (~7 days); Fly.io pay-as-you-go
   allowance covers one tiny warm machine (~$2–4/mo). Acceptable for personal use; revisit if traffic
   grows.
-- **No generated PDF at launch.** `site/public/cv.pdf` is a committed static asset (the existing
-  "Classic" CV); generating it from page content is iteration two (idea-brief §5).
+- **PDF generation is in scope at v1** (supersedes idea-brief §5, which deferred it). `cv.pdf` is a
+  build artifact rendered from `cv.astro`, not a committed file — the site is the single source of
+  truth. Cost: the site CI job installs Chromium (`npx playwright install --with-deps chromium`),
+  and `cv.astro` is a second layout to maintain alongside `index.astro`. The PDF is only as complete
+  as the reconciled content — the content-reconciliation constraint above gates it. See ADR 0004.
 - **Deferred: browser admin panel.** v1 content is file + git only. The tracker must not grow into
   that backend (idea-brief §5).
 
@@ -147,5 +162,8 @@ C4Container
 
 No authored architecture doc exists. This map is the current reference. `docs/idea-brief.md` is the
 upstream intent and is reconciled here — no conflicts (this map realizes its §7 recommendation with
-Roman's two overrides: the tracker is Java/Spring Boot rather than an edge worker, and hosting is
-GitHub Pages + Fly.io + Supabase rather than a single platform).
+Roman's overrides: (1) the tracker is Java/Spring Boot rather than an edge worker, (2) hosting is
+GitHub Pages + Fly.io + Supabase rather than a single platform, (3) `cv.pdf` is generated from the
+site at build time from v1 — the site is the single source of truth — rather than shipping the
+existing "Classic" PDF and deferring generation to iteration two (idea-brief §5). ADR 0004 records
+override 3.
