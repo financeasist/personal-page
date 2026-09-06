@@ -1,0 +1,2525 @@
+{
+  "version": "2.17",
+  "children": [
+    {
+      "type": "frame",
+      "id": "k6V1ni",
+      "x": 700,
+      "y": 240,
+      "name": "AvailabilityBlock",
+      "reusable": true,
+      "width": 340,
+      "fill": "#f5f7fa",
+      "cornerRadius": 10,
+      "stroke": "$color/line",
+      "strokeWidth": 1,
+      "strokeAlignment": "inner",
+      "layout": "vertical",
+      "gap": 4,
+      "padding": 16,
+      "children": [
+        {
+          "type": "text",
+          "id": "TNYgr",
+          "name": "Kicker",
+          "fill": "$color/muted",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "AVAILABILITY",
+          "fontFamily": "Inter",
+          "fontSize": 11,
+          "fontWeight": "700",
+          "letterSpacing": 1
+        },
+        {
+          "type": "text",
+          "id": "bepuU",
+          "name": "Status",
+          "fill": "$color/ink",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "Open to Remote & Hybrid Opportunities",
+          "fontFamily": "Inter",
+          "fontSize": 14,
+          "fontWeight": "600"
+        },
+        {
+          "type": "text",
+          "id": "Bm9Tb",
+          "name": "Location",
+          "fill": "$color/muted",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "Krakow, Poland",
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Sh75H",
+      "x": 0,
+      "y": 420,
+      "name": "SCR-01 · laptop default (1280×800)",
+      "clip": true,
+      "width": 1200,
+      "height": 590,
+      "fill": "$color/surface",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "u3xWDb",
+          "type": "ref",
+          "ref": "dvllD",
+          "name": "Header",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "hHrJT",
+          "name": "page",
+          "width": 1199,
+          "fill": "$color/surface",
+          "layout": "vertical",
+          "gap": 26,
+          "padding": [
+            44,
+            60
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "xEwZk",
+              "name": "Hero",
+              "width": "fill_container",
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "V3GYm",
+                  "name": "Headshot",
+                  "width": 172,
+                  "height": 208,
+                  "fill": [
+                    "$color/navy",
+                    {
+                      "type": "image",
+                      "enabled": true,
+                      "url": "../../reference/me.png",
+                      "mode": "fill"
+                    }
+                  ],
+                  "cornerRadius": 12,
+                  "layout": "none"
+                },
+                {
+                  "type": "frame",
+                  "id": "hWxQs",
+                  "name": "Hero copy",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 10,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "M2uBJ",
+                      "fill": "$color/navy-dark",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Roman Hrupskyi",
+                      "fontFamily": "Inter",
+                      "fontSize": 34,
+                      "fontWeight": "800"
+                    },
+                    {
+                      "type": "text",
+                      "id": "whdan",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Senior Java Engineer | Lead Backend Engineer",
+                      "fontFamily": "Inter",
+                      "fontSize": 18,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "PXgxV",
+                      "name": "Tagline",
+                      "width": "fill_container",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "n5YsHN",
+                          "fill": "$color/ink",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Java engineer and technical leader with 9+ years of experience designing, building, and scaling high-load distributed systems, leading engineering teams, and delivering business-critical platforms across multiple domains.",
+                          "fontFamily": "Inter",
+                          "fontSize": 15,
+                          "fontWeight": "normal",
+                          "fontStyle": "italic"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "l81pSK",
+                      "name": "AvailabilityBlock slot",
+                      "padding": [
+                        8,
+                        0,
+                        0,
+                        0
+                      ],
+                      "children": [
+                        {
+                          "id": "idXz3",
+                          "type": "ref",
+                          "ref": "k6V1ni",
+                          "name": "AvailabilityBlock",
+                          "width": 400
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "QfCVa",
+                  "name": "Industries",
+                  "width": 300,
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "FqZFa",
+                      "name": "label",
+                      "fill": "$color/muted",
+                      "content": "INDUSTRIES",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "700",
+                      "letterSpacing": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "gFa2S",
+                      "name": "li",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "M7BcW",
+                          "name": "b",
+                          "fill": "$color/navy",
+                          "content": "·",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "xUouJ",
+                          "name": "t",
+                          "fill": "$color/muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "iGaming — Remote Game Servers (RGS)",
+                          "lineHeight": 1.4,
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ZedWa",
+                      "name": "li",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "jNXGO",
+                          "name": "b",
+                          "fill": "$color/navy",
+                          "content": "·",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "o2pQK",
+                          "name": "t",
+                          "fill": "$color/muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "FinTech & E-commerce — Value Intelligence AI platform",
+                          "lineHeight": 1.4,
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "m6b8g3",
+                      "name": "li",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "q34JXo",
+                          "name": "b",
+                          "fill": "$color/navy",
+                          "content": "·",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "U2e5n",
+                          "name": "t",
+                          "fill": "$color/muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Healthcare — medical software for hospitals",
+                          "lineHeight": 1.4,
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "pfBYO",
+                      "name": "li",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "K4WGsy",
+                          "name": "b",
+                          "fill": "$color/navy",
+                          "content": "·",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "LUKDE",
+                          "name": "t",
+                          "fill": "$color/muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Retail — Automated Decision Intelligence systems",
+                          "lineHeight": 1.4,
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "F4Meci",
+              "name": "Top stack",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "SzwWg",
+                  "fill": "$color/muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "TOP STACK",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "700",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "jsUrq",
+                  "fill": "$color/ink",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Java · Spring ecosystem (Boot, Cloud, WebFlux, Data, Security) · Kafka · Postgres · Redis · Hazelcast · Kubernetes · GitLab · and more",
+                  "fontFamily": "Inter",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "xK32U",
+              "name": "Fold marker",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "eW4Py",
+                  "name": "rule",
+                  "opacity": 0.35,
+                  "width": "fill_container",
+                  "height": 2,
+                  "fill": "$color/navy"
+                },
+                {
+                  "type": "frame",
+                  "id": "vhR4s",
+                  "name": "caption",
+                  "width": 620,
+                  "fill": "#fff8e1",
+                  "cornerRadius": 6,
+                  "stroke": "#f0d98a",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
+                  "layout": "vertical",
+                  "padding": [
+                    8,
+                    10
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Ul38h",
+                      "name": "t",
+                      "fill": "#7a6a2e",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "⚑ AC-01 / AC-08 — every above-the-fold essential visible with no scrolling at 1280×800 and 390×844. Header + Footer are NEW (not yet in spec §1 / sad §5).",
+                      "lineHeight": 1.45,
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "W5vee",
+          "type": "ref",
+          "ref": "W7AZlV",
+          "name": "Footer",
+          "width": "fill_container"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "XKUfO",
+      "x": 2700,
+      "y": 420,
+      "name": "SCR-01 · phone default (390×844)",
+      "clip": true,
+      "width": 390,
+      "height": 785,
+      "fill": "$color/canvas",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "j3fNa",
+          "name": "Header",
+          "width": "fill_container",
+          "fill": "$color/navy-dark",
+          "padding": [
+            12,
+            20
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "QeG9x",
+              "name": "Name",
+              "fill": "#ffffff",
+              "content": "Roman Hrupskyi",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "800"
+            },
+            {
+              "type": "frame",
+              "id": "Pla7b",
+              "name": "icons",
+              "gap": 14,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "A0bn5",
+                  "name": "LinkedIn",
+                  "width": 17,
+                  "height": 17,
+                  "icon": "linkedin",
+                  "library": "lucide",
+                  "fill": "#ffffff"
+                },
+                {
+                  "type": "icon",
+                  "id": "Wu68n",
+                  "name": "Gmail",
+                  "width": 17,
+                  "height": 17,
+                  "icon": "mail",
+                  "library": "lucide",
+                  "fill": "#ffffff"
+                },
+                {
+                  "type": "icon",
+                  "id": "L3tJMt",
+                  "name": "Menu",
+                  "width": 18,
+                  "height": 18,
+                  "icon": "menu",
+                  "library": "lucide",
+                  "fill": "#c9d4e6"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "HFYaQ",
+          "name": "page",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 16,
+          "padding": [
+            24,
+            22
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "H5qssn",
+              "name": "Headshot",
+              "clip": true,
+              "width": 120,
+              "height": 120,
+              "fill": [
+                "$color/navy",
+                {
+                  "type": "image",
+                  "enabled": true,
+                  "url": "../../reference/me.png",
+                  "mode": "fill"
+                }
+              ],
+              "cornerRadius": 60
+            },
+            {
+              "type": "frame",
+              "id": "Avanx",
+              "name": "Hero copy",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "iWQgL",
+                  "fill": "$color/navy-dark",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Roman Hrupskyi",
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 23,
+                  "fontWeight": "800"
+                },
+                {
+                  "type": "text",
+                  "id": "iSs8r",
+                  "fill": "$color/muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Senior Java Engineer | Lead Backend Engineer",
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "xZZEy",
+                  "name": "Tagline",
+                  "width": "fill_container",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "FF5Ey",
+                      "fill": "$color/ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Java engineer and technical leader with 9+ years of experience designing, building, and scaling high-load distributed systems, leading engineering teams, and delivering business-critical platforms across multiple domains.",
+                      "textAlign": "center",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "normal",
+                      "fontStyle": "italic"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "d6HUzT",
+              "type": "ref",
+              "ref": "k6V1ni",
+              "name": "AvailabilityBlock",
+              "width": "fill_container"
+            },
+            {
+              "type": "frame",
+              "id": "WMCWv",
+              "name": "Industries",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 5,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "AJchz",
+                  "name": "label",
+                  "fill": "$color/muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "INDUSTRIES",
+                  "fontFamily": "Inter",
+                  "fontSize": 10,
+                  "fontWeight": "700",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "frame",
+                  "id": "t6JGQ",
+                  "name": "li",
+                  "width": "fill_container",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "LqJTz",
+                      "name": "b",
+                      "fill": "$color/navy",
+                      "content": "·",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "yqQmp",
+                      "name": "t",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "iGaming — Remote Game Servers (RGS)",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "jCZBZ",
+                  "name": "li",
+                  "width": "fill_container",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "hLc4U",
+                      "name": "b",
+                      "fill": "$color/navy",
+                      "content": "·",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "sAR7J",
+                      "name": "t",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "FinTech & E-commerce — Value Intelligence AI platform",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "IYmdc",
+                  "name": "li",
+                  "width": "fill_container",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "xc7Jk",
+                      "name": "b",
+                      "fill": "$color/navy",
+                      "content": "·",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "XZVNs",
+                      "name": "t",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Healthcare — medical software for hospitals",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "O03Ut7",
+                  "name": "li",
+                  "width": "fill_container",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "U7RagM",
+                      "name": "b",
+                      "fill": "$color/navy",
+                      "content": "·",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "QlkMA",
+                      "name": "t",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Retail — Automated Decision Intelligence systems",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "G4RjNN",
+              "name": "Top stack",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 4,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "R8N3tJ",
+                  "fill": "$color/muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "TOP STACK",
+                  "fontFamily": "Inter",
+                  "fontSize": 10,
+                  "fontWeight": "700",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "nsqqe",
+                  "fill": "$color/ink",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Java · Spring ecosystem (Boot, Cloud, WebFlux, Data, Security) · Kafka · Postgres · Redis · Hazelcast · Kubernetes · GitLab · and more",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ouMUb",
+              "name": "caption",
+              "width": 350,
+              "fill": "#fff8e1",
+              "cornerRadius": 6,
+              "stroke": "#f0d98a",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "layout": "vertical",
+              "padding": [
+                8,
+                10
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "NoBke",
+                  "name": "t",
+                  "fill": "#7a6a2e",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "⚑ AC-08 — body text ≥16px, each control ≥44×44px, no horizontal scroll. Header condenses to name + icons + menu; phone number is never shown (AC-10).",
+                  "lineHeight": 1.45,
+                  "fontFamily": "Inter",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "UVBCd",
+          "type": "ref",
+          "ref": "W7AZlV",
+          "name": "Footer",
+          "width": "fill_container"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "hzNGN",
+      "x": 1400,
+      "y": 420,
+      "name": "SCR-02 · experience timeline",
+      "clip": true,
+      "width": 900,
+      "height": 551,
+      "fill": "$color/surface",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "mQ0Vj",
+          "name": "Section",
+          "width": "fill_container",
+          "fill": "$color/surface",
+          "layout": "vertical",
+          "gap": 20,
+          "padding": [
+            44,
+            80
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "frg5B",
+              "name": "heading",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "vN86h",
+                  "name": "t",
+                  "fill": "$color/navy",
+                  "content": "EXPERIENCE",
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "800",
+                  "letterSpacing": 2
+                },
+                {
+                  "type": "frame",
+                  "id": "acEF5",
+                  "name": "rule",
+                  "width": 56,
+                  "height": 3,
+                  "fill": "$color/navy",
+                  "cornerRadius": 2
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "jgvYw",
+              "name": "ExperienceTimeline",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 18,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "eUu9X",
+                  "name": "Experience row #exp-everymatrix",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 3,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "jnmPs",
+                      "name": "head",
+                      "width": "fill_container",
+                      "gap": 12,
+                      "justifyContent": "space_between",
+                      "alignItems": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "HmwQH",
+                          "name": "role",
+                          "fill": "$color/navy-dark",
+                          "content": "Java Team Lead / Solution Architect  ·  EveryMatrix",
+                          "fontFamily": "Inter",
+                          "fontSize": 16,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "qgD9q",
+                          "name": "dates",
+                          "fill": "$color/muted",
+                          "content": "2023 – 2026",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "Z6Zrrw",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Led backend for a business-critical RGS platform; team of 7. Scaled reactive Java microservices to tens of millions of transactions/day; optimised MySQL tables of billions of records.",
+                      "lineHeight": 1.45,
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "C6uPLi",
+                  "name": "Experience row #exp-exoft",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 3,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "u9ienu",
+                      "name": "head",
+                      "width": "fill_container",
+                      "gap": 12,
+                      "justifyContent": "space_between",
+                      "alignItems": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "IH4UL",
+                          "name": "role",
+                          "fill": "$color/navy-dark",
+                          "content": "Senior Software Engineer  ·  Exoft",
+                          "fontFamily": "Inter",
+                          "fontSize": 16,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "tN0Xv",
+                          "name": "dates",
+                          "fill": "$color/muted",
+                          "content": "2021 – 2023",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "rStcR",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Backend microservices for Spotlight.ai — an AI Value Intelligence platform automating sales discovery; built the Salesforce CRM integrations.",
+                      "lineHeight": 1.45,
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "D9aRy",
+                  "name": "Experience row #exp-softserve",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 3,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "i0qMXT",
+                      "name": "head",
+                      "width": "fill_container",
+                      "gap": 12,
+                      "justifyContent": "space_between",
+                      "alignItems": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "P4eUv",
+                          "name": "role",
+                          "fill": "$color/navy-dark",
+                          "content": "Software Engineer  ·  SoftServe",
+                          "fontFamily": "Inter",
+                          "fontSize": 16,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "R4V8tx",
+                          "name": "dates",
+                          "fill": "$color/muted",
+                          "content": "2018 – 2021",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "Wg1KJ",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Enterprise components for CompuGroup Medical's large-scale hospital platform; architecture & design, features, production-issue investigation.",
+                      "lineHeight": 1.45,
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "SzCmU",
+                  "name": "Experience row #exp-devcom",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 3,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "m6c1v",
+                      "name": "head",
+                      "width": "fill_container",
+                      "gap": 12,
+                      "justifyContent": "space_between",
+                      "alignItems": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "itTU5",
+                          "name": "role",
+                          "fill": "$color/navy-dark",
+                          "content": "Full Stack Software Engineer  ·  DevCom",
+                          "fontFamily": "Inter",
+                          "fontSize": 16,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "JmZkG",
+                          "name": "dates",
+                          "fill": "$color/muted",
+                          "content": "2017 – 2019",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "doCWY",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "REST APIs and business services for a marketplace / e-commerce platform (CollegeBom, USA).",
+                      "lineHeight": 1.45,
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "sMjyH",
+                  "name": "rule",
+                  "width": "fill_container",
+                  "height": 1,
+                  "fill": "$color/line"
+                },
+                {
+                  "type": "text",
+                  "id": "LcIat",
+                  "fill": "$color/muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Earlier background: sales & project management, 2004–2017.",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "normal",
+                  "fontStyle": "italic"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "GkJLX",
+              "name": "caption",
+              "width": 640,
+              "fill": "#fff8e1",
+              "cornerRadius": 6,
+              "stroke": "#f0d98a",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "layout": "vertical",
+              "padding": [
+                8,
+                10
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "T0ENdG",
+                  "name": "t",
+                  "fill": "#7a6a2e",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "⚑ AC-09 — company, date range, contribution; most-recent-first. Current role reads \"<start> – present\". Exact non-overlapping ranges are spec §8: the CV template and Classic variant disagree (EveryMatrix reads both 2021–2023 and 2023–2026). The pre-2017 \"earlier background\" line is one line, exempt from AC-09, absent when profile.earlierBackground is empty.",
+                  "lineHeight": 1.45,
+                  "fontFamily": "Inter",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "xSFYJ",
+      "x": 1400,
+      "y": 1180,
+      "name": "SCR-03 · selected projects",
+      "clip": true,
+      "width": 1040,
+      "height": 754,
+      "fill": "$color/canvas",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "xTWK5",
+          "name": "Section",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 20,
+          "padding": [
+            44,
+            80
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "ClSqX",
+              "name": "heading",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "lVFwu",
+                  "name": "t",
+                  "fill": "$color/navy",
+                  "content": "SELECTED PROJECTS",
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "800",
+                  "letterSpacing": 2
+                },
+                {
+                  "type": "frame",
+                  "id": "kCZsw",
+                  "name": "rule",
+                  "width": 56,
+                  "height": 3,
+                  "fill": "$color/navy",
+                  "cornerRadius": 2
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "b9PNeG",
+              "name": "SelectedProjects",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "id": "vY7IC",
+                  "type": "ref",
+                  "ref": "J2r0z",
+                  "name": "Card · expanded — EveryMatrix",
+                  "width": "fill_container",
+                  "descendants": {
+                    "Kwf9S": {
+                      "content": "RGS Platform — EveryMatrix"
+                    },
+                    "oXoil": {
+                      "content": "Role · Java Team Lead / Solution Architect"
+                    },
+                    "Xk6wn": {
+                      "icon": "chevron-up"
+                    },
+                    "l6o83O": {
+                      "content": "Impact: scaled reactive Java microservices to tens of millions of business transactions/day, stable through major traffic spikes; optimised MySQL tables of billions of records; led 7 backend engineers."
+                    },
+                    "YCCO9": {
+                      "content": "Led backend for a business-critical RGS platform used by gaming operators and game providers worldwide. Owned architecture, planning, code reviews, mentoring, delivery and production support for a team of 7. Kafka-based recovery (durable events, idempotent processing, retry handling); migrated two RGS platforms to a shared on-prem Kubernetes environment; delivered wallet / bet / win / refund / jackpot / promotion / free-spin integrations where financial consistency was critical."
+                    },
+                    "TDzG9": {
+                      "content": "Stack: Java 17/19/21 · Spring Boot · WebFlux · Spring Cloud · Project Reactor · Kafka · MySQL · R2DBC · REST · gRPC · OpenFeign · Hazelcast · Docker · Kubernetes · Rancher · GitLab CI/CD"
+                    },
+                    "I8uHF7": {
+                      "content": "2023 – 2026"
+                    }
+                  }
+                },
+                {
+                  "id": "zdPAQ",
+                  "type": "ref",
+                  "ref": "J2r0z",
+                  "name": "Card · collapsed — Exoft",
+                  "width": "fill_container",
+                  "descendants": {
+                    "Kwf9S": {
+                      "content": "Spotlight.ai Value Intelligence — Exoft"
+                    },
+                    "oXoil": {
+                      "content": "Role · Senior Software Engineer"
+                    },
+                    "Xk6wn": {
+                      "icon": "chevron-down"
+                    },
+                    "l6o83O": {
+                      "content": "Impact: built the backend microservices and Salesforce CRM integrations for an AI platform that automates sales discovery and value-case generation."
+                    },
+                    "ukJge": {
+                      "enabled": false
+                    },
+                    "YCCO9": {
+                      "content": "Designed and implemented backend services for a microservices platform helping sales organisations automate discovery and build value cases. Developed Salesforce CRM integrations; delivered new features and performance improvements; contributed to solution architecture, automated quality controls, code reviews, mentoring, deployment, monitoring and production support."
+                    },
+                    "TDzG9": {
+                      "content": "Stack: Java 11 · Spring Boot · Spring Cloud · Spring Security · JPA · PostgreSQL · Project Reactor · Redis · AWS S3 · Docker · REST APIs · Salesforce CRM · GitLab CI/CD"
+                    },
+                    "I8uHF7": {
+                      "content": "2021 – 2023"
+                    }
+                  }
+                },
+                {
+                  "id": "Lgpk8",
+                  "type": "ref",
+                  "ref": "J2r0z",
+                  "name": "Card · collapsed — SoftServe",
+                  "width": "fill_container",
+                  "descendants": {
+                    "Kwf9S": {
+                      "content": "CompuGroup Medical platform — SoftServe"
+                    },
+                    "oXoil": {
+                      "content": "Role · Software Engineer"
+                    },
+                    "Xk6wn": {
+                      "icon": "chevron-down"
+                    },
+                    "l6o83O": {
+                      "content": "Impact: delivered enterprise components for a large-scale hospital platform — architecture & design, new features, production-issue investigation, with international Agile teams."
+                    },
+                    "ukJge": {
+                      "enabled": false
+                    },
+                    "YCCO9": {
+                      "content": "Developed enterprise software components for a large-scale platform supporting hospitals and medical organisations. Contributed to architecture and design, implemented new features, investigated production issues, performed code reviews and testing, maintained technical documentation, supported production operations."
+                    },
+                    "TDzG9": {
+                      "content": "Stack: Java 8 · Spring · Hibernate · MS SQL Server · Oracle · H2 · Jenkins · GitLab · Maven · JMeter · Enterprise Architect · Jira · Confluence"
+                    },
+                    "I8uHF7": {
+                      "content": "2018 – 2021"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "bMSlO",
+              "name": "caption",
+              "width": 640,
+              "fill": "#fff8e1",
+              "cornerRadius": 6,
+              "stroke": "#f0d98a",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "layout": "vertical",
+              "padding": [
+                8,
+                10
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "S21SHA",
+                  "name": "t",
+                  "fill": "#7a6a2e",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "⚑ AC-11 — name, role, impact statement (quantified where a figure exists). AC-12 — empty/placeholder impact fails the build. Impact + Detail copy is REAL, from docs/reference/cv-classic-variant.pdf — this resolves spec §8's impact-statement open question.",
+                  "lineHeight": 1.45,
+                  "fontFamily": "Inter",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "heCTv",
+      "x": 1400,
+      "y": 2000,
+      "name": "SCR-01 · keyboard focus (Header)",
+      "clip": true,
+      "width": 1000,
+      "height": 237,
+      "fill": "$color/canvas",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "Be3BF",
+          "name": "Section",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 16,
+          "padding": [
+            40,
+            64
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "z2cwHF",
+              "name": "cap",
+              "fill": "$color/muted",
+              "content": "KEYBOARD FOCUS",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "700",
+              "letterSpacing": 1
+            },
+            {
+              "type": "frame",
+              "id": "eceA7",
+              "name": "Header",
+              "width": "fill_container",
+              "fill": "$color/navy-dark",
+              "padding": [
+                14,
+                28
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "zwXPM",
+                  "name": "left",
+                  "gap": 12,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "sPu7E",
+                      "name": "Name",
+                      "fill": "#ffffff",
+                      "content": "Roman Hrupskyi",
+                      "fontFamily": "Inter",
+                      "fontSize": 15,
+                      "fontWeight": "800"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Huy5O",
+                      "name": "LinkedIn (focused)",
+                      "cornerRadius": 5,
+                      "stroke": "#7db3ff",
+                      "strokeWidth": 2,
+                      "strokeAlignment": "outer",
+                      "padding": 2,
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "BP8NC",
+                          "name": "i",
+                          "width": 17,
+                          "height": 17,
+                          "icon": "linkedin",
+                          "library": "lucide",
+                          "fill": "#ffffff"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "icon",
+                      "id": "k2OGl",
+                      "name": "Gmail",
+                      "width": 17,
+                      "height": 17,
+                      "icon": "mail",
+                      "library": "lucide",
+                      "fill": "#ffffff"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "RXo9y",
+                  "name": "right",
+                  "gap": 22,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "dM3Fr",
+                      "name": "About me",
+                      "fill": "#c9d4e6",
+                      "content": "About me",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "vpYI2",
+                      "name": "Download CV",
+                      "fill": "#c9d4e6",
+                      "content": "Download CV",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "K6Stx",
+                      "name": "Contact",
+                      "fill": "#ffffff",
+                      "content": "Contact",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "700"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "s0yqA",
+              "name": "caption",
+              "width": 620,
+              "fill": "#fff8e1",
+              "cornerRadius": 6,
+              "stroke": "#f0d98a",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "layout": "vertical",
+              "padding": [
+                8,
+                10
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "LzYzI",
+                  "name": "t",
+                  "fill": "#7a6a2e",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "⚑ QG-3 — every Header control takes a visible focus ring, in DOM order (Name link, LinkedIn, Gmail, About me, Download CV, Contact), operable by Enter/Space. Zero client JS. The Header is the contact + nav surface now that the hero button row is removed.",
+                  "lineHeight": 1.45,
+                  "fontFamily": "Inter",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "f4NTK",
+      "x": 0,
+      "y": 0,
+      "name": "— manifest legend —",
+      "width": 820,
+      "fill": "$color/navy",
+      "cornerRadius": 12,
+      "layout": "vertical",
+      "gap": 6,
+      "padding": 24,
+      "children": [
+        {
+          "type": "text",
+          "id": "p3NYzD",
+          "name": "h",
+          "fill": "#ffffff",
+          "content": "personal-landing — screen manifest",
+          "fontFamily": "Inter",
+          "fontSize": 20,
+          "fontWeight": "800"
+        },
+        {
+          "type": "text",
+          "id": "aLxx2",
+          "name": "s",
+          "fill": "#c9d4e6",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "Top row: reusable components (ContactButton · ContactActions · PhoneChooser · ProjectCard · AvailabilityBlock · Header · Footer). Below: SCR-01..04 artboards. Content is REAL — pulled from docs/reference/ (CV template + LinkedIn About); project impact lines are spec §8 placeholders. States, N/A rows and source-refs are the contract in screens.md — this file is the drawing.",
+          "lineHeight": 1.5,
+          "fontFamily": "Inter",
+          "fontSize": 13,
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "dvllD",
+      "x": 0,
+      "y": 140,
+      "name": "Header",
+      "reusable": true,
+      "width": 1160,
+      "fill": "$color/navy-dark",
+      "stroke": "$color/navy-dark",
+      "strokeWidth": {
+        "bottom": 1
+      },
+      "strokeAlignment": "inner",
+      "padding": [
+        14,
+        40
+      ],
+      "justifyContent": "space_between",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "frame",
+          "id": "fHuJ6",
+          "name": "left",
+          "gap": 14,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "P66r2g",
+              "name": "Name",
+              "fill": "#ffffff",
+              "content": "Roman Hrupskyi",
+              "fontFamily": "Inter",
+              "fontSize": 16,
+              "fontWeight": "800"
+            },
+            {
+              "type": "frame",
+              "id": "zE6LO",
+              "name": "sep",
+              "width": 1,
+              "height": 18,
+              "fill": "#3d4b66"
+            },
+            {
+              "type": "icon",
+              "id": "n85kV",
+              "name": "LinkedIn",
+              "width": 18,
+              "height": 18,
+              "icon": "linkedin",
+              "library": "lucide",
+              "fill": "#ffffff"
+            },
+            {
+              "type": "icon",
+              "id": "iOsDW",
+              "name": "Gmail",
+              "width": 18,
+              "height": 18,
+              "icon": "mail",
+              "library": "lucide",
+              "fill": "#ffffff"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "hFprU",
+          "name": "right",
+          "gap": 26,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "xOEcG",
+              "name": "About me",
+              "fill": "#c9d4e6",
+              "content": "About me",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "bigIn",
+              "name": "Download CV",
+              "fill": "#c9d4e6",
+              "content": "Download CV",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "rMJQ4",
+              "name": "Contact",
+              "fill": "#ffffff",
+              "content": "Contact",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "700"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "W7AZlV",
+      "x": 1240,
+      "y": 140,
+      "name": "Footer",
+      "reusable": true,
+      "width": 1160,
+      "fill": "$color/navy-dark",
+      "stroke": "$color/navy-dark",
+      "strokeWidth": {
+        "top": 1
+      },
+      "strokeAlignment": "inner",
+      "padding": [
+        18,
+        40
+      ],
+      "justifyContent": "center",
+      "alignItems": "center",
+      "children": [
+        {
+          "type": "text",
+          "id": "o1bAy",
+          "name": "Copyright",
+          "fill": "#9aa4b2",
+          "content": "Copyright © Hrupskyi R. Bio 2026",
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "AKdd9",
+      "x": 0,
+      "y": 2300,
+      "name": "SCR-01 · tagline omitted",
+      "clip": true,
+      "width": 1200,
+      "height": 539,
+      "fill": "$color/canvas",
+      "layout": "vertical",
+      "children": [
+        {
+          "id": "zWATg",
+          "type": "ref",
+          "ref": "dvllD",
+          "name": "Header",
+          "width": "fill_container"
+        },
+        {
+          "type": "frame",
+          "id": "wkJRD",
+          "name": "page",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 26,
+          "padding": [
+            44,
+            60
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "Nz7Sx",
+              "name": "Hero",
+              "width": "fill_container",
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "A4W9Q",
+                  "name": "Headshot",
+                  "width": 172,
+                  "height": 208,
+                  "fill": [
+                    "$color/navy",
+                    {
+                      "type": "image",
+                      "enabled": true,
+                      "url": "../../reference/me.png",
+                      "mode": "fill"
+                    }
+                  ],
+                  "cornerRadius": 12,
+                  "layout": "none"
+                },
+                {
+                  "type": "frame",
+                  "id": "Ey2NT",
+                  "name": "Hero copy",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 10,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "BxGCL",
+                      "fill": "$color/navy-dark",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Roman Hrupskyi",
+                      "fontFamily": "Inter",
+                      "fontSize": 34,
+                      "fontWeight": "800"
+                    },
+                    {
+                      "type": "text",
+                      "id": "PbtLr",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Senior Java Engineer | Lead Backend Engineer",
+                      "fontFamily": "Inter",
+                      "fontSize": 18,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ESDhK",
+                      "name": "AvailabilityBlock slot",
+                      "padding": [
+                        8,
+                        0,
+                        0,
+                        0
+                      ],
+                      "children": [
+                        {
+                          "id": "V73Lf",
+                          "type": "ref",
+                          "ref": "k6V1ni",
+                          "name": "AvailabilityBlock",
+                          "width": 400
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "w8IISt",
+              "name": "Top stack",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "RYtvX",
+                  "fill": "$color/muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "TOP STACK",
+                  "fontFamily": "Inter",
+                  "fontSize": 11,
+                  "fontWeight": "700",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "PD5cX",
+                  "fill": "$color/ink",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Java · Spring ecosystem (Boot, Cloud, WebFlux, Data, Security) · Kafka · Postgres · Redis · Hazelcast · Kubernetes · GitLab · and more",
+                  "fontFamily": "Inter",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "G569yN",
+              "name": "Fold marker",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "rfgIl",
+                  "name": "rule",
+                  "opacity": 0.35,
+                  "width": "fill_container",
+                  "height": 2,
+                  "fill": "$color/navy"
+                },
+                {
+                  "type": "frame",
+                  "id": "rNNkY",
+                  "name": "caption",
+                  "width": 620,
+                  "fill": "#fff8e1",
+                  "cornerRadius": 6,
+                  "stroke": "#f0d98a",
+                  "strokeWidth": 1,
+                  "strokeAlignment": "inner",
+                  "layout": "vertical",
+                  "padding": [
+                    8,
+                    10
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "e7mjRN",
+                      "name": "t",
+                      "fill": "#7a6a2e",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "⚑ Both optional fields (tagline, positioning) empty — tightest, fastest-scanning hero; availability sits directly under the headline. AC-01 still holds. Header + Footer frame the page.",
+                      "lineHeight": 1.45,
+                      "fontFamily": "Inter",
+                      "fontSize": 10,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "mknmh",
+          "type": "ref",
+          "ref": "W7AZlV",
+          "name": "Footer",
+          "width": "fill_container"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "GSu58",
+      "x": 9,
+      "y": 1214,
+      "name": "SCR-05 · about me",
+      "clip": true,
+      "width": 1200,
+      "height": 491,
+      "fill": "$color/canvas",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "HO9ni",
+          "name": "Section",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 22,
+          "padding": [
+            48,
+            80
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "Pj3Bd",
+              "name": "heading",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "x6AiM0",
+                  "name": "t",
+                  "fill": "$color/navy",
+                  "content": "ABOUT ME",
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "800",
+                  "letterSpacing": 2
+                },
+                {
+                  "type": "frame",
+                  "id": "V3azz",
+                  "name": "rule",
+                  "width": 56,
+                  "height": 3,
+                  "fill": "$color/navy",
+                  "cornerRadius": 2
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "k0sIs",
+              "name": "AboutMe",
+              "width": "fill_container",
+              "gap": 48,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "B6zSXN",
+                  "name": "narrative",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 12,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "q9REd",
+                      "fill": "$color/ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Seasoned Java professional with 9+ years designing and building scalable, high-performance business applications — backend development, microservices architecture, and technical leadership, with a track record of improving software quality, system performance, and engineering workflows.",
+                      "lineHeight": 1.55,
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Obofu",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "My way of working is rooted in systems thinking — a holistic view of the big picture together with the ability to dive deep into the implementation details of complex systems.",
+                      "lineHeight": 1.55,
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "adgPe",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "A background in sales and project management gives me a perspective on delivering business value through technology — aligning engineering with product goals and communicating with both technical and non-technical stakeholders.",
+                      "lineHeight": 1.55,
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "wJJMU",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Comfortable using AI coding assistants and LLM-based tools as productivity multipliers for development, debugging, refactoring, testing, and technical research.",
+                      "lineHeight": 1.55,
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "MKVFu",
+                  "name": "highlights",
+                  "width": 400,
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ClaHF",
+                      "name": "label",
+                      "fill": "$color/muted",
+                      "content": "HIGHLIGHTS",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "700",
+                      "letterSpacing": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "uHyia",
+                      "name": "li",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "BLJZr",
+                          "name": "b",
+                          "fill": "$color/navy",
+                          "content": "·",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "S5gqAq",
+                          "name": "t",
+                          "fill": "$color/muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Experience managing engineers.",
+                          "lineHeight": 1.45,
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "SvKQX",
+                      "name": "li",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "DuUnW",
+                          "name": "b",
+                          "fill": "$color/navy",
+                          "content": "·",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "jwB2Y",
+                          "name": "t",
+                          "fill": "$color/muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Worked on a variety of projects, from large legacy systems to early- and mid-stage startups.",
+                          "lineHeight": 1.45,
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "p2XPqh",
+                      "name": "li",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "L79IQm",
+                          "name": "b",
+                          "fill": "$color/navy",
+                          "content": "·",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "rrs2Q",
+                          "name": "t",
+                          "fill": "$color/muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Worked with architectures from large legacy monoliths to complex distributed systems of dozens of microservices.",
+                          "lineHeight": 1.45,
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "XtxXV",
+                      "name": "li",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "hLLlA",
+                          "name": "b",
+                          "fill": "$color/navy",
+                          "content": "·",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "pK0HO",
+                          "name": "t",
+                          "fill": "$color/muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Worked with teams from small co-located groups to large international teams with hundreds of members distributed worldwide.",
+                          "lineHeight": 1.45,
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "IqHvi",
+                      "name": "li",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Je3r6",
+                          "name": "b",
+                          "fill": "$color/navy",
+                          "content": "·",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "hbarj",
+                          "name": "t",
+                          "fill": "$color/muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Strong expertise in Java and its ecosystem, relational databases, and distributed systems.",
+                          "lineHeight": 1.45,
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "UdrW9",
+                      "name": "li",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "x6xJr8",
+                          "name": "b",
+                          "fill": "$color/navy",
+                          "content": "→",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "vAv8s",
+                          "name": "t",
+                          "fill": "$color/navy",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "See my LinkedIn profile for more details.",
+                          "lineHeight": 1.45,
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "CuUR2",
+              "name": "caption",
+              "width": 640,
+              "fill": "#fff8e1",
+              "cornerRadius": 6,
+              "stroke": "#f0d98a",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "layout": "vertical",
+              "padding": [
+                8,
+                10
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "l3gLze",
+                  "name": "t",
+                  "fill": "#7a6a2e",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "⚑ NEW section (Roman's request). Copy is from docs/reference/linkedin-about.md — the \"over 8 years\" figure is reconciled to \"9+\" (CV). Header \"About me\" item anchors here (#about). Not in spec §4 / sad.md §5 — needs an upstream touch-up.",
+                  "lineHeight": 1.45,
+                  "fontFamily": "Inter",
+                  "fontSize": 10,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "wSrnk",
+      "x": 900,
+      "y": 0,
+      "name": "— section background scheme —",
+      "width": 420,
+      "fill": "#f5f7fa",
+      "cornerRadius": 10,
+      "stroke": "$color/line",
+      "strokeWidth": 1,
+      "strokeAlignment": "inner",
+      "layout": "vertical",
+      "gap": 4,
+      "padding": 16,
+      "children": [
+        {
+          "type": "text",
+          "id": "QkIcn",
+          "name": "h",
+          "fill": "$color/navy",
+          "content": "SECTION BACKGROUNDS (alternating)",
+          "fontFamily": "Inter",
+          "fontSize": 11,
+          "fontWeight": "800",
+          "letterSpacing": 1
+        },
+        {
+          "type": "text",
+          "id": "vI3IE",
+          "name": "b",
+          "fill": "$color/ink",
+          "textGrowth": "fixed-width",
+          "width": "fill_container",
+          "content": "Header navy · Hero white · About me grey · Experience white · Selected projects grey · Footer navy. Full-bleed bands; content stays in a centered max-width column.",
+          "lineHeight": 1.5,
+          "fontFamily": "Inter",
+          "fontSize": 12,
+          "fontWeight": "normal"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "J2r0z",
+      "x": 0,
+      "y": 240,
+      "name": "ProjectCard",
+      "reusable": true,
+      "clip": true,
+      "width": 640,
+      "fill": "$color/surface",
+      "cornerRadius": 10,
+      "stroke": "$color/line",
+      "strokeWidth": 1,
+      "strokeAlignment": "inner",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "hEcjQ",
+          "name": "Summary",
+          "width": "fill_container",
+          "padding": [
+            16,
+            20
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "VKA7K",
+              "name": "titles",
+              "layout": "vertical",
+              "gap": 2,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Kwf9S",
+                  "name": "Name",
+                  "fill": "$color/navy-dark",
+                  "content": "Project name",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "oXoil",
+                  "name": "Role",
+                  "fill": "$color/muted",
+                  "content": "Role · —",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "icon",
+              "id": "Xk6wn",
+              "name": "Chevron",
+              "width": 18,
+              "height": 18,
+              "icon": "chevron-up",
+              "library": "lucide",
+              "fill": "$color/muted"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "iHpxz",
+          "name": "Body",
+          "width": "fill_container",
+          "layout": "vertical",
+          "gap": 10,
+          "padding": [
+            0,
+            20,
+            16,
+            20
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "l6o83O",
+              "name": "Impact",
+              "fill": "$color/ink",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Impact: [pending, spec §8]",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "ukJge",
+              "name": "Detail",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "GsaNO",
+                  "name": "sep",
+                  "width": "fill_container",
+                  "height": 1,
+                  "fill": "$color/line"
+                },
+                {
+                  "type": "text",
+                  "id": "YCCO9",
+                  "name": "Description",
+                  "fill": "$color/muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Full project description from the CV …",
+                  "lineHeight": 1.5,
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "TDzG9",
+                  "name": "Stack",
+                  "fill": "$color/muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Stack: …",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "I8uHF7",
+                  "name": "Dates",
+                  "fill": "$color/navy",
+                  "content": "— ",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variables": {
+    "font/sans": {
+      "type": "string",
+      "value": "Inter"
+    },
+    "color/navy": {
+      "type": "color",
+      "value": "#2b3a55"
+    },
+    "color/navy-dark": {
+      "type": "color",
+      "value": "#1f2a3f"
+    },
+    "color/ink": {
+      "type": "color",
+      "value": "#1a1a1a"
+    },
+    "color/muted": {
+      "type": "color",
+      "value": "#5b6472"
+    },
+    "color/surface": {
+      "type": "color",
+      "value": "#ffffff"
+    },
+    "color/canvas": {
+      "type": "color",
+      "value": "#eef1f5"
+    },
+    "color/line": {
+      "type": "color",
+      "value": "#d7dde5"
+    },
+    "color/focus": {
+      "type": "color",
+      "value": "#2b6cb0"
+    }
+  },
+  "fileToken": "4fa26c77-8872-41f9-a7ee-bbd10601c871"
+}

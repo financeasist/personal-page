@@ -56,17 +56,23 @@ updated_at: "2026-09-06"
 > `implement` replaces `pending` with the real `file:line` anchor as it registers each one; the
 > `.pen` node id is filled in as `screens` draws it. A later UI feature reuses these names or
 > declares `NEW: <name>` with a why-no-primitive-fits justification and registers it back here.
+>
+> **Removed** (personal-landing revision, `screens.md` §Divergence D-1/D-2): `ContactActions`,
+> `ContactButton`, `PhoneChooser` — the hero contact row moved into the `Header` and phone was
+> dropped. Not re-add unless a spec revision brings phone back.
 
 | Component | Source (`file:line` / node / URL) | States it supports | Notes |
 |---|---|---|---|
-| `Section` | `site/src/components/` — pending (personal-landing) | default | Below-the-fold section wrapper: heading + spacing rhythm. Reused by SCR-02, SCR-03. |
-| `Hero` | `site/src/components/` — pending (personal-landing) | default / tagline-omitted / positioning-omitted | Above-the-fold composition: headshot (LCP, `astro:assets` eager), name, headline, optional tagline, optional positioning block. |
-| `AvailabilityBlock` | `site/src/components/` — pending (personal-landing) | default / work-auth-omitted | Structured block: availability `status` (carries remote stance) + `location` + optional `workAuthorization`. |
-| `ContactActions` | `site/src/components/` — pending (personal-landing) | default / keyboard-focus | Four labelled controls (Call / Email / LinkedIn / Download CV), each ≥44×44 px on phone, each carrying a stable `data-contact-channel` / `data-cv-download` hook for the tracking roadmap step (SAD §8). |
-| `PhoneChooser` | `site/src/components/` — pending (personal-landing) | collapsed / expanded / single-line | Native `<details>` disclosure, no JS; two labelled `tel:` controls, no phone digits rendered as text (ADR-0006). |
-| `ExperienceTimeline` | `site/src/components/` — pending (personal-landing) | default / current-role / earlier-background-omitted | Roles most-recent-first + the optional single "earlier background" line. |
-| `SelectedProjects` | `site/src/components/` — pending (personal-landing) | default (3-vs-5 reflow) | Card layout wrapper, reflows for 3–5 cards without an orphan. |
-| `ProjectCard` | `site/src/components/` — pending (personal-landing) | quantified-impact / qualitative-impact | One project: name, Roman's role, impact statement (number rendered prominently when present). |
+| `Header` | `site/src/components/` — pending (personal-landing) · `screens.pen` reusable `dvllD` | default / phone-condensed / keyboard-focus | **Fixed / sticky** dark-navy top bar (CSS only). Left: name + `LinkedIn` / `Gmail` **icon controls** → the LinkedIn URL / `mailto:` (these ARE the LinkedIn + email contact actions). Right: `About me` (`#about`), `Download CV`, `Contact` (`#contact`) **menu items**. **No phone.** ⚠ not in `sad.md` §5 — `screens.md` §Divergence D-1/D-3. |
+| `Footer` | `site/src/components/` — pending (personal-landing) · `screens.pen` reusable `W7AZlV` | default | Dark-navy bottom bar, centered "Copyright © Hrupskyi R. Bio 2026". ⚠ not in `sad.md` §5 — D-3. |
+| `Section` | `site/src/components/` — pending (personal-landing) · `screens.pen` inline `mQ0Vj` | default | Below-the-fold section wrapper: centered heading + short rule + spacing rhythm. Reused by SCR-02, SCR-03, SCR-05. |
+| `AboutMe` | `site/src/components/` — pending (personal-landing) · `screens.pen` inline (`GSu58` › `k0sIs`) | default / phone-reflow / ai-line-omitted | Grey band, two columns: `narrative` (from `linkedin-about.md`) + `highlights` (Roman's own bullets + a LinkedIn link). ⚠ new section — D-4. |
+| `Industries` | `site/src/components/` — pending (personal-landing) · `screens.pen` inline (`Sh75H` › `QfCVa` / `XKUfO` › `WMCWv`) | default / phone-stacked | Hero right column — the INDUSTRIES list from `linkedin-about.md` (iGaming / FinTech & E-commerce / Healthcare / Retail). Static text. ⚠ D-7. |
+| `Hero` | `site/src/components/` — pending (personal-landing) · `screens.pen` `xEwZk` (laptop) / `Avanx` (phone) | default / tagline-omitted | White band. Headshot (LCP, `astro:assets` eager, real `docs/reference/me.png`) + name + headline + optional tagline (~40-word sentence, D-10) + `AvailabilityBlock` (left) + `Industries` (right). **No `positioning` block.** Laptop + phone layouts differ (responsive-both). No hero contact row (D-1). |
+| `AvailabilityBlock` | `site/src/components/` — pending (personal-landing) · `screens.pen` reusable `k6V1ni` | default / work-auth-omitted | Structured block: availability `status` (carries remote stance) + `location` + optional `workAuthorization`. No notice period. |
+| `ExperienceTimeline` | `site/src/components/` — pending (personal-landing) · `screens.pen` inline `jgvYw` | default / current-role / earlier-background-omitted | White band. 4 real roles most-recent-first + the optional single "earlier background" line. |
+| `SelectedProjects` | `site/src/components/` — pending (personal-landing) · `screens.pen` inline `b9PNeG` | default | Grey band. **Vertical stack** of `ProjectCard` accordions (3–5). |
+| `ProjectCard` | `site/src/components/` — pending (personal-landing) · `screens.pen` reusable `J2r0z` | collapsed / expanded / quantified-impact / qualitative-impact | **Accordion** — native `<details>`, no JS. Collapsed: name + role + one-line impact + chevron. Expanded: + `Detail` (CV description, tech stack, date range). ⚠ D-8 — needs `data-model` fields. |
 
 ## Interaction & writing conventions
 
@@ -82,5 +88,11 @@ updated_at: "2026-09-06"
 - **Validation:** N/A — no forms. The only inputs are `tel:` / `mailto:` / link hand-offs to the
   visitor's own tools; a device with no handler is an accepted no-op (ADR-0006), no fallback text.
 - **Microcopy tone:** plain, recruiter-facing, action-first. Contact controls are verbs
-  ("Call", "Email", "Download CV"). No marketing voice. Locale-clean — no hard-coded English in
+  ("Email", "Download CV"). No marketing voice. Locale-clean — no hard-coded English in
   non-content-driven components (CLAUDE.md); visible strings come from the content collection.
+- **Section rhythm:** full-bleed background bands **alternate** `surface` (white) / `canvas`
+  (grey) down the page — `Header` navy · Hero white · About me grey · Experience white · Selected
+  projects grey · `Footer` navy. Content sits in a centered max-width column inside each band.
+  Section headings are centered with a short navy rule beneath (personal-landing SCR-02/03/05).
+- **`Header` / `Footer`:** the `Header` is position-sticky (CSS, no JS) and always visible; the
+  `Footer` is flush to the viewport bottom (`min-height: 100vh` page).
