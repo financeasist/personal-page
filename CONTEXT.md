@@ -17,8 +17,14 @@ and win on conflict. NO implementation detail here — only domain words and the
 - **Profile content** — the single typed content-collection entry (`site/src/data/profile/*.json`, Zod schema in `site/src/content/config.ts`) that BOTH the landing page and the CV route render from. NOT page-specific copy embedded in components, and NOT a hand-edited PDF.
 - **Availability block** — the compact panel of hiring-relevant status: availability, location, remote / relocation stance, notice period, work authorisation. NOT a calendar or a booking widget.
 - **Contact action** — one above-the-fold tap target (phone, email, LinkedIn, Download CV) that opens the corresponding channel and fires a tracked click event. On the landing page the underlying phone number / email / URL is never shown as text — the action is the only way to reach it (the CV PDF is exempt). NOT a contact form and NOT a message-sending feature.
-- **Above-the-fold scan** — everything a Recruiter can see and act on without scrolling, designed for a ~10-second fit judgement. NOT the whole page — depth (experience, projects) sits below it.
+- **Above-the-fold scan** — everything a Recruiter can see and act on without scrolling, designed for a ~10-second fit judgement. NOT the whole page — depth (experience, projects) sits below it. The reference viewports for "fits above the fold" are 1280×800 (laptop) and 390×844 (phone).
 - **Labelled link** — a per-recruiter URL (`/t/{label}`) Roman sends in outreach; the tracker 302-redirects it to the site and records who opened it. NOT a public share link and NOT a tracking cookie.
+- **Headline** — the short pipe-separated positioning line under Roman's name (currently "Senior Java Engineer | Lead Backend Engineer"); a required Profile field, also the source string for the CV PDF filename. NOT the page `<title>` and NOT a full sentence.
+- **Tagline** — an optional single sentence shown below the **Headline** in the hero. NOT required, NOT the Headline, NOT a summary paragraph.
+- **Top stack** — a curated list of at most eight technologies shown in the above-the-fold scan, chosen by Roman in the Profile content. NOT the full skills matrix (that lives below the fold and in the CV).
+- **Experience timeline** — the below-the-fold list of Roman's roles from 2017 on, most-recent first, each with company, date range, and contribution. NOT the pre-2017 **earlier background** line, which is a single summary sentence, not a timeline entry.
+- **Selected project** — one of three-to-five flagship pieces of work called out below the fold with an **impact statement**. NOT the same as an **Experience timeline** role (a project is curated and impact-led; a role is chronological).
+- **Impact statement** — the one- or two-line "what changed because of Roman's work" attached to a **Selected project**, quantified where a real number exists. NOT a responsibilities list and NOT a job description.
 
 ## Invariants
 

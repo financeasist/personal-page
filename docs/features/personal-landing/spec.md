@@ -19,18 +19,18 @@ The trigger is immediate: Roman is interviewing this month and wants the link li
 
 The roadmap sized step 3 as **L**; it is re-classified **M** here (`.size` / `.route` updated to `M` / `standard`). Rationale: no API, no migration, no backend, no breaking change, and the scaffold has already established the component and styling conventions the "L" estimate assumed this feature would set. It stays above S because it is the site's foundational UI feature — nine user stories, four new shared components — so the `ux-flows` and `screens` stages are worth offering rather than auto-skipping.
 
-The committed approach is one static landing page rendered at build time entirely from the single typed **Profile content** entry. The **above-the-fold scan** carries Roman's name, a one-line positioning statement, the **Availability block** (availability, location, remote / relocation, notice period, work authorisation), his top stack, and four **Contact actions** — phone, email, LinkedIn, and Download CV. Each contact action is a plain link that opens its channel directly and works with no JavaScript; a later inline script (roadmap step 8) adds fire-and-forget click beacons that never block the action — this confirms roadmap decision D8 (plain link + inline-script beacon, not a redirect through the tracker). **On the landing page, Roman's phone numbers, email address, and LinkedIn URL are never rendered as visible text** — a Recruiter reaches him by activating a labelled control, not by reading and copying a string. The values live only in the controls' link attributes so the controls can function; whether that is tight enough or the values should be assembled by script on click is §8. This rule is scoped to the landing page only: the **generated CV PDF** (roadmap step 4, the `cv.astro` print route, rendered from the same Profile content) **does show the contact details as visible text** — that is the point of a CV, and the Recruiter obtains it by a deliberate download. Same source, two renderers, two exposure rules; no schema split. Depth — an experience timeline and a selected-work section — sits below the fold. This feature ships zero client JavaScript; the click-tracking beacon is roadmap step 8. Hand-rolled section, contact-button, availability-block, and project-card components become the site's first shared primitives.
+The committed approach is one static landing page rendered at build time entirely from the single typed **Profile content** entry. The **above-the-fold scan** carries Roman's headshot, his name, his **headline** (the pipe-separated positioning line — currently "Senior Java Engineer | Lead Backend Engineer" — which is also the source for the CV filename) with an optional one-line **tagline** below it, the **Availability block** (availability, location, remote / relocation, notice period, work authorisation), his **top stack** (a curated list of at most eight technologies chosen in the Profile content), and four **Contact actions** — phone, email, LinkedIn, and Download CV, all four mandatory. Each contact action is a plain link that opens its channel directly and works with no JavaScript; a later inline script (roadmap step 8) adds fire-and-forget click beacons that never block the action — this confirms roadmap decision D8 (plain link + inline-script beacon, not a redirect through the tracker). **On the landing page, Roman's phone numbers, email address, and LinkedIn URL are never rendered as visible text** — a Recruiter reaches him by activating a labelled control, not by reading and copying a string. The values live only in the controls' link attributes so the controls can function; whether that is tight enough or the values should be assembled by script on click is §8. This rule is scoped to the landing page only: the **generated CV PDF** (roadmap step 4, the `cv.astro` print route, rendered from the same Profile content) **does show the contact details as visible text** — that is the point of a CV, and the Recruiter obtains it by a deliberate download. Same source, two renderers, two exposure rules; no schema split. Depth — an experience timeline and a selected-work section — sits below the fold. This feature ships zero client JavaScript; the click-tracking beacon is roadmap step 8. Hand-rolled section, contact-button, availability-block, and project-card components become the site's first shared primitives.
 
-Content is derived from `docs/reference/` (the CV template, the "Classic" variant, the LinkedIn "About", and the `me.png` headshot), reconciled into the Profile content entry. The canonical reconciliation (roadmap step 2) is **confirmed by Roman on 2026-09-06**: surname → **Hrupskyi** (email stays `roman.grupskyi@gmail.com`); experience → **"9+ years"**; headline → **"Senior Java Engineer | Lead Backend Engineer"** (the CV template text is updated to match); the iGaming / EveryMatrix work is **framed by its engineering substance** (Remote Gaming Server platform — reactive microservices, high-throughput distributed systems, multi-operator — the domain named plainly once, not foregrounded); the 2004–2017 sales / project-management period is shown as **a single "earlier background" line**. Only the exact non-overlapping employment date ranges remain open (§8).
+Content is derived from `docs/reference/` (the CV template, the "Classic" variant, the LinkedIn "About", and the `me.png` headshot), reconciled into the Profile content entry. The canonical reconciliation (roadmap step 2) is **confirmed by Roman on 2026-09-06**: surname → **Hrupskyi** (email stays `roman.grupskyi@gmail.com`); experience → **"9+ years"**; headline → **"Senior Java Engineer | Lead Backend Engineer"** (the CV template text is updated to match); the iGaming / EveryMatrix work is **framed by its engineering substance** (Remote Gaming Server platform — reactive microservices, high-throughput distributed systems, multi-operator — the domain named plainly once, not foregrounded); the 2004–2017 sales / project-management period is shown as **a single "earlier background" line** — a distinct optional Profile field rendered once after the experience timeline, not a timeline entry (exempt from AC-09). Only the exact non-overlapping employment date ranges remain open (§8).
 
 **Scope narrowing vs roadmap step 3:** the roadmap lists "recommendations" below the fold; this spec defers the recommendation / testimonial block to v2 (no quote material exists yet). Roadmap step 3's scope is amended to match. No other roadmap step-3 item is dropped.
 
-**Sequencing:** roadmap step 4 (the CV print route and its build-generated, meaningfully-named PDF) is sequenced to land together with this feature. The Download-CV control and its tracked click hook are built here; the file they point at is step 4's generated output — there is no interim committed PDF. AC-04 is satisfied by step 4's generated file. Note for step 4: the CV PDF **must** render Roman's contact details as visible text (contact block of the locked template) — the "actionable-only" rule is a landing-page rule, not a Profile-content rule.
+**Sequencing:** roadmap step 4 (the CV print route and its build-generated, meaningfully-named PDF) is sequenced to land together with this feature. The Download-CV control and its tracked click hook are built here; the file they point at is step 4's generated output — there is no interim committed PDF. AC-04 is satisfied by step 4's generated file. Step 4 owns the filename derivation (from the Profile content name + headline); the landing page's Download-CV control resolves the same name through a shared helper, never a hand-copied string. A missing generated PDF fails the build (postbuild assertion) rather than shipping a dead download. Note for step 4: the CV PDF **must** render Roman's contact details as visible text (contact block of the locked template) — the "actionable-only" rule is a landing-page rule, not a Profile-content rule.
 
 ## 2. Goals
 
 - A Recruiter can state Roman's seniority, stack, location, and availability from the above-the-fold scan alone, without scrolling.
-- A Recruiter can reach Roman through any primary channel — phone, email, LinkedIn, or CV — in one tap, on a phone or a laptop.
+- A Recruiter can reach Roman through any primary channel — phone, email, LinkedIn, or CV — from the top of the page (one tap; the phone action adds one tap to pick a line), on a phone or a laptop.
 - The page presents one reconciled professional history that never contradicts the generated CV.
 
 ## 3. Non-goals
@@ -47,7 +47,7 @@ Content is derived from `docs/reference/` (the CV template, the "Classic" varian
 ### US-01: Scan Roman's fit in seconds
 
 **As a** Recruiter
-**I want** the essentials — name, positioning, seniority, stack, location, availability — visible without scrolling
+**I want** the essentials — headshot, name, headline, top stack, location, availability — visible without scrolling
 **So that** I can decide in about ten seconds whether to pursue him.
 
 ### US-02: Reach Roman in one tap
@@ -95,16 +95,16 @@ Content is derived from `docs/reference/` (the CV template, the "Classic" varian
 ### US-09: Gauge the scale and outcome of his work
 
 **As a** Recruiter
-**I want** a few flagship projects called out with what changed because of Roman's work — the impact, in numbers where there are numbers
+**I want** three to five flagship projects called out with what changed because of Roman's work — the impact, in numbers where there are numbers
 **So that** I can judge the scale and results of what he has built, not just where he has worked.
 
 ## 5. Acceptance criteria
 
 ### AC-01 (US-01) — happy path
 
-**Given** a Recruiter opens the landing page on a standard laptop screen
+**Given** a Recruiter opens the landing page at the reference laptop viewport (1280×800, see §6)
 **When** the page finishes loading
-**Then** without scrolling, the Recruiter sees Roman's name, his one-line positioning, his current availability with location and remote / relocation stance, and his top stack.
+**Then** without scrolling, the Recruiter sees Roman's headshot, his name, his headline, his current availability with location and remote / relocation stance, and his top stack (at most eight technologies).
 
 ### AC-02 (US-02) — happy path
 
@@ -115,7 +115,7 @@ Content is derived from `docs/reference/` (the CV template, the "Classic" varian
 ### AC-03 (US-03) — happy path
 
 **Given** a Recruiter activates the phone action and Roman has more than one published phone line
-**When** the action expands
+**When** the action expands (a native disclosure control that needs no JavaScript)
 **Then** the Recruiter sees one labelled call control per line (for example "Call — Poland" / "Call — international"), with no phone digits shown as text, and activating one starts a call to that line.
 
 ### AC-04 (US-05) — cross-context
@@ -126,8 +126,8 @@ Content is derived from `docs/reference/` (the CV template, the "Classic" varian
 
 ### AC-05 (US-08) — domain invariant
 
-**Given** the Profile content is missing an above-the-fold essential — the positioning line, the availability status, or at least one contact channel
-**When** the site is built
+**Given** the Profile content is missing an above-the-fold essential — the headline, the availability status, or any of the four contact channels (phone, email, LinkedIn, CV — all required)
+**When** Roman or CI builds the site
 **Then** the build fails with a message naming the missing field, and the incomplete page is never published (the invariant "the above-the-fold scan is always complete" holds).
 
 ### AC-06 (US-07) — error
@@ -152,35 +152,43 @@ Content is derived from `docs/reference/` (the CV template, the "Classic" varian
 
 **Given** a Recruiter scrolls below the fold
 **When** the experience section renders
-**Then** each role shows the company, the date range, and Roman's contribution, ordered most-recent first, with date ranges that match the reconciled history and never overlap or contradict each other.
+**Then** each role shows the company, the date range, and Roman's contribution, ordered most-recent first, with date ranges that match the reconciled history and never overlap or contradict each other; a current role may read "<start>–present", and the pre-2017 "earlier background" summary is a single line, not a timeline entry, and is exempt from this criterion.
 
 ### AC-10 (US-02 / US-03) — domain invariant
 
-**Given** the rendered landing page (`index.astro`) and its delivered source — not the CV print route
-**When** anyone inspects the contact area
-**Then** no phone number, email address, or profile URL appears as human-readable text — each is reachable only by activating its labelled control (the invariant "contact details are actionable-only on the landing page" holds; the CV PDF is the deliberate exception).
+**Given** the rendered landing page — not the CV download
+**When** a Recruiter views the contact area
+**Then** no phone number, email address, or profile URL appears as visible text — each is reachable only by activating its labelled control (the invariant "contact details are actionable-only on the landing page" holds; the CV PDF is the deliberate exception). Whether the values are also kept out of the HTML source entirely is the stricter option tracked in §8.
 
 ### AC-11 (US-09) — happy path
 
-**Given** the Profile content lists selected projects, each with a name, Roman's role, and an impact statement
+**Given** the Profile content lists three to five selected projects, each with a name, Roman's role, and an impact statement
 **When** a Recruiter reads the selected-work section below the fold
 **Then** each project shows what changed because of Roman's work, stated as a concrete outcome and quantified wherever the Profile content provides a number (for example a latency, throughput, team-size, or delivery-time figure).
 
 ### AC-12 (US-09) — domain invariant
 
 **Given** a selected project entry in the Profile content has an empty or placeholder impact statement
-**When** the site is built
-**Then** the build fails and names that project, so no selected project is ever published without a stated outcome.
+**When** Roman or CI builds the site
+**Then** the build fails and names that project, so no selected project is ever published without a stated outcome (what counts as a "placeholder" — minimum length, a blocked-words list — is §8).
+
+### AC-13 (US-02) — happy path
+
+**Given** a Recruiter is viewing the contact actions at the top of the page
+**When** the Recruiter activates the LinkedIn action or the Download-CV action
+**Then** LinkedIn opens Roman's profile in a new browser tab with the landing page left open, and Download CV saves the named PDF to the Recruiter's device as a file download rather than opening it inline.
 
 ## 6. Non-functional requirements
 
 | Aspect | Target | Measurement |
 |---|---|---|
-| Above-the-fold render (Largest Contentful Paint), mid-tier mobile, throttled 4G | ≤ 2.5 s | Lighthouse mobile audit (pre-launch; optionally wired into CI) |
-| Initial page weight (excludes the later analytics beacon) | ≤ 500 KB transferred | build size report / Lighthouse |
+| Above-the-fold render (Largest Contentful Paint), Lighthouse "mobile" preset (mid-tier device, throttled 4G) | ≤ 2.5 s | Lighthouse mobile audit, run manually pre-launch |
+| Initial page weight (HTML + CSS + fonts + images; excludes the later analytics beacon) | ≤ 500 KB transferred | Lighthouse / build size report |
 | Client JavaScript shipped by this feature | 0 KB | build output inspection |
-| Accessibility | Lighthouse Accessibility ≥ 95; all interactive elements keyboard-reachable | Lighthouse mobile audit + manual keyboard pass |
-| Supported viewports | 360–1920 px wide, no horizontal scroll at any width in range | responsive check, manual + CI screenshot |
+| Accessibility | Lighthouse Accessibility ≥ 95; every interactive element keyboard-reachable and operable | Lighthouse mobile audit + manual keyboard pass |
+| Above-the-fold fit | every above-the-fold essential visible with no scrolling at 1280×800 (reference laptop) and 390×844 (reference phone) | manual check at both viewports pre-launch |
+| Readability & hit area | body text ≥ 16 px; every interactive target ≥ 44×44 px (WCAG 2.5.8) | manual audit + Lighthouse |
+| Supported viewports | no horizontal scroll at 360, 768, 1280, and 1920 px width | manual responsive check pre-launch |
 | Content completeness enforced at build | 100% of missing / malformed required fields fail the build | `astro check` + content-collection schema validation in CI |
 
 ## 6.1 Security / privacy
@@ -207,5 +215,5 @@ Content is derived from `docs/reference/` (the CV template, the "Classic" varian
 ## 8. Open questions
 
 - [ ] What are Roman's exact, non-overlapping employment date ranges? The CV template and the "Classic" variant disagree and partly overlap (EveryMatrix reads "2021–2023" on one page and "2023–2026" on another), and AC-09 requires ranges that are consistent across the page and the CV and never overlap. Default now: take the CV-template page-2/3 ranges as the base and resolve the EveryMatrix overlap into one continuous range. — owner: Roman, due: before sdd:tasks
-- [ ] What is the impact statement for each selected project? AC-11 wants a concrete outcome per flagship project, quantified where a real number exists, but the reference material describes responsibilities, not measured impact. Default now: Roman supplies one impact statement per selected project — with a number where a real one exists, otherwise a concrete qualitative outcome. — owner: Roman, due: before sdd:implement
+- [ ] What is the impact statement for each selected project, and how does the build detect a "placeholder" one (AC-12)? The reference material describes responsibilities, not measured impact. Default now: Roman supplies one impact statement per selected project — with a number where a real one exists, otherwise a concrete qualitative outcome; the build rejects an impact statement that is empty, shorter than ~40 characters, or matches a small blocked-words list (TODO / TBD / lorem / …). — owner: Roman (content) / design (the detection rule), due: before sdd:implement
 - [ ] Should the contact values (phone, email) be assembled by a small script on click so they are absent from the delivered HTML entirely, or is keeping them in the controls' link attributes (not visible text) acceptable? The stricter option costs the feature's "0 KB JavaScript" property for the contact controls. Default now: keep them in link attributes only — no visible text (AC-07, AC-10), no script. — owner: Roman / design, due: before sdd:design
