@@ -37,13 +37,14 @@
     "status": "Open to Remote & Hybrid Opportunities"
   },
   "about": {
-    "narrative": "Seasoned Java professional with 9+ years designing and building scalable, high-performance business applications — backend development, microservices architecture, and technical leadership, with a track record of improving software quality, system performance, and engineering workflows.\n\nMy way of working is rooted in systems thinking — a holistic view of the big picture together with the ability to dive deep into the implementation details of complex systems.\n\nA background in sales and project management gives me a perspective on delivering business value through technology — aligning engineering with product goals and communicating with both technical and non-technical stakeholders.\n\nComfortable using AI coding assistants and LLM-based tools as productivity multipliers for development, debugging, refactoring, testing, and technical research.",
+    "narrative": "Seasoned Java professional with 9+ years designing and building scalable, high-performance business applications — backend development, microservices architecture, and technical leadership, with a track record of improving software quality, system performance, and engineering workflows.\n\nMy way of working is rooted in systems thinking — a holistic view of the big picture together with the ability to dive deep into the implementation details of complex systems.\n\nHands-on experience working in various roles throughout the software development life cycle (SDLC).\n\nA background in sales and project management gives me a perspective on delivering business value through technology — aligning engineering with product goals and communicating with both technical and non-technical stakeholders.\n\nComfortable using AI coding assistants and LLM-based tools as productivity multipliers for technical research, design, development, debugging, refactoring, testing, and agentic engineering workflows.",
     "highlights": [
       "Experience managing engineers.",
       "Worked on a variety of projects, from large legacy systems to early- and mid-stage startups.",
       "Worked with architectures from large legacy monoliths to complex distributed systems of dozens of microservices.",
       "Worked with teams from small co-located groups to large international teams with hundreds of members distributed worldwide.",
-      "Strong expertise in Java and its ecosystem, relational databases, and distributed systems."
+      "Strong in Java and its ecosystem, relational databases, and distributed systems.",
+      "Physics background and strong analytical skills."
     ]
   },
   "competencies": ["STUB — see docs/reference/cv-template-reference.pdf"],
