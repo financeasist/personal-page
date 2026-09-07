@@ -7,98 +7,105 @@ feature_size: "M"
 target_surfaces: []  # filled in §4 — subset of: backend-service | web-frontend | mobile-app | desktop-app | cli | worker | library-sdk. Read (never re-derived) by api/sequences/tasks/plan-tests/review → _shared/surfaces.md
 ---
 
-# Software Architecture Document — <slug>
+# Software Architecture Document — tracking-system
 
-<!-- 12 Arc42 sections. Empty section → <!-- N/A: <one-line reason> -->. -->
-<!-- C4 Context (L1) lives inline in §3. C4 Container (L2) lives inline in §5. -->
-<!-- Numbers in §10 come VERBATIM from spec.md §6 NFR — no inventing, no rounding. -->
+<!-- 12 Arc42 sections. C4 Context (L1) inline in §3, C4 Container (L2) inline in §5.
+     Numbers in §10 come VERBATIM from spec.md §6 NFR. -->
 
 ## 1. Introduction and goals
 
-<!-- 🎯 Why: durable memory of «what + the three dominant qualities + who cares». A year from
-     now nobody recalls which three qualities were critical for this system.
-     📋 Write: 1 ¶ intent + 3 lines of top-3 quality goals + a stakeholders table.
-     ¶4 is the override slot — critic `Override` resolutions emit «Decision override: <headline>
-     — rationale: <reason>» bullets here so downstream skills see the deliberate choice. -->
-
-**Intent.** <One paragraph from spec §2 Goals — what we're building and for whom.>
+**Intent.** Add the tracking behaviour (roadmap steps 5–7) to the existing `tracker/` Spring Boot service: a **labelled-link redirect** (`GET /t/{label}` → `302` to `https://<site>/?r=<label>`), a **cookieless event-ingest endpoint** (`POST /e` for page-view / contact-action / cv-download events posted by roadmap step 8's future browser beacon), and a real-time Telegram **View notification** for every genuine **Visit** *and* every engagement event. Labels are short URL-safe slugs Roman seeds by hand (one `recruiter_link` row per outreach) — there is no label-creation endpoint or admin UI. Visit history is retained indefinitely, offset by a manual, Roman-only **erase-by-label** operation. Both public endpoints carry a per-source rate limit as the sole abuse guardrail. This feature owns the redirect + ingest + notify behaviour and the `?r=<label>` on the redirect target; the browser code that reads `?r=`, retains it, and scrubs the URL is roadmap step 8 (a separate `site/` feature, out of scope here).
 
 **Top-3 quality goals (1-liners; full scenarios in §10):**
 
-1. <e.g. "Availability under partial failure of a downstream module">
-2. <e.g. "Read performance for the dashboard under data-scale growth">
-3. <e.g. "Recoverability with <30 min RTO">
+1. **Redirect responsiveness on the recruiter click path** — p95 ≤ 100 ms (request received → 302 returned), redirect availability ≥ 99% monthly; no heavy work before the 302.
+2. **Notification signal integrity** — exactly one View notification per genuine Visit and one per engagement event (no batching, no dedup of repeats), delivered p95 ≤ 5 s; recognized link-preview crawlers never record or notify; fire-and-forget — a failed send is logged, never retried, and never blocks recording.
+3. **Privacy / data-protection posture** — the raw IP is never persisted to the visit store or any durable history (only the derived city); erase-by-label removes every row for a label; the endpoints are unauthenticated by design and the only abuse guardrail is the per-source rate limit.
 
 **Stakeholders.**
 
 | Role | Interest | Sign-off owner? |
 |---|---|---|
-| <author role from glossary> | <feature usage> | No |
-| <consumer role from glossary> | <read usage> | No |
-| Tech Lead | SAD approval | Yes |
+| Roman | Seeds `recruiter_link` rows; runs erase-by-label; receives every View notification; reads visit history out-of-band | Yes |
+| Recruiter | Opens labelled / plain links; must never be dead-ended by a bad label or a throttle | No |
+| Tech Lead (Roman) | SAD approval | Yes |
+| Security reviewer | The §6.1-required review of the erase operation and the rate limit before this SAD's ADRs finalize | Yes |
 
-<!-- Decision overrides (¶4) — populated by the critic resolution loop, empty otherwise. -->
+<!-- Decision overrides (¶4) — none. -->
 
 ## 2. Constraints
 
-<!-- 🎯 Why: §4 strategy only works when §2 has fixed WHAT IS ALREADY FIXED — stack, versions,
-     deadline, regulatory. This is an input, not an output.
-     📋 Write: four blocks — Technical / Organisational / Conventions / Regulatory.
-     📌 Pin versions («<datastore> 18», not «<datastore>»); «Q3 deadline — hard», not «ideally».
-     Never N/A — every feature inherits at least Conventions + Technical. -->
+**Technical (fixed).**
+- Java 21; Spring Boot 3.5.5; Maven (wrapper `./mvnw`).
+- Spring Web MVC; **Spring Data JDBC** (no JPA/Hibernate); Flyway; PostgreSQL 16 (Supabase, free tier); Spring `RestClient` for the Telegram Bot API.
+- Package layout `com.grupskyi.tracker` → `web` (controllers) / `app` (services) / `infra` (JDBC repos, Telegram client) / `domain` (records); **constructor injection only**; components discovered by scan.
+- Runtime: **one always-warm Fly.io `shared-cpu-1x` machine in `waw`**, `min_machines_running = 1` — load-bearing for the ≤ 100 ms redirect NFR; no scale-to-zero, no cold JVM on a recruiter's click path.
 
-**Technical.**
-- <Language + version>
-- <Framework(s) + version>
-- <Datastore(s) + version>
-- <Architecture convention — e.g. the layering style from the project convention file>
+**Technical (assumptions — flagged, with fallbacks).**
+- **Supabase project region: EU-central (Frankfurt)**, ~10–25 ms RTT from `waw`; a single-row `INSERT` is budgeted at p95 ≤ 30 ms. → If the real project is trans-Atlantic, the §4 decision to write the visit row *synchronously before the 302* flips to fully-async recording. Carried as a §11 risk row.
+- Supabase free tier pauses a project after ~7 days of inactivity — the first request after a pause misses the redirect NFR. Accepted at personal scale (an `architecture-map.md` constraint); the always-warm machine's own DB touches keep the project from idling in practice.
 
 **Organisational.**
-- <Effort budget — e.g. 3 person-weeks>
-- <Deadline — e.g. 2026-Q3 hard>
-- <Team composition>
+- Solo developer (Roman); personal-scale project; no fixed external deadline — "ship this week beats ship complete".
+- Bundles roadmap steps 5 (M) + 6 (M) + 7 (S) into one feature; stays **M** — no breaking changes (nothing consumes this service yet), the module + conventions are already scaffolded.
 
 **Conventions.**
-- <Link to the project's convention file>
-- <Naming, ID strategy, error-handling pattern>
+- `CLAUDE.md` + `docs/architecture-map.md §Conventions`.
+- `visit_event` is **append-only** — no `UPDATE`/`DELETE` code path in the application.
+- One `@RestControllerAdvice` → `{ "error": <code>, "message": <text> }`.
+- Event-ingest endpoints are **fire-and-forget**: a DB/logging failure is logged server-side and still returns `202`, never a `5xx` to the browser.
+- IDs: `visit_event.id` = `bigint generated always as identity`; ordering by `created_at timestamptz default now()`; `recruiter_link.label` is a human-chosen slug and the PK.
+- Migrations: Flyway `V<n>__<snake_case>.sql`, forward-only, each small and reversible-by-hand.
+- Tests: JUnit 5. Unit = plain classes. Integration = `@SpringBootTest` + Testcontainers Postgres (extend `AbstractIntegrationTest`).
 
 **Regulatory / external.**
-- <e.g. data-retention / deletion behaviour per ADR-NNNN>
-- <e.g. applicable compliance controls, or N/A with a reason>
+- **GDPR** — a Labelled link's label may name a real, identifiable person; the data is classified **confidential** (spec §6.1).
+- **Retention:** indefinite, offset by the manual Roman-only erase-by-label operation — no automatic expiry policy (resolves roadmap open decision D6; spec §3).
+- **Security review Required** (spec §6.1) — a new store of personal data plus a destructive manual operation; the review lands before this SAD's erase + rate-limit ADRs finalize.
+- Accepted residual: already-delivered Telegram messages and label occurrences in rotating server logs are outside the erase operation's reach (spec §6.1 / AC-08).
 
 ## 3. Context and scope
 
-<!-- 🎯 Why: draws the SYSTEM BOUNDARY — who talks to it from outside, where the trust zone ends.
-     Without §3, §5 and §8 (authorization) blur — unclear what's «inside» vs «outside».
-     📋 Write: 2–3 sentences of business context + an external-systems table + a C4Context block.
-     📌 «External: none (deliberate, no third-party in v1)» is itself a decision worth stating.
-     Trust boundary — the line past which you don't trust data without checking it.
-     Never N/A — greenfield still draws the planned actors + external systems. -->
+The tracker sits between a Recruiter's browser and Roman's Telegram: it turns "I sent a recruiter a link" into "I know she opened it, when, roughly from where, and what she did." It exposes two **unauthenticated public endpoints** by design — the labelled-link redirect and the event-ingest path — so any recruiter can use them with no friction; the one privileged capability (erase-by-label) is not reachable on any public path.
 
-<Business context in 2–3 sentences. What the system does for whom.>
+<!-- brownfield: `tracker/` Spring Boot service scaffolded (commit b1583df) — TrackerApplication, HealthController (/healthz), Flyway V1__init.sql (recruiter_link, visit_event: id/link_label/kind/city/referrer/user_agent/created_at), application.yml with telegram.bot-token + chat-id placeholders, Testcontainers harness (AbstractIntegrationTest). This feature adds redirect + ingest + notify on that skeleton; no existing behaviour changes. -->
 
-<!-- brownfield: <one-line scan summary> (or «N/A — greenfield repo» if no source existed) -->
+**Trust boundary.** Everything arriving from a browser is untrusted: the `{label}` path segment, request headers (`User-Agent`, `Referer`), and every `/e` request body. A label is validated against `recruiter_link` before it is forwarded — an unmatched label is **not** put on the redirect target (AC-04). Event bodies are recorded **without** verifying that the claimed label or Visit genuinely exists — a deliberate, accepted trade-off at this scale; the per-source rate limit is the only defence (spec §6.1).
 
 **External systems (in / out):**
 
 | Actor or system | Type | Interaction |
 |---|---|---|
-| <author role> | Person | <what they do> |
-| <external service> | System (internal/external) | <interaction> |
-| <identity provider> | System (external) | <provides auth tokens> |
+| Recruiter | Person (external, untrusted) | Opens `/t/{label}` (receives a 302); via step 8's future beacon, triggers `/e` events |
+| Roman | Person (internal) | Seeds `recruiter_link` rows by hand; runs erase-by-label by hand (out-of-band); receives every View notification |
+| Landing site (`site/`, GitHub Pages) | System (internal, sibling feature) | The 302 target (`https://<site>/?r=<label>`); roadmap step 8's inline script will POST events to `/e` — step 8 is out of scope here |
+| Telegram Bot API | System (external) | Receives HTTPS `sendMessage` calls; delivers View notifications to Roman's chat |
+| GeoIP lookup | System (external service *or* bundled dataset — §4 decision) | Maps a request IP → city; the IP is used transiently and never persisted (AC-12) |
+| Supabase PostgreSQL 16 | System (external, managed) | The visit store; Flyway migrations run on tracker boot |
 
-**C4 Context (L1):** <!-- syntax → references/c4-mermaid-syntax.md. Real names, no <placeholder> stubs. -->
+**C4 Context (L1):**
 
 ```mermaid
 C4Context
-    title <feature> — System Context
+    title tracking-system — System Context
 
-    Person(actor, "<Actor role>", "<intent>")
-    System(app, "<Our system>", "<one-sentence description>")
-    System_Ext(ext, "<External system>", "<one-sentence description>")
+    Person(recruiter, "Recruiter", "Opens a link Roman sent; must never be dead-ended")
+    Person(roman, "Roman", "Seeds labels + runs erase by hand; reads every notification")
 
-    Rel(actor, app, "<interaction>", "<protocol>")
-    Rel(app, ext, "<interaction>", "<protocol>")
+    System(tracker, "Tracking service", "Labelled-link redirect, cookieless event ingest, real-time View notifications")
+
+    System_Ext(site, "Landing site", "Astro static site on GitHub Pages — the 302 target; step 8's beacon source")
+    System_Ext(telegram, "Telegram Bot API", "Delivers real-time View notifications to Roman")
+    System_Ext(geoip, "GeoIP lookup", "IP -> city; IP used transiently, never persisted")
+    SystemDb(supabase, "Analytics DB", "PostgreSQL 16 on Supabase — recruiter_link + append-only visit_event")
+
+    Rel(recruiter, tracker, "Opens /t/{label}", "HTTPS 302")
+    Rel(recruiter, site, "Lands on the page; step 8 beacons events", "HTTPS")
+    Rel(roman, supabase, "Seeds recruiter_link rows; runs erase-by-label", "SQL, out-of-band")
+    Rel(tracker, supabase, "Looks up labels, appends visit events", "JDBC")
+    Rel(tracker, geoip, "Resolves city for a visit", "in-process or HTTPS")
+    Rel(tracker, telegram, "Sends the View notification", "HTTPS")
+    Rel(telegram, roman, "Notifies", "Telegram app")
 ```
 
 ## 4. Solution strategy
