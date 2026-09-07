@@ -299,3 +299,121 @@ _`industries` is not an above-the-fold essential — it is not in the AC-01 / AC
 
 - [ ] Roman's exact, non-overlapping employment date ranges — needed by the v2 experience timeline (was: before sdd:tasks). The CV template and the "Classic" variant disagree and partly overlap (EveryMatrix reads "2021–2023" on one page, "2023–2026" on another). — owner: Roman, due: v2 (before the experience-timeline feature)
 - [ ] Per-project impact statements and the "placeholder" detection rule (empty / < ~40 chars / blocked-words list) — needed by the v2 selected-work section. — owner: Roman (content) / design (the rule), due: v2 (before the selected-work feature)
+
+## Test plan
+
+> Inline per the size matrix (feature size **S**). Maps every §5 acceptance criterion to ≥ 1
+> named test. `target_surfaces: [web-frontend]` (sad.md) → the frontend tiers apply:
+> **component** (a UI component exercised in isolation), **visual-regression** (rendered UI
+> diffed against a baseline), **e2e-through-UI** (the flow driven through the built page).
+> There is no datastore and no API, so there are no **contract** rows; "integration" here means
+> a test against the **real Astro build pipeline** (`astro:content` + the Zod schema + its
+> `.refine()` invariants + the `postbuild` step), not a mock. Test *tools* are not named — `implement` detects what
+> the repo already uses and picks the unit/component runner, the browser-driver and the
+> visual-diff tool.
+> Withdrawn ACs (AC-03, AC-09, AC-11, AC-12) are listed for traceability with **no test** —
+> they carry no v1 behaviour.
+
+### Coverage table
+
+| AC | Intent | Test name | Level(s) |
+|---|---|---|---|
+| AC-01 | Every above-the-fold essential renders at both reference viewports | `above-the-fold essentials render from profile content` | component |
+| AC-01 | | `laptop and phone hero show every essential with no scroll` | e2e-through-UI (1280×800, 390×844) |
+| AC-01 | | `hero baseline unchanged — laptop + phone` | visual-regression |
+| AC-02 | Email action opens a pre-addressed message | `header email control carries a mailto addressed to Roman` | component |
+| AC-02 | | `activating the header email action hands off a mailto` | e2e-through-UI |
+| AC-04 | CV filename derived from name + headline; committed PDF present | `cv-filename helper derives the name-and-headline filename` | unit |
+| AC-04 | | `build asserts the committed CV PDF exists at the derived path` | integration |
+| AC-05 | Missing required field fails the build, naming the field | `schema rejects a profile missing a required landing field` | unit (fixtures per `data-model.md` §Test fixtures) |
+| AC-05 | | `astro build fails and names the missing field` | integration |
+| AC-06 | Malformed value fails the build, naming the field and why | `schema rejects a malformed field value with a named reason` | unit |
+| AC-06 | | `astro build fails and names the malformed field` | integration |
+| AC-07 | Need-to-know exposure — nothing over-shared in the delivered page or source | `delivered HTML contains no salary, address, phone, or recruiter-link label` | integration (assertion over `dist/` build output) |
+| AC-07 | | `email and LinkedIn never appear as visible text in the rendered page` | component + integration (over `dist/`) |
+| AC-08 | Phone viewport — fit, legibility, tap targets, native `<details>` menu, zero JS | `phone hero: essentials visible, no horizontal scroll, tap targets ≥ 44×44` | e2e-through-UI (390×844) |
+| AC-08 | | `header menu is a native <details> and works with JavaScript disabled` | e2e-through-UI (JS off) |
+| AC-08 | | `condensed header baseline — phone` | visual-regression |
+| AC-10 | Contact values actionable-only on the landing page | `contact controls hold email/URL in link attributes, not in text content` | component |
+| AC-10 | | `rendered page exposes no contact value as visible text` | integration (over `dist/`) |
+| AC-13 | LinkedIn opens a new tab; Download CV saves as a file | `LinkedIn control opens a new tab; CV control is a download, not inline` | component |
+| AC-13 | | `activating LinkedIn opens a new tab with the page still open; Download CV saves the named PDF` | e2e-through-UI |
+| AC-14 | About section renders from content; phone reflows to one column | `About renders narrative + highlights straight from profile content` | component |
+| AC-14 | | `About visible one scroll below the fold; single column ≥ 16px on phone` | e2e-through-UI (1280×800, 390×844) |
+| AC-14 | | `About section baseline — laptop + phone` | visual-regression |
+| AC-15 | Optional industries list — present renders from content, absent still builds | `hero renders the industries column from content when present, omits it when absent` | component |
+| AC-15 | | `build succeeds with industries omitted` | integration |
+| AC-03 | — | WITHDRAWN (phone removed from v1) — no test | — |
+| AC-09 | — | WITHDRAWN (experience timeline → v2) — no test | — |
+| AC-11 | — | WITHDRAWN (selected work → v2) — no test | — |
+| AC-12 | — | WITHDRAWN (placeholder-impact rule → v2) — no test | — |
+
+### Edge cases & error paths (each its own row)
+
+| # | AC | Case | Expected outcome | Level |
+|---|---|---|---|---|
+| E1 | AC-05 | `contact.email` absent | build fails naming `contact.email` | unit + integration |
+| E2 | AC-05 | no `linkedin.com` entry in `contact.links` | build fails naming the missing LinkedIn link | unit + integration |
+| E3 | AC-05 | committed CV PDF missing at the derived path | postbuild "file exists" assertion fails the build | integration |
+| E4 | AC-05 | `about` object omitted entirely | build fails naming `about` | unit + integration |
+| E5 | AC-05 | `about.highlights` is an empty list | build fails naming `about.highlights` | unit + integration |
+| E6 | AC-05 | `topStack` has fewer than 4 entries | build fails naming `topStack` | unit + integration |
+| E7 | AC-06 | `contact.email` has no `@` | build fails naming `contact.email` and why | unit + integration |
+| E8 | AC-06 | `headline` is an empty string | build fails naming `headline` | unit + integration |
+| E9 | AC-06 | a link `url` does not parse | build fails naming that link | unit + integration |
+| E10 | AC-06 | `topStack` has more than 8 entries | build fails naming `topStack` | unit + integration |
+| E11 | AC-06 | `tagline` present but empty | build fails naming `tagline` | unit + integration |
+| E12 | AC-06 | an `industries` entry has an empty `domain` | build fails naming the `industries` domain field | unit + integration |
+| E13 | AC-06 | `industries` has more than 6 entries | build fails naming `industries` | unit + integration |
+| E14 | AC-07 | over-exposure token (salary / rate / home address / recruiter-link label) present anywhere in `dist/` | assertion over the built output finds none | integration |
+| E15 | AC-02 / AC-10 | device has no `mailto:` handler | the action is inert and there is **no** visible or copyable contact value as a fallback (accepted, ADR-0006) | e2e-through-UI (assert no reveal/copy affordance) |
+| E16 | AC-08 | viewport at 360 px width | no horizontal scroll (only binding guarantee); optional elements drop in order Industries → Tagline → top-stack truncates | e2e-through-UI (360 px) |
+| E17 | AC-08 / QG-3 | no-horizontal-scroll at 360 / 768 / 1280 / 1920 px | no horizontal scroll at any of the four widths | e2e-through-UI (parametrized) |
+
+### Integration strategy — real pipeline, ephemeral fixtures
+
+- **No datastore, no container.** The "real dependency" under integration test is the **Astro
+  build pipeline** itself: `astro:content` loading a fixture `profile` document against the
+  Zod schema + `.refine()` invariants (`site/src/content/config.ts`), plus the `postbuild`
+  CV-file assertion.
+- **Seed:** the fixture factories already enumerated in `data-model.md` §Test fixtures —
+  `validProfile()` (the green baseline) and the invalid/edge variants
+  (`missingChannelProfile`, `missingAboutProfile`, `emptyAboutProfile`, `malformedProfile`,
+  `undersizeTopStackProfile`, `oversizeTopStackProfile`, `oversizeTaglineProfile`,
+  `industriesOmittedProfile`, `oversizeIndustriesProfile`, `missingCvPdfProfile`). PII guard:
+  invalid/edge fixtures use `example.test`, never Roman's real details.
+- **Cleanup:** per-test. Each test writes its fixture profile into a throwaway content
+  location (temp dir or an overridden content path), runs the schema parse or a scoped
+  `astro build`, asserts, and removes the fixture. No shared state between tests; no fixture
+  is left in `site/src/data/profile/`.
+- **e2e-through-UI + visual-regression** run against the built static output of `validProfile()`
+  (a real `astro build` into a temp `dist/`), served statically and driven at the two
+  reference viewports. Baselines are committed; a diff fails the test.
+
+### NFR verification (§6 / sad.md §10)
+
+| NFR | Check | Level |
+|---|---|---|
+| Client JavaScript shipped by this feature = 0 KB | assert the built `dist/` ships no feature JS bundle | integration (build-output inspection) |
+| Every interactive element keyboard-reachable and operable, one `<h1>`, semantic landmarks | keyboard-tab pass through the header + About; structure assertions | e2e-through-UI + component |
+| LCP ≤ 2.5 s · initial page weight ≤ 500 KB · Lighthouse Accessibility ≥ 95 | Lighthouse "mobile" audit | **manual pre-launch** (§6 "run manually pre-launch"; not CI in v1 — sad.md §11 accepted debt). A miss blocks launch unless Roman waives it in the release checklist with a written reason. |
+| Above-the-fold fit at 1280×800 and 390×844 | every essential visible with no scrolling | e2e-through-UI (automated) **+** manual pre-launch confirmation |
+| Content completeness — 100 % of missing/malformed required fields fail the build | covered by AC-05 / AC-06 rows above | unit + integration |
+
+### Load
+
+<!-- N/A: no numeric NFR — none carries a throughput or concurrency target. The §6 numbers
+     (LCP ≤ 2.5 s, ≤ 500 KB, 0 KB JS, a11y ≥ 95) are single-client budgets for a static page
+     on a CDN, verified by Lighthouse + build-output inspection — not load scenarios. -->
+
+### CI placement
+
+- **Every PR (fast):** unit (schema + `cv-filename` helper), component, and the build-output
+  inspection integration tests (`astro build` against fixtures + the zero-JS + `dist/`
+  exposure assertions).
+- **Every PR (heavier, still gating):** e2e-through-UI and visual-regression against the
+  `validProfile()` build. If these grow slow, move visual-regression to a pre-merge job.
+- **Pre-launch, manual (not CI in v1):** the Lighthouse mobile audit (LCP, weight, a11y),
+  the manual keyboard pass, the manual responsive check at 360 / 768 / 1280 / 1920 px, and
+  the page-vs-committed-CV parity check (§7, §8). Wiring Lighthouse CI and an `astro check`
+  step onto the `deploy.yml` push path is a `tasks` follow-up (sad.md §7, §11).
