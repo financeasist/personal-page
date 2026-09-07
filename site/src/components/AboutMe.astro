@@ -1,0 +1,84 @@
+---
+// The one below-the-fold section in v1 (US-10 / AC-14). Renders `about.narrative`
+// (paragraphs split on blank lines) and `about.highlights` straight from the
+// profile content — NO hard-coded copy. Grey band, `id="about"` (the Header menu
+// "About me" item anchors here). Two columns on laptop, one on phone.
+//
+// Precondition: the build guarantees a non-empty narrative and >=1 highlight
+// (INV-09) — this component is never asked to render blank.
+import Section from './Section.astro';
+
+interface Props {
+  narrative: string;
+  highlights: string[];
+  linkedInUrl?: string;
+}
+
+const { narrative, highlights, linkedInUrl } = Astro.props;
+const paragraphs = narrative.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
+---
+
+<Section id="about" tone="canvas" heading="About me">
+  <div class="about">
+    <div class="about__narrative">
+      {paragraphs.map((p) => <p>{p}</p>)}
+    </div>
+    <div class="about__highlights">
+      <p class="about__highlights-heading">Highlights</p>
+      <ul>
+        {highlights.map((h) => <li>{h}</li>)}
+      </ul>
+      {
+        linkedInUrl && (
+          <a class="about__link" href={linkedInUrl} target="_blank" rel="noopener">
+            See my LinkedIn profile
+          </a>
+        )
+      }
+    </div>
+  </div>
+</Section>
+
+<style>
+  .about {
+    display: grid;
+    gap: 2rem;
+    max-width: 60rem;
+    margin-inline: auto;
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+  .about__narrative p {
+    margin: 0 0 1rem;
+  }
+  .about__narrative p:last-child {
+    margin-bottom: 0;
+  }
+  .about__highlights-heading {
+    margin: 0 0 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .about__highlights ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    display: grid;
+    gap: 0.4rem;
+  }
+  .about__link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--color-navy);
+    font-weight: 600;
+  }
+
+  @media (min-width: 768px) {
+    .about {
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      gap: 3rem;
+    }
+  }
+</style>

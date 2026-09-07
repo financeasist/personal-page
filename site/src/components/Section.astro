@@ -1,0 +1,43 @@
+---
+// Below-the-fold section wrapper — layout only, no copy. Full-bleed colour band
+// (via Band) + a centered heading with a short navy rule + the section spacing
+// rhythm (screens.md §Source: "Section headings are centered with a short navy
+// rule beneath"). Reused for About now; Experience / Selected-projects in v2.
+import Band from './Band.astro';
+
+interface Props {
+  heading: string;
+  tone?: 'surface' | 'canvas' | 'navy';
+  id?: string;
+}
+
+const { heading, tone = 'surface', id } = Astro.props;
+---
+
+<Band as="section" tone={tone} id={id} class="section">
+  <h2 class="section__heading">{heading}</h2>
+  <div class="section__rule" aria-hidden="true"></div>
+  <div class="section__body">
+    <slot />
+  </div>
+</Band>
+
+<style>
+  .section {
+    scroll-margin-top: 4.5rem; /* clears the sticky header on #anchor jump */
+  }
+  .section__heading {
+    margin: 0;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: clamp(1.3rem, 3vw, 1.6rem);
+    color: var(--color-navy);
+  }
+  .section__rule {
+    width: 3rem;
+    height: 3px;
+    margin: 0.75rem auto 2rem;
+    background: var(--color-navy);
+  }
+</style>
