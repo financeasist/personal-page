@@ -248,9 +248,13 @@ const mailto = `mailto:${email}`;
     outline-offset: -2px;
   }
 
-  /* Laptop (>=768px): every action inline, disclosure menu hidden, icon labels
-     visible. */
-  @media (min-width: 768px) {
+  /* Laptop (>=960px): every action inline, disclosure menu hidden, icon labels
+     visible. The threshold is 960, not 768: the hero-sized name plus two
+     labelled icons plus three inline text actions only sit on one row without
+     compressing the name below ~960px — at 768 the row filled the viewport to
+     the exact pixel and tipped into a 1px horizontal overflow on CI's font
+     metrics. Below 960 the compact burger header (which has ample room) runs. */
+  @media (min-width: 960px) {
     .site-header__menu {
       display: none;
     }
@@ -263,9 +267,9 @@ const mailto = `mailto:${email}`;
     }
   }
 
-  /* Phone (<768px): name left; LinkedIn + email + burger on the right; the
+  /* Compact (<960px): name left; LinkedIn + email + burger on the right; the
      inline About / Download CV / Contact move into the <details> menu. */
-  @media (max-width: 767.98px) {
+  @media (max-width: 959.98px) {
     .site-header__divider {
       display: none;
     }
