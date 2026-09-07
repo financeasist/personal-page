@@ -9,12 +9,14 @@
   "topStack": [
     "Java",
     "Spring ecosystem (Boot, Cloud, WebFlux, Data, Security)",
+    "Event-driven architecture",
+    "Microservices",
     "Kafka",
     "Postgres",
-    "Redis",
     "Hazelcast",
     "Kubernetes",
     "GitLab",
+    "CI/CD",
     "and more"
   ],
   "industries": [
