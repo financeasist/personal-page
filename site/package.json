@@ -12,16 +12,24 @@
     "postbuild": "node scripts/generate-pdf.mjs",
     "preview": "astro preview",
     "check": "astro check",
-    "lint": "astro check"
+    "lint": "astro check",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:visual": "playwright test --update-snapshots=none --grep @visual"
   },
   "dependencies": {
     "astro": "^5.13.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/vite": "^4.1.0",
+    "@types/node": "^20.19.43",
+    "linkedom": "^0.18.13",
     "playwright": "^1.55.0",
     "tailwindcss": "^4.1.0",
-    "typescript": "^5.6.0"
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.9"
   }
 }

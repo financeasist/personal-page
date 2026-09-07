@@ -2,6 +2,12 @@
 dist/
 .astro/
 
+# test output (Playwright / Vitest); e2e/**-snapshots/ visual baselines ARE committed
+test-results/
+playwright-report/
+blob-report/
+coverage/
+
 # deps
 node_modules/
 
