@@ -1,0 +1,85 @@
+---
+// Availability block — `status` carries the remote / hybrid / relocation stance
+// (AC-01 essential). Location sits here in the reading order but comes from
+// `contact.location`. Notice period and work authorisation render only when the
+// content supplies them (both optional — data-model.md §availability).
+interface Props {
+  status: string;
+  location: string;
+  noticePeriod?: string;
+  workAuthorization?: string;
+}
+
+const { status, location, noticePeriod, workAuthorization } = Astro.props;
+---
+
+<section class="availability" aria-label="Availability">
+  <p class="availability__heading">Availability</p>
+  <p class="availability__status">{status}</p>
+  <dl class="availability__detail">
+    <div>
+      <dt>Location</dt>
+      <dd>{location}</dd>
+    </div>
+    {
+      noticePeriod && (
+        <div>
+          <dt>Notice period</dt>
+          <dd>{noticePeriod}</dd>
+        </div>
+      )
+    }
+    {
+      workAuthorization && (
+        <div>
+          <dt>Work authorisation</dt>
+          <dd>{workAuthorization}</dd>
+        </div>
+      )
+    }
+  </dl>
+</section>
+
+<style>
+  .availability {
+    border: 1px solid color-mix(in srgb, var(--color-navy) 25%, transparent);
+    border-radius: 0.6rem;
+    padding: 1rem 1.25rem;
+    background: color-mix(in srgb, var(--color-navy) 4%, transparent);
+    max-width: 24rem;
+  }
+  .availability__heading {
+    margin: 0 0 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .availability__status {
+    margin: 0 0 0.5rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--color-navy);
+  }
+  .availability__detail {
+    margin: 0;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .availability__detail div {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 1rem;
+  }
+  .availability__detail dt {
+    color: var(--color-muted);
+  }
+  .availability__detail dt::after {
+    content: ':';
+  }
+  .availability__detail dd {
+    margin: 0;
+    font-weight: 500;
+  }
+</style>

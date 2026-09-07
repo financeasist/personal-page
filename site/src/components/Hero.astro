@@ -1,0 +1,173 @@
+---
+// Above-the-fold hero (US-01 / AC-01). Every essential renders straight from
+// the profile content: headshot, name (<h1>), headline, optional tagline,
+// AvailabilityBlock, top stack. Optional Industries column on the right.
+//
+// The headshot is the LCP element — processed by `astro:assets` (modern format,
+// responsive sizes, explicit dimensions) and hinted eager + high priority
+// (sad.md §8, §11 — the raw ~1.9 MB PNG would blow the 500 KB budget).
+import { Image } from 'astro:assets';
+import AvailabilityBlock from './AvailabilityBlock.astro';
+import Band from './Band.astro';
+import Industries from './Industries.astro';
+
+interface Props {
+  name: string;
+  headline: string;
+  tagline?: string;
+  topStack: string[];
+  headshot: { src: string; alt: string };
+  location: string;
+  availability: { status: string; noticePeriod?: string; workAuthorization?: string };
+  industries?: { domain: string; note?: string }[];
+}
+
+const { name, headline, tagline, topStack, headshot, location, availability, industries } =
+  Astro.props;
+
+const assets = import.meta.glob<{ default: ImageMetadata }>('../assets/*.{png,jpg,jpeg,webp,avif}', {
+  eager: true,
+});
+const headshotEntry = assets[`../assets/${headshot.src}`];
+if (!headshotEntry) {
+  throw new Error(`Hero: headshot asset not found: src/assets/${headshot.src}`);
+}
+const headshotImage = headshotEntry.default;
+
+const hasIndustries = Array.isArray(industries) && industries.length > 0;
+---
+
+<Band tone="surface" class="hero">
+  <div class:list={['hero__grid', hasIndustries && 'hero__grid--two']}>
+    <div class="hero__main">
+      <Image
+        class="hero__photo"
+        src={headshotImage}
+        alt={headshot.alt}
+        width={320}
+        height={400}
+        widths={[240, 320, 480]}
+        sizes="(min-width: 768px) 320px, 240px"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <div class="hero__intro">
+        <h1 class="hero__name">{name}</h1>
+        <p class="hero__headline">{headline}</p>
+        {tagline && <p class="hero__tagline">{tagline}</p>}
+        <AvailabilityBlock
+          status={availability.status}
+          location={location}
+          noticePeriod={availability.noticePeriod}
+          workAuthorization={availability.workAuthorization}
+        />
+      </div>
+    </div>
+
+    {
+      hasIndustries && (
+        <div class="hero__aside">
+          <Industries industries={industries} />
+        </div>
+      )
+    }
+  </div>
+
+  <div class="hero__stack" aria-label="Top stack">
+    <span class="hero__stack-label">Top stack</span>
+    <ul class="hero__chips">
+      {topStack.map((tech) => <li>{tech}</li>)}
+    </ul>
+  </div>
+</Band>
+
+<style>
+  .hero__grid {
+    display: grid;
+    gap: 2rem;
+  }
+  .hero__main {
+    display: flex;
+    gap: clamp(1rem, 4vw, 2rem);
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .hero__photo {
+    width: clamp(9rem, 28vw, 12.5rem);
+    height: auto;
+    border-radius: 0.75rem;
+    object-fit: cover;
+    flex: none;
+  }
+  .hero__intro {
+    flex: 1 1 16rem;
+    min-width: 0;
+  }
+  .hero__name {
+    margin: 0;
+    font-size: clamp(1.9rem, 5vw, 2.6rem);
+    line-height: 1.1;
+    color: var(--color-navy);
+  }
+  .hero__headline {
+    margin: 0.4rem 0 0;
+    font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .hero__tagline {
+    margin: 0.75rem 0 0;
+    font-size: 1rem;
+    color: var(--color-muted);
+    max-width: 44rem;
+  }
+  .hero__intro :global(.availability) {
+    margin-top: 1.25rem;
+  }
+
+  .hero__stack {
+    margin-top: 1.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 0.75rem;
+  }
+  .hero__stack-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .hero__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .hero__chips li {
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-navy) 8%, transparent);
+    color: var(--color-navy);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  /* Laptop: two columns when there is an Industries aside. */
+  @media (min-width: 768px) {
+    .hero__grid--two {
+      grid-template-columns: minmax(0, 1fr) minmax(12rem, 18rem);
+    }
+  }
+
+  /* Very narrow (<360px, spec §6 drop order step 1): drop the optional
+     Industries column first; essentials never drop. */
+  @media (max-width: 359.98px) {
+    .hero__aside {
+      display: none;
+    }
+  }
+</style>

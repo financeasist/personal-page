@@ -57,7 +57,9 @@ export function validProfile(): ProfileInput {
     tagline:
       'Backend engineer and technical leader with 9+ years designing, building and scaling high-load distributed systems and the engineering teams around them.',
     topStack: ['Java', 'Spring Boot', 'Kafka', 'PostgreSQL', 'Redis', 'Kubernetes'],
-    headshot: { src: 'headshot.jpg', alt: 'Portrait of Jordan Rivera' },
+    // `me.png` is the asset committed under src/assets/ (T7) — buildFixture
+    // copies src/ verbatim, so a fixture build resolves it.
+    headshot: { src: 'me.png', alt: 'Portrait of Jordan Rivera' },
     industries: [
       { domain: 'iGaming', note: 'Remote Game Servers (RGS)' },
       { domain: 'FinTech & E-commerce', note: 'AI-driven value intelligence platform' },
