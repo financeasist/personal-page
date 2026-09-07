@@ -1,0 +1,115 @@
+{
+  "slug": "personal-landing",
+  "tasks": [
+    {
+      "id": "T1",
+      "title": "Set up the site test harness (unit/component + build-output tiers)",
+      "layer": "tests",
+      "deps": [],
+      "acs": [],
+      "dod": "npm --prefix site test and test:e2e run green against a real astro build; the data-model fixture factory names are exported (stubs ok); check + lint still pass",
+      "files_hint": ["site/package.json", "site/vitest.config.ts", "site/test/", "site/src/lib/__tests__/"],
+      "file": "docs/features/personal-landing/tasks/site-test-harness.md"
+    },
+    {
+      "id": "T2",
+      "title": "Extend the profile content schema + build-time invariants, reshape roman.json",
+      "layer": "domain",
+      "deps": ["T1"],
+      "acs": ["AC-05", "AC-06", "AC-07", "AC-14", "AC-15"],
+      "dod": "config.ts Zod schema + .refine()/.superRefine() invariants (INV-01..04,07..09) fail astro build naming the offending field; content-checks.ts hasLinkedInLink is unit-tested; roman.json reshaped and builds green with real landing content",
+      "files_hint": ["site/src/content/config.ts", "site/src/lib/content-checks.ts", "site/src/data/profile/roman.json", "site/test/fixtures/"],
+      "file": "docs/features/personal-landing/tasks/profile-schema-and-content.md"
+    },
+    {
+      "id": "T3",
+      "title": "Shared CV-filename helper (name + headline -> Roman-Hrupskyi-...-CV.pdf)",
+      "layer": "app",
+      "deps": ["T1"],
+      "acs": ["AC-04"],
+      "dod": "cvFilename({name,headline}) returns Roman-Hrupskyi-Senior-Java-Engineer-CV.pdf for the current profile and handles the edge rows; pure and importable from .astro and a Node script; unit test passes",
+      "files_hint": ["site/src/lib/cv-filename.ts", "site/src/lib/__tests__/cv-filename.test.ts"],
+      "file": "docs/features/personal-landing/tasks/cv-filename-helper.md"
+    },
+    {
+      "id": "T4",
+      "title": "Commit the static CV PDF and assert it exists at build time",
+      "layer": "wiring",
+      "deps": ["T3"],
+      "acs": ["AC-04", "AC-05"],
+      "dod": "named PDF committed under site/public/; postbuild assert-cv-pdf.mjs fails the build (naming the expected path) when the file is missing; postbuild no longer invokes Playwright/Chromium; integration test covers present/absent",
+      "files_hint": ["site/public/", "site/scripts/assert-cv-pdf.mjs", "site/scripts/generate-pdf.mjs", "site/package.json"],
+      "file": "docs/features/personal-landing/tasks/committed-cv-pdf-and-assertion.md"
+    },
+    {
+      "id": "T5",
+      "title": "Design tokens (section bands) + base page shell (Layout) + Footer",
+      "layer": "ui",
+      "deps": ["T1"],
+      "acs": ["AC-08"],
+      "dod": "global.css gains canvas/surface tokens; Layout.astro renders lang=en, a title prop, one <footer>, Footer flush to the bottom on a short viewport; no horizontal scroll at 360/768/1280/1920; 0 KB JS",
+      "files_hint": ["site/src/styles/global.css", "site/src/layouts/Layout.astro", "site/src/components/Footer.astro"],
+      "file": "docs/features/personal-landing/tasks/design-tokens-and-page-shell.md"
+    },
+    {
+      "id": "T6",
+      "title": "Header - sticky CSS-only bar with the three contact actions + mobile disclosure menu",
+      "layer": "ui",
+      "deps": ["T1", "T3", "T5"],
+      "acs": ["AC-02", "AC-07", "AC-08", "AC-10", "AC-13"],
+      "dod": "Header.astro renders email/LinkedIn/Download-CV controls with values only in href (never visible text), stable data-* hooks, target=_blank+rel=noopener on LinkedIn, download on CV; phone condenses to icons + a native <details> menu; every target >=44x44; 0 KB JS; component + e2e tests pass",
+      "files_hint": ["site/src/components/Header.astro"],
+      "file": "docs/features/personal-landing/tasks/header-contact-actions.md"
+    },
+    {
+      "id": "T7",
+      "title": "Hero (headshot + name + headline + tagline) with AvailabilityBlock and optional Industries",
+      "layer": "ui",
+      "deps": ["T1", "T2", "T5"],
+      "acs": ["AC-01", "AC-08", "AC-15"],
+      "dod": "Hero/AvailabilityBlock/Industries render every AC-01 essential from content at 1280x800 and 390x844 with no scroll; industries column present-from-content / omitted-and-still-builds; headshot via astro:assets eager+high-priority, <100 KB at display size; component + integration + e2e + visual tests pass",
+      "files_hint": ["site/src/components/Hero.astro", "site/src/components/AvailabilityBlock.astro", "site/src/components/Industries.astro", "site/src/assets/"],
+      "file": "docs/features/personal-landing/tasks/hero-availability-industries.md"
+    },
+    {
+      "id": "T8",
+      "title": "About section - Section wrapper + AboutMe (narrative + highlights), below the fold",
+      "layer": "ui",
+      "deps": ["T1", "T2", "T5"],
+      "acs": ["AC-14"],
+      "dod": "AboutMe renders about.narrative + about.highlights straight from content (no hard-coded copy); id=about anchor matches the Header menu link; phone reflows to one column, body text >=16 px, no horizontal scroll; component + e2e + visual tests pass",
+      "files_hint": ["site/src/components/Section.astro", "site/src/components/AboutMe.astro"],
+      "file": "docs/features/personal-landing/tasks/about-section.md"
+    },
+    {
+      "id": "T9",
+      "title": "Assemble index.astro from the components; source-exposure + zero-JS guarantees",
+      "layer": "ui",
+      "deps": ["T1", "T2", "T5", "T6", "T7", "T8"],
+      "acs": ["AC-01", "AC-02", "AC-07", "AC-08", "AC-10", "AC-13", "AC-14", "AC-15"],
+      "dod": "index.astro composes Header + Hero + AboutMe in Layout from the one profile entry; one <h1> + header/main/footer landmarks; dist/ contains no salary/address/phone/recruiter-link-label and no visible email/LinkedIn text; ships 0 KB feature JS; integration-over-dist + e2e tests pass; astro build green",
+      "files_hint": ["site/src/pages/index.astro"],
+      "file": "docs/features/personal-landing/tasks/assemble-index-page.md"
+    },
+    {
+      "id": "T10",
+      "title": "Build + CI wiring: drop Playwright/Chromium, gate the deploy path on check + invariant tests",
+      "layer": "wiring",
+      "deps": ["T4", "T9"],
+      "acs": ["AC-05", "AC-06"],
+      "dod": "ci.yml and deploy.yml site jobs no longer run playwright install; deploy.yml runs npm run check + npm test before build; a deliberately-broken roman.json fails the deploy job naming the field; astro.config.mjs site/base set or recorded as a launch-checklist TODO",
+      "files_hint": [".github/workflows/ci.yml", ".github/workflows/deploy.yml", "site/package.json", "site/astro.config.mjs"],
+      "file": "docs/features/personal-landing/tasks/build-and-ci-wiring.md"
+    },
+    {
+      "id": "T11",
+      "title": "Register the new components in the design canon + architecture map",
+      "layer": "docs",
+      "deps": ["T9"],
+      "acs": [],
+      "dod": "every component this feature shipped (Layout, Footer, Header, Hero, AvailabilityBlock, Industries, Section, AboutMe) has a real site/src/components/<Name>.astro file:line anchor in docs/design-system.md; no stale pending row remains; ExperienceTimeline/SelectedProjects/ProjectCard labelled v2-not-built",
+      "files_hint": ["docs/design-system.md", "docs/features/personal-landing/screens.md", "docs/architecture-map.md"],
+      "file": "docs/features/personal-landing/tasks/register-components-in-design-canon.md"
+    }
+  ]
+}
