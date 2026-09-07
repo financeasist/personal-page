@@ -38,6 +38,7 @@ const hasIndustries = Array.isArray(industries) && industries.length > 0;
 ---
 
 <Band tone="surface" class="hero">
+  <div class="hero__fill">
   <div class:list={['hero__grid', hasIndustries && 'hero__grid--two']}>
     <div class="hero__main">
       <Image
@@ -79,9 +80,18 @@ const hasIndustries = Array.isArray(industries) && industries.length > 0;
       {topStack.map((tech) => <li>{tech}</li>)}
     </ul>
   </div>
+  </div>
 </Band>
 
 <style>
+  /* The hero fills the fold so the About section sits below it at load
+     (AC-14 "below the fold by design"). Band padding is subtracted. */
+  .hero__fill {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(100dvh - 3.75rem - clamp(4rem, 12vw, 8rem));
+  }
   .hero__grid {
     display: grid;
     gap: 2rem;

@@ -15,8 +15,8 @@
     "lint": "astro check",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test",
-    "test:visual": "playwright test --update-snapshots=none --grep @visual"
+    "test:e2e": "playwright test --grep-invert @visual",
+    "test:visual": "playwright test --grep @visual"
   },
   "dependencies": {
     "astro": "^5.13.0",
