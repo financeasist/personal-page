@@ -289,6 +289,7 @@ sequenceDiagram
 - **Pipeline trigger, drawn as sync.** Flow 4's `push to main triggers the build` is event-driven, but it is an internal CI trigger, not a third-party callback — no idempotency key, retry note, or dead-letter branch is warranted. GitHub Actions' own re-run semantics are outside this view.
 - **AC-07 is only partly runtime.** The "no visible contact text" / "no phone control" half is the `Note` in Flow 2. The "no salary / no home address / no per-recruiter link labels anywhere in the delivered source" half is a build-output / source-inspection property with no runtime flow — verified by `plan-tests`, not shown here.
 - **Withdrawn / deferred (no flow, by design):** AC-03 (phone control — removed from v1 with US-03), AC-09 (experience timeline — deferred to v2 with US-04), AC-11 / AC-12 (selected projects + placeholder-impact rule — deferred to v2 with US-09).
+- **US-11 (Industries list, AC-15) has no dedicated flow.** It is static, optional hero content with no interaction and no error branch — part of the Flow 1 scan. Present → rendered from the `industries` field; absent or collapsed on the phone viewport (§6 drop order) → the hero renders without it. Covered by `ux-flows.md` (Flow US-11) and `screens.md` SCR-01; a sequence diagram would add nothing.
 
 ## 7. Deployment view
 

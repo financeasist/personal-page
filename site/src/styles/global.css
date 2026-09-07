@@ -21,7 +21,14 @@
 html {
   font-size: 100%;
   overflow-x: clip;
-  scroll-behavior: smooth;
+}
+
+/* Smooth the in-page #about jump (Header menu link) only when the visitor has
+   not asked for reduced motion (QG-3 accessibility). */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {

@@ -6,6 +6,7 @@ import {
   malformedProfile,
   missingAboutProfile,
   missingChannelProfile,
+  missingEssentialProfile,
   oversizeIndustriesProfile,
   oversizeTaglineProfile,
   oversizeTopStackProfile,
@@ -61,6 +62,16 @@ describe('profileSchema', () => {
 
     it('names topStack for fewer than 4 entries (E6)', () => {
       expect(failurePaths(undersizeTopStackProfile())).toContain('topStack');
+    });
+
+    it.each([
+      ['name', 'name'],
+      ['headshot.src', 'headshot.src'],
+      ['headshot.alt', 'headshot.alt'],
+      ['availability.status', 'availability.status'],
+      ['contact.location', 'contact.location'],
+    ] as const)('names %s when it is missing (AC-05 canonical essentials)', (field, path) => {
+      expect(failurePaths(missingEssentialProfile(field))).toContain(path);
     });
   });
 

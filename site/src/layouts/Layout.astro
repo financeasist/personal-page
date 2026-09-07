@@ -9,9 +9,12 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  /** Copyright owner for the footer — the page passes `profile.name` (US-07);
+      no owner name is hard-coded anywhere in the shell. */
+  owner: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, owner } = Astro.props;
 ---
 
 <!doctype html>
@@ -24,7 +27,7 @@ const { title, description } = Astro.props;
   </head>
   <body>
     <slot />
-    <Footer />
+    <Footer owner={owner} />
   </body>
 </html>
 

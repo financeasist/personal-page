@@ -111,6 +111,25 @@ export function missingChannelProfile(channel: 'email' | 'linkedin'): ProfileInp
   return p;
 }
 
+/**
+ * Drops (or blanks) one of the AC-05 canonical essentials that the other
+ * factories don't already cover — `name`, the headshot `src` / `alt` pair,
+ * `availability.status`, or `contact.location` → the schema failure must name
+ * that field (AC-05: "the headshot (image path *and* its alt text), the
+ * availability status, the location …").
+ */
+export function missingEssentialProfile(
+  field: 'name' | 'headshot.src' | 'headshot.alt' | 'availability.status' | 'contact.location',
+): ProfileInput {
+  const p = validProfile();
+  if (field === 'name') p.name = '';
+  else if (field === 'headshot.src') p.headshot.src = '';
+  else if (field === 'headshot.alt') p.headshot.alt = '';
+  else if (field === 'availability.status') p.availability.status = '';
+  else if (field === 'contact.location') p.contact.location = '';
+  return p;
+}
+
 /** Omits `about` entirely → the required-object failure names `about` (AC-05, E4). */
 export function missingAboutProfile(): ProfileInput {
   const p = validProfile();

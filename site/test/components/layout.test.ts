@@ -7,7 +7,7 @@ import { buildFixture, type BuildResult } from '../helpers/build-fixture';
 const PROBE = `---
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="Probe Title — Shell">
+<Layout title="Probe Title — Shell" owner="Casey Probe">
   <main id="probe"><p>placeholder content</p></main>
 </Layout>
 `;
@@ -36,8 +36,10 @@ describe('Layout.astro', () => {
     expect(doc.body.querySelector('#probe')).not.toBeNull();
   });
 
-  it('carries the copyright chrome line', () => {
-    expect(doc.querySelector('footer')?.textContent).toContain('Copyright © Hrupskyi R. Bio 2026');
+  it('renders the copyright line from the owner prop + the build year, no hard-coded name (US-07)', () => {
+    const copy = doc.querySelector('footer')?.textContent ?? '';
+    expect(copy).toContain('Casey Probe');
+    expect(copy).toMatch(new RegExp(`©\\s*${new Date().getFullYear()}`));
   });
 
   it('ships no <script> and no hydrated island', () => {

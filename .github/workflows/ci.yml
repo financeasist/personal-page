@@ -20,8 +20,10 @@ jobs:
       - run: npm run check
       - run: npm test          # Vitest: unit + component + build-pipeline integration (AC-05/AC-06)
       - run: npm run build      # postbuild asserts the committed CV PDF exists (ADR-0008)
-      # e2e-through-UI + visual-regression (Playwright/Chromium) are local-only in
-      # v1 — no browser is installed on the CI path (ADR-0008 §Consequences).
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e   # e2e-through-UI — gating (spec.md §Test plan "still gating"): AC-01/08/13/14, E15/E16/E17
+      # Visual-regression (`npm run test:visual`) stays local-only until Linux
+      # baselines are generated in a Playwright container (launch-checklist.md).
 
   tracker:
     runs-on: ubuntu-latest

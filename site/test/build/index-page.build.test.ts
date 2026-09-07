@@ -65,8 +65,15 @@ describe('assembled index.astro — need-to-know exposure (AC-07 / AC-10)', () =
   });
 
   it('leaks no salary / rate / home-address / recruiter-link-label token (E14)', () => {
+    // Scope: the delivered landing document (index.html). The committed CV PDF
+    // that also ships in dist/ deliberately carries contact details — AC-07
+    // exempts it, so the assertion is over the page, not the whole dist/ tree.
     expect(html.toLowerCase()).not.toMatch(/salary|day rate|rate expectation|compensation|expected salary/);
     expect(html.toLowerCase()).not.toMatch(/home address|street|apt\b/);
+    // No per-recruiter tracker link label (roadmap step 5 `/t/{label}` redirects)
+    // — the landing page never carries one (AC-07, spec §3 "No tracker wiring").
+    expect(html).not.toMatch(/\/t\/[a-z0-9-]+/i);
+    expect(html.toLowerCase()).not.toMatch(/recruiter-link|link-label|utm_/);
   });
 
   it('still makes contact reachable — mailto, new-tab LinkedIn, downloadable CV in href', () => {

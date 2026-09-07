@@ -71,6 +71,21 @@ describe('Header.astro', () => {
     for (const phone of P.contact.phones) expect(text).not.toContain(phone);
   });
 
+  it('offers no reveal / copy affordance for the email — a dead mailto has no fallback (E15, ADR-0006)', () => {
+    // The email lives only in the mailto href. There is no <button>, no
+    // clipboard control, and no element carrying the raw address as data — so
+    // on a device with no mail handler there is nothing to reveal or copy.
+    expect(doc.querySelectorAll('header button')).toHaveLength(0);
+    expect(doc.querySelectorAll('header [data-clipboard], header [data-copy]')).toHaveLength(0);
+    const email = P.contact.email;
+    for (const el of doc.querySelectorAll('header *')) {
+      for (const attr of el.attributes) {
+        if (attr.name === 'href') continue;
+        expect(attr.value).not.toContain(email);
+      }
+    }
+  });
+
   it('focus/DOM order is Name → LinkedIn → email → About → Download CV (screens SCR-01)', () => {
     const focusables = Array.from(
       doc.querySelectorAll('header a, header summary'),

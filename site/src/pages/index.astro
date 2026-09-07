@@ -18,7 +18,11 @@ const linkedInUrl = profile.contact.links.find((l) => hasLinkedInLink([l]))?.url
 // `contact.phones` is deliberately never read on this page (AC-07).
 ---
 
-<Layout title={`${profile.name} — ${profile.headline}`} description={profile.tagline}>
+<Layout
+  title={`${profile.name} — ${profile.headline}`}
+  description={profile.tagline}
+  owner={profile.name}
+>
   <Header
     name={profile.name}
     headline={profile.headline}

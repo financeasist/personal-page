@@ -74,12 +74,12 @@ const hasIndustries = Array.isArray(industries) && industries.length > 0;
     }
   </div>
 
-  <div class="hero__stack" aria-label="Top stack">
+  <section class="hero__stack" aria-label="Top stack">
     <span class="hero__stack-label">Top stack</span>
     <ul class="hero__chips">
       {topStack.map((tech) => <li>{tech}</li>)}
     </ul>
-  </div>
+  </section>
   </div>
 </Band>
 
@@ -162,7 +162,9 @@ const hasIndustries = Array.isArray(industries) && industries.length > 0;
     border-radius: 999px;
     background: color-mix(in srgb, var(--color-navy) 8%, transparent);
     color: var(--color-navy);
-    font-size: 0.9rem;
+    /* ≥ 16px — the top stack is an AC-01 essential, "all text legible" (AC-08,
+       spec §6 "body text ≥ 16px"). */
+    font-size: 1rem;
     font-weight: 500;
   }
 
@@ -183,6 +185,11 @@ const hasIndustries = Array.isArray(industries) && industries.length > 0;
   @media (max-width: 767.98px) {
     .hero__aside {
       display: none;
+    }
+    /* Tighten the stack gap on the phone so the 16px chips (AC-08) still clear
+       the 390×844 fold with margin. */
+    .hero__stack {
+      margin-top: 1.25rem;
     }
   }
 </style>

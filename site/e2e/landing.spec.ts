@@ -18,6 +18,14 @@ test('AC-01 — every above-the-fold essential is visible', async ({ page }) => 
   await expect(page.locator('img').first()).toBeVisible();
   await expect(page.locator('[data-contact-channel="email"]').first()).toBeVisible();
   await expect(page.locator('[data-contact-channel="linkedin"]').first()).toBeVisible();
+
+  // AC-08 "all text is legible" / spec §6 "body text ≥ 16px" — the top-stack
+  // chips carry an AC-01 essential, so they are held to the body-text floor.
+  const chipFont = await page
+    .locator('.hero__chips li')
+    .first()
+    .evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+  expect(chipFont).toBeGreaterThanOrEqual(16);
 });
 
 test('AC-01 / AC-08 — every above-the-fold essential sits within the fold, no scrolling', async ({
