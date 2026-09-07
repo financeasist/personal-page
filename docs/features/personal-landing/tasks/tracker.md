@@ -14,7 +14,7 @@
 | T7 | `Hero` + `AvailabilityBlock` + optional `Industries` | ui | Roman | M | T1, T2, T5 | done |
 | T8 | About section — `Section` + `AboutMe` | ui | Roman | S | T1, T2, T5 | done |
 | T9 | Assemble `index.astro` | ui | Roman | S | T1, T2, T5, T6, T7, T8 | done |
-| T10 | Build + CI wiring | wiring | Roman | S | T4, T9 | todo |
+| T10 | Build + CI wiring | wiring | Roman | S | T4, T9 | done |
 | T11 | Register components in the design canon | docs | Roman | S | T9 | todo |
 
 **Total:** 11 tasks, ~6–7 person-days.

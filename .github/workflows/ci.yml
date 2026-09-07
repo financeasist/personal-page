@@ -17,9 +17,11 @@ jobs:
           cache: npm
           cache-dependency-path: site/package-lock.json
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
       - run: npm run check
-      - run: npm run build   # triggers the postbuild CV PDF generation
+      - run: npm test          # Vitest: unit + component + build-pipeline integration (AC-05/AC-06)
+      - run: npm run build      # postbuild asserts the committed CV PDF exists (ADR-0008)
+      # e2e-through-UI + visual-regression (Playwright/Chromium) are local-only in
+      # v1 — no browser is installed on the CI path (ADR-0008 §Consequences).
 
   tracker:
     runs-on: ubuntu-latest

@@ -24,8 +24,9 @@ jobs:
           cache: npm
           cache-dependency-path: site/package-lock.json
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
-      - run: npm run build   # dist/ incl. the generated CV PDF
+      - run: npm run check       # type-gate the direct-push path too (sad.md §7)
+      - run: npm test            # content invariants gate the deploy, not only the PR (AC-05/AC-06)
+      - run: npm run build       # dist/ incl. the committed CV PDF; postbuild asserts it exists
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site/dist
