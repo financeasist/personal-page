@@ -1,22 +1,44 @@
 {
   "name": "Roman Hrupskyi",
   "headline": "Senior Java Engineer | Lead Backend Engineer",
-  "tagline": "9+ years building and leading backend platforms — iGaming, fintech, healthcare, retail.",
-  "positioning": "I design and build scalable, high-performance backend platforms — microservices, reactive systems, distributed data — and lead the engineering practices around them. I work by systems thinking: the big picture and the deep implementation detail at once.",
+  "tagline": "Java engineer and technical leader with 9+ years of experience designing, building, and scaling high-load distributed systems, leading engineering teams, and delivering business-critical platforms across multiple domains.",
+  "headshot": {
+    "src": "me.png",
+    "alt": "Roman Hrupskyi"
+  },
+  "topStack": ["Java", "Spring Boot", "Spring WebFlux", "Kafka", "PostgreSQL", "Redis", "Kubernetes", "Docker"],
+  "industries": [
+    { "domain": "iGaming", "note": "Remote Game Servers (RGS)" },
+    { "domain": "FinTech & E-commerce", "note": "AI-driven value-intelligence platform" },
+    { "domain": "Healthcare", "note": "Medical software for hospitals" },
+    { "domain": "Retail", "note": "Automated decision-intelligence systems" }
+  ],
   "contact": {
     "phones": ["+38 063 199 08484", "+48 662 477 198"],
     "email": "roman.grupskyi@gmail.com",
     "location": "Krakow, Poland",
-    "availability": "Open to Remote & Hybrid Opportunities",
     "links": [
       { "label": "LinkedIn", "url": "https://linkedin.com/in/romangrupskiy" }
+    ]
+  },
+  "availability": {
+    "status": "Open to Remote & Hybrid Opportunities"
+  },
+  "about": {
+    "narrative": "Seasoned Java engineer with 9+ years designing and building scalable, high-performance business applications — backend development, microservices architecture, and technical leadership, with a track record of improving software quality, system performance, and engineering workflows.\n\nMy way of working is rooted in systems thinking — a holistic view of the big picture together with the ability to dive deep into the implementation detail of complex systems.\n\nA background in sales and project management gives me a product-focused perspective: aligning engineering effort with business goals and communicating with technical and non-technical stakeholders alike.\n\nI use AI coding assistants and LLM-based tools as productivity multipliers for development, debugging, refactoring, testing, and technical research, and I'm adopting agentic coding workflows.",
+    "highlights": [
+      "Experience managing engineers",
+      "Projects spanning legacy systems to greenfield startups",
+      "Architectures from monolith to microservices",
+      "Teams from co-located to hundreds worldwide",
+      "Deep Java, relational-database and distributed-systems expertise"
     ]
   },
   "competencies": ["STUB — see docs/reference/cv-template-reference.pdf"],
   "languages": [
     { "name": "English", "level": "B2+" },
     { "name": "Ukrainian", "level": "native" },
-    { "name": "Poland", "level": "basic" }
+    { "name": "Polish", "level": "basic" }
   ],
   "summary": ["STUB professional summary — content reconciliation is a specify open question (idea-brief §8)."],
   "skills": [

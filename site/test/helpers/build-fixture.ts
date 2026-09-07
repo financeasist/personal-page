@@ -64,11 +64,20 @@ export function buildFixture(opts: BuildFixtureOptions = {}): BuildResult {
     rmSync(root, { recursive: true, force: true });
     mkdirSync(root, { recursive: true });
 
-    for (const entry of ['node_modules', 'astro.config.mjs', 'tsconfig.json', 'public']) {
+    for (const entry of ['node_modules', 'tsconfig.json', 'public']) {
       const target = join(siteRoot, entry);
       if (existsSync(target)) symlinkSync(target, join(root, entry));
     }
     cpSync(join(siteRoot, 'src'), join(root, 'src'), { recursive: true });
+    // Per-fixture astro.config that re-exports the real one but pins Vite's
+    // cacheDir INSIDE the temp root — otherwise every parallel `astro build`
+    // shares the real `node_modules/.vite` dep-optimizer cache and races.
+    writeFileSync(
+      join(root, 'astro.config.mjs'),
+      `import base from ${JSON.stringify(join(siteRoot, 'astro.config.mjs'))};\n` +
+        `export default { ...base, vite: { ...(base.vite ?? {}), ` +
+        `cacheDir: new URL('./.vite/', import.meta.url).pathname } };\n`,
+    );
     // package.json: keep build, drop/neutralise postbuild for a clean unit of work.
     const pkg = JSON.parse(readFileSync(join(siteRoot, 'package.json'), 'utf8'));
     if (skipPostbuild) delete pkg.scripts.postbuild;
