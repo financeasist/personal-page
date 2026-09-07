@@ -97,8 +97,10 @@ C4Container
 - **Inter-module communication:** none direct. The browser (served by `site`) calls `tracker` over
   HTTPS JSON; the two build, test, and deploy independently.
 - **UI / styling:** Tailwind v4 with `@theme` tokens in `site/src/styles/global.css`; hand-rolled
-  `.astro` components in `site/src/components/`; zero client JS by default (one small inline script
-  posts contact-click events).
+  `.astro` components in `site/src/components/`; zero client JS by default — sanctioned exceptions
+  are small inline progressive-enhancement scripts: the scroll-spy active-section indicator
+  (personal-landing ADR-0009, ships now) and the contact-click / cv-download beacon (roadmap
+  step 8). No JS bundle, no framework island.
 - **PDF generation:** `site/src/pages/cv.astro` is a print route consuming the same `profile`
   content; `site/scripts/generate-pdf.mjs` (Playwright, Chromium) renders it in the `build` script's
   `postbuild` hook. The **output filename is meaningful, not `cv.pdf`** — derived from the profile's

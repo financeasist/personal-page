@@ -36,7 +36,7 @@ target_surfaces: [web-frontend]  # single static web front-end; read (never re-d
 
 1. **Above-the-fold render speed** — the scan is usable within 2.5 s on a mid-tier phone over 4G.
 2. **Never ship a broken or incomplete page** — missing or malformed Profile content fails the build; nothing incomplete deploys.
-3. **Zero-JavaScript, accessible delivery** — the page and every contact action work with no client script, at ≥ 95 Lighthouse accessibility.
+3. **JS-optional, accessible delivery** — the page and every contact action work with no client script, at ≥ 95 Lighthouse accessibility. The one script that ships (the scroll-spy active-section indicator, ADR-0009) is a decorative progressive enhancement — no bundle, no island, no effect on content or contact actions.
 
 **Stakeholders.**
 
@@ -53,7 +53,7 @@ target_surfaces: [web-frontend]  # single static web front-end; read (never re-d
 **Technical.**
 - Node 20+; Astro 5 (static output); TypeScript; Tailwind v4 with `@theme` tokens in `site/src/styles/global.css`.
 - Content in a typed Astro content collection — `site/src/data/profile/*.json`, Zod schema in `site/src/content/config.ts`. One `profile` entry is the single source of truth for the landing page **and** the CV route.
-- Zero client JavaScript by default (ADR-0001); the click-tracking beacon is roadmap step 8, not this feature.
+- Zero client JavaScript by default (ADR-0001). This feature ships exactly one small inline progressive-enhancement script — the scroll-spy active-section indicator (ADR-0009, ≤ 1 KB, no bundle / island). The click-tracking beacon is roadmap step 8, not this feature.
 - The CV print route (`site/src/pages/cv.astro`) layout is locked to `docs/reference/cv-template-reference.pdf` (ADR-0004) — this feature does not touch it, but shares the content entry and the CV-filename helper with it.
 - Build/test/lint: `npm --prefix site run build` / `check` (`astro check`) / `lint`.
 
@@ -115,7 +115,7 @@ C4Context
 **Top strategic choices (the seeds for ADRs):**
 
 1. **One Profile content entry, extended with landing-specific structured fields** — the landing page needs data the CV template does not carry (a `tagline`, a curated `topStack`, a structured `availability` block, an `about` section, an optional `industries` list). These are added as fields on the same `profile` entry rather than a separate collection or derived implicitly from CV fields, so the "one source, two renderers" invariant holds and nothing drifts. The v2 sections — `selectedProjects` with impact, machine-readable experience years, an `earlierBackground` line — extend the same entry additively when they land. → **ADR-0005**.
-2. **Contact details are actionable-only, in link attributes, zero client JavaScript** — email / LinkedIn never render as visible text on the landing page; each is a plain link (`mailto:` / `https:` new tab). The phone is not a landing-page channel in v1. The three contact controls live in a persistent, sticky, CSS-only `Header`; on the phone viewport the header condenses to Roman's name, the email + LinkedIn icon controls, and a native `<details>` disclosure menu holding Download CV and an About link. No script assembles or obfuscates the values in v1. → **ADR-0006** (resolves spec §8 Q3).
+2. **Contact details are actionable-only, in link attributes, zero client JavaScript** — email / LinkedIn never render as visible text on the landing page; each is a plain link (`mailto:` / `https:` new tab). The phone is not a landing-page channel in v1. The three contact controls live in a persistent, sticky `Header` whose layout, scroll-shrink and mobile menu are all CSS-only; on the phone viewport the header condenses to Roman's name, the email + LinkedIn icon controls, and a native `<details>` disclosure menu holding Download CV and an About link. **No script touches, assembles or obfuscates the contact values** — the header's one script (the scroll-spy indicator, ADR-0009) only reads scroll position and toggles a CSS class on the About link. → **ADR-0006** (resolves spec §8 Q3), narrowed by **ADR-0009**.
 3. **Content invariants enforced at build time in the content-collection schema** — required fields (including a non-empty `about.narrative` and a non-empty `about.highlights`), all three contact channels present (email, LinkedIn, and the committed CV PDF): expressed as Zod schema rules (`.refine`) so `astro check` / the build fails and names the offending field. No incomplete page can deploy. → **ADR-0007**.
 
 Tactical decisions (hand-rolled components, the shared CV-filename helper, image optimisation via `astro:assets`) trace to these seeds and to the repo conventions; they are recorded in §5 / §8, not as ADRs.
@@ -170,7 +170,7 @@ C4Container
         Container(cvpdf, "Committed CV PDF", "static file in site/public/", "v1 — hand-maintained (ADR-0008); postbuild asserts the named file exists")
     }
 
-    Container(pages, "Static page", "HTML + CSS + images on GitHub Pages", "The delivered landing page — zero JavaScript")
+    Container(pages, "Static page", "HTML + CSS + images on GitHub Pages", "The delivered landing page — one ~320 B inline PE script (scroll-spy, ADR-0009), no JS bundle")
 
     System_Ext(devices, "Recruiter device apps", "Mail client / browser")
 
@@ -203,7 +203,7 @@ sequenceDiagram
     participant Page as Landing page (static)
     Note over Page: Precondition: a completed build published the page (Flow 4) — every above-the-fold essential is present
     Recruiter->>Pages: open the shared link
-    Pages-->>Recruiter: static HTML + CSS + optimised headshot (0 KB JavaScript)
+    Pages-->>Recruiter: static HTML + CSS + optimised headshot (≤ 1 KB inline JS — scroll-spy PE only)
     Recruiter->>Page: scan above the fold (SCR-01)
     alt reference laptop viewport 1280x800
         Page-->>Recruiter: headshot, name, headline, availability (location + remote stance), top stack, three contact actions — no scrolling
@@ -310,7 +310,7 @@ Reuses the scaffold's deployment unit unchanged: GitHub Actions builds `site/` o
 |---|---|---|
 | Single source of truth | The landing page and the CV route both render from one `profile` entry; no page-specific copy in components | `CONTEXT.md` invariant · ADR-0005 |
 | Content validation | Zod schema + `.refine()` invariants (required fields incl. `about.narrative` + `about.highlights`, all three contact channels: email, LinkedIn, committed CV) fail the build and name the field | ADR-0007 · `site/src/content/config.ts` |
-| Client JavaScript | None. Progressive enhancement only; the mobile header menu is a native `<details>` disclosure; contact actions are plain links | ADR-0001 · ADR-0006 |
+| Client JavaScript | One ~320 B inline module — the scroll-spy active-section indicator (ADR-0009): toggles `.is-active` on the header "About me" link while `#about` is in view. No bundle, no framework island, no hydration; `type="module"` (deferred). Strict progressive enhancement — blocked/off ⇒ no highlight, nothing else changes. The mobile header menu is a native `<details>` disclosure; contact actions are plain links; no script touches the contact controls | ADR-0001 · ADR-0006 · ADR-0009 |
 | Contact-detail exposure | Email / LinkedIn never rendered as visible text on the landing page; values live only in the header controls' link attributes; not obfuscated in v1 (revisit — §11). Phone is not a landing-page channel in v1 | ADR-0006 · `CONTEXT.md` invariant |
 | Images | Headshot processed by `astro:assets` — responsive sizes, modern format, explicit dimensions, eager + high fetch-priority for the LCP element | §5 `src/assets/` · here |
 | Accessibility | Semantic HTML, one `<h1>`, keyboard-operable controls, body text ≥ 16 px, interactive targets ≥ 44×44 px (WCAG 2.5.8), Lighthouse a11y ≥ 95 | spec §6 · here |
@@ -328,6 +328,7 @@ Reuses the scaffold's deployment unit unchanged: GitHub Actions builds `site/` o
 | 0006 | Contact details as actionable-only link attributes, zero client JavaScript | Accepted | §4 |
 | 0007 | Enforce content invariants in the content-collection schema at build time | Accepted | §4 |
 | 0008 | CV delivery is a committed static PDF in v1 | Accepted | §4, §11 |
+| 0009 | Scroll-spy active-section indicator ships one small progressive-enhancement script (amends the 0 KB client-JS NFR → ≤ 1 KB) | Accepted | §1, §2, §8, §10 |
 
 Inherited foundational ADRs (not re-decided here): `docs/adr/0001` (Astro static site + typed content collection), `0004` (CV PDF generated from a print route at build time — **amended for v1 by ADR-0008**: v1 ships a committed static PDF; build-time generation resumes at roadmap step 4).
 
@@ -337,17 +338,17 @@ ADR files live under `docs/features/personal-landing/adr/NNNN-<title>.md`.
 
 **QG-1. Above-the-fold render speed**
 - **When:** a Recruiter opens the page on a mid-tier mobile device over throttled 4G (Lighthouse "mobile" preset).
-- **Then:** Largest Contentful Paint ≤ 2.5 s; initial page weight ≤ 500 KB transferred; 0 KB of client JavaScript shipped by this feature.
-- **How verify:** Lighthouse mobile audit run manually pre-launch; build-output inspection for the JS figure; build size report for weight.
+- **Then:** Largest Contentful Paint ≤ 2.5 s; initial page weight ≤ 500 KB transferred; ≤ 1 KB of client JavaScript shipped by this feature — one inline progressive-enhancement script (ADR-0009), no JS bundle and no framework island.
+- **How verify:** Lighthouse mobile audit run manually pre-launch; build-output inspection for the JS figure (no `.m?js` bundle, no `astro-island`, one inline `type="module"` script < 1 KB); build size report for weight.
 
 **QG-2. Never ship a broken or incomplete page**
 - **When:** the Profile content is missing or has a malformed required field — no headline, no availability status, no location, a missing/empty `about.narrative` or an empty `about.highlights`, fewer than four `topStack` entries, any of the three contact channels absent (email, LinkedIn, or the committed CV PDF), or a malformed value (email without an `@`, unparseable link, more than eight `topStack` entries, present-but-empty `tagline`).
 - **Then:** 100% of missing / malformed required fields fail the build, which names the offending field; nothing is published.
 - **How verify:** `astro build` enforces the content-collection schema and its `.refine()` invariants and gates the deploy (ADR-0007); unit tests over the invariant predicates with fixture profiles; `astro check` on pull requests (and, once `tasks` adds it, on the deploy path).
 
-**QG-3. Zero-JavaScript, accessible, correctly-scaled delivery**
+**QG-3. JS-optional, accessible, correctly-scaled delivery**
 - **When:** a Recruiter uses the page with JavaScript disabled, or with a keyboard / screen reader, on any viewport from 360 to 1920 px wide.
-- **Then:** every contact action works; Lighthouse Accessibility ≥ 95; every interactive element is keyboard-reachable and operable; body text ≥ 16 px; interactive targets ≥ 44×44 px; no horizontal scroll at 360 / 768 / 1280 / 1920 px width; and every above-the-fold essential is visible with no scrolling at 1280×800 (reference laptop) and 390×844 (reference phone).
+- **Then:** every contact action works; the only script (the scroll-spy indicator, ADR-0009) is decorative and its absence leaves the page fully usable — only the active-link highlight is gone, with no layout shift or dead control; Lighthouse Accessibility ≥ 95; every interactive element is keyboard-reachable and operable; body text ≥ 16 px; interactive targets ≥ 44×44 px; no horizontal scroll at 360 / 768 / 1280 / 1920 px width; and every above-the-fold essential is visible with no scrolling at 1280×800 (reference laptop) and 390×844 (reference phone).
 - **How verify:** Lighthouse mobile audit + manual keyboard pass + manual responsive check at the four widths + manual above-the-fold check at 1280×800 and 390×844, all pre-launch.
 
 ## 11. Risks and technical debt

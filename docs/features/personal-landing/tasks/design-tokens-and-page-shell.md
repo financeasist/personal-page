@@ -56,6 +56,8 @@ flush to the bottom) and the alternating-band colour tokens every section render
 > **Hard rule (NFR):** Client JavaScript shipped by this feature = **0 KB**. Body text ≥ 16 px;
 > every interactive target ≥ 44×44 px (WCAG 2.5.8). No horizontal scroll at 360 / 768 / 1280 /
 > 1920 px width.
+
+_(NFR amended 2026-09-07 by ADR-0009: ≤ 1 KB — one inline scroll-spy PE script, no bundle. The page shell / tokens task itself still ships no script.)_
 >
 > — `spec.md §6 NFR, abridged` · full text: [spec.md](../spec.md)
 

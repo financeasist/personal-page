@@ -78,9 +78,10 @@ updated_at: "2026-09-07"
 
 ## Interaction & writing conventions
 
-- **Errors:** no runtime error state — the site is static (SSG, ADR-0001) with zero client JS by
-  default. Every completeness failure is a **build-time gate** that fails the build and names the
-  missing field (AC-05 / AC-06 / AC-12, ADR-0007); an incomplete page never deploys.
+- **Errors:** no runtime error state — the site is static (SSG, ADR-0001); the only client JS is
+  small inline progressive-enhancement scripts (scroll-spy indicator, personal-landing ADR-0009;
+  step-8 beacon later). Every completeness failure is a **build-time gate** that fails the build
+  and names the missing field (AC-05 / AC-06 / AC-12, ADR-0007); an incomplete page never deploys.
 - **Empty states:** none at runtime — optional content fields (tagline, positioning,
   `workAuthorization`, `earlierBackground`) simply don't render and the layout closes up. Required
   fields are schema-enforced, so a section is never empty at runtime.

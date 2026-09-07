@@ -85,10 +85,11 @@ updated_at: "2026-09-07"
 - **No `api` stage:** the feature has no datastore and no API (`data-model` → N/A → `api`
   skipped), so there are no contract error responses. Non-default states derive from spec §5 ACs
   and `sad.md` §6 `alt` / `else` branches only.
-- **Static, zero-JS delivery.** The page is fully rendered at build time (SSG, ADR-0001). There is
-  **no runtime `loading` / `empty` / `error` state** on any screen: no client fetch, no
-  hydration, and every completeness failure is a build-time gate (AC-05 / AC-06, ADR-0007) so an
-  incomplete page never deploys. Each screen carries explicit `N/A: <reason>` rows for those
+- **Static delivery, one tiny PE script.** The page is fully rendered at build time (SSG,
+  ADR-0001); the only client JavaScript is the ~320 B inline scroll-spy active-section indicator
+  (ADR-0009) — no bundle, no hydration. There is **no runtime `loading` / `empty` / `error`
+  state** on any screen: no client fetch, and every completeness failure is a build-time gate
+  (AC-05 / AC-06, ADR-0007) so an incomplete page never deploys. Each screen carries explicit `N/A: <reason>` rows for those
   classes. The real variation is **content-driven** (optional fields present / absent) and
   **viewport-driven** (laptop vs phone).
 
@@ -125,7 +126,8 @@ optional **INDUSTRIES list on the right**) → Top Stack line (≤ 8 items, D-9)
 | default — laptop | Page load at 1280×800, all above-the-fold essentials present (build-guaranteed). Fixed white-on-navy `Header` (name + LinkedIn / email **icon controls** → LinkedIn URL / `mailto:`; `About me` / `Download CV` / `Contact` menu items — **three contact actions, no phone**). Hero (white band): headshot (`me.png`), name, headline, the optional **tagline**, `AvailabilityBlock` (status + location) on the left; the **INDUSTRIES** list on the right (D-7). Then the **Top Stack** line — **≤ 8 technologies** (D-9). No scrolling. `Footer` flush to the bottom. | `Header`, `Hero`, `AvailabilityBlock`, `Footer` | `Sh75H` (Header `dvllD`, Hero `xEwZk`, Industries `QfCVa`, Footer `W5vee`) · wireframe A |
 | default — phone | Page load at 390×844. `Header` condenses to name + LinkedIn / email icons + a menu affordance. Same essentials single-column; the INDUSTRIES list sits below the `AvailabilityBlock`; body text ≥ 16 px; every contact control ≥ 44×44 px; no horizontal scroll at any width. Verified in the QG-3 manual pass at 390×844. | `Header`, `Hero`, `AvailabilityBlock`, `Footer` | `XKUfO` (Industries `WMCWv`) · wireframe B |
 | default — tagline omitted | `profile.tagline` is empty (optional, spec §1). Headline renders with `AvailabilityBlock` directly beneath — the tightest hero. AC-01 still holds. | `Header`, `Hero`, `Footer` | `AKdd9` (`Tagline` frame `PXgxV` absent in this state) |
-| default — keyboard focus | Recruiter tabs the page (QG-3). Every `Header` control takes a visible focus ring, in DOM order (Name link → LinkedIn → Gmail → About me → Download CV → Contact), operable by Enter / Space. Zero client JS. | `Header` | `heCTv` |
+| default — keyboard focus | Recruiter tabs the page (QG-3). Every `Header` control takes a visible focus ring, in DOM order (Name link → LinkedIn → Gmail → About me → Download CV → Contact), operable by Enter / Space. The only script is the scroll-spy indicator (ADR-0009) — decorative, no effect on focus or activation. | `Header` | `heCTv` |
+| about-in-view — active nav | While `#about` is in the reading band the header "About me" link + menu item carry a filled-block active state (`.is-active`), toggled by the inline `IntersectionObserver` (ADR-0009). Scroll away ⇒ state clears. JS off ⇒ state never applied; the link is otherwise unchanged. | `Header` | — (post-`screens.pen`, 2026-09-07) |
 | N/A: loading | Static HTML, no client fetch and no hydration; the headshot is `astro:assets` eager + high fetch-priority with explicit dimensions, so first paint is the `default` layout with no CLS. | — | — |
 | N/A: empty | The build fails and names the field if any AC-05 essential is missing — headline, availability status, location, headshot path / alt, fewer than four `topStack` entries, `email`, the LinkedIn link, or the committed CV PDF (ADR-0007 / ADR-0008). An empty hero can never deploy. | — | — |
 | N/A: error | No runtime error path exists on static delivery (SAD §8 "Error handling: build-time only"). | — | — |

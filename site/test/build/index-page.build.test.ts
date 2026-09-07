@@ -4,8 +4,9 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { buildFixture, type BuildResult } from '../helpers/build-fixture';
 
 // T9 — the assembled page, verified over the REAL delivered `dist/` (built from
-// the committed roman.json). AC-07 / AC-10 delivered-source half + the 0 KB JS
-// NFR (spec.md §Test plan integration + NFR rows).
+// the committed roman.json). AC-07 / AC-10 delivered-source half + the client-JS
+// NFR (spec.md §Test plan integration + NFR rows): no JS bundle / island, only
+// the one small inline progressive-enhancement script from ADR-0009.
 let build: BuildResult;
 let html: string;
 let visibleText: string;
@@ -39,15 +40,26 @@ describe('assembled index.astro — structure', () => {
   });
 });
 
-describe('assembled index.astro — zero client JavaScript (NFR)', () => {
-  it('ships no <script> tag and no JS bundle in dist/', () => {
-    expect(html).not.toMatch(/<script/);
+describe('assembled index.astro — client JS is one tiny inline PE script (NFR, ADR-0009)', () => {
+  it('ships no JS bundle and no framework island — only one small inline <script>', () => {
     const walk = (dir: string): string[] =>
       readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
         e.isDirectory() ? walk(join(dir, e.name)) : [join(dir, e.name)],
       );
     const js = walk(build.distDir).filter((f) => /\.m?js$/.test(f));
-    expect(js).toEqual([]);
+    expect(js).toEqual([]); // no hoisted/bundled JS
+    expect(html).not.toMatch(/astro-island/); // no hydration
+
+    // Exactly one <script>: the scroll-spy active-section indicator (ADR-0009).
+    // Inline module, no src, < 1 KB, progressive enhancement.
+    const openTags = html.match(/<script\b[^>]*>/g) ?? [];
+    expect(openTags).toHaveLength(1);
+    expect(openTags[0]).toMatch(/type="module"/);
+    expect(openTags[0]).not.toMatch(/\bsrc=/);
+    const body = html.match(/<script\b[^>]*>([\s\S]*?)<\/script>/)?.[1] ?? '';
+    expect(body).toContain('IntersectionObserver');
+    expect(body.length).toBeGreaterThan(0);
+    expect(body.length).toBeLessThan(1024);
   });
 });
 

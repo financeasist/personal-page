@@ -85,8 +85,11 @@ See [tracker.md](./tracker.md) for status. Machine contract: [tasks.json](../tas
 
 ## Risks / Hard rules
 
-- **0 KB client JavaScript shipped by this feature** (spec §6, ADR-0001). The sticky header and
-  the mobile menu are CSS-only; the mobile menu is a native `<details>` disclosure. No `<script>`.
+- **Client JavaScript ≤ 1 KB** (spec §6, ADR-0001; amended by **ADR-0009** — was "0 KB / no
+  `<script>`"). The sticky header, scroll-shrink and mobile menu are CSS-only (the menu is a
+  native `<details>` disclosure). The one allowed script is the inline scroll-spy active-section
+  indicator (ADR-0009) — ~320 B, inlined, no bundle, no framework island, strict progressive
+  enhancement.
 - **Contact-detail exposure** (AC-07, AC-10, ADR-0006): email + LinkedIn never rendered as visible
   text on the landing page — values only in `href`. Phone is not on the landing page at all in v1
   (not text, not attribute). No salary / rate / home address / recruiter-link label anywhere in

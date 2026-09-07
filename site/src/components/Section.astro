@@ -34,10 +34,15 @@ const { heading, tone = 'surface', id } = Astro.props;
     font-size: clamp(1.3rem, 3vw, 1.6rem);
     color: var(--color-navy);
   }
+  /* Same rule as under the hero name (Hero.astro `.hero__rule`) — 150 px wide,
+     4 px tall, 2 px radius — kept centered with an auto inline margin and the
+     section's 2rem gap before the body. */
   .section__rule {
-    width: 3rem;
-    height: 3px;
-    margin: 0.75rem auto 2rem;
+    width: 150px;
+    max-width: 60%;
+    height: 4px;
+    border-radius: 2px;
+    margin: 0.85rem auto 2rem;
     background: var(--color-navy);
   }
 </style>

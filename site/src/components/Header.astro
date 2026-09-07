@@ -138,8 +138,10 @@ const mailto = `mailto:${email}`;
     color: #fff;
     font-weight: 800;
     text-decoration: none;
-    font-size: 1.25rem;
+    /* Same size as the hero name under the photo (Hero.astro `.hero__name`). */
+    font-size: clamp(1.6rem, 4.2vw, 2.15rem);
     letter-spacing: 0.01em;
+    line-height: 1.15;
     min-height: 44px;
     display: inline-flex;
     align-items: center;
@@ -324,7 +326,7 @@ const mailto = `mailto:${email}`;
       }
       @keyframes site-header-name {
         to {
-          font-size: 1.1rem;
+          font-size: 1.5rem;
         }
       }
     }

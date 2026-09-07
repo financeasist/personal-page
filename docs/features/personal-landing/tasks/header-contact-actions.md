@@ -64,6 +64,10 @@ Contact), operable by Enter / Space, **zero client JS**.
 > header menu is a **native `<details>` disclosure**. Body text ≥ 16 px. Lighthouse a11y ≥ 95;
 > every interactive element keyboard-reachable and operable.
 >
+> _(Amended 2026-09-07 by **ADR-0009**: the Header now also carries the inline scroll-spy
+> active-section indicator — ~320 B, inlined, PE only. NFR is ≤ 1 KB, no bundle / island. The
+> `<details>` menu and every contact control stay script-free.)_
+>
 > — `spec.md §6 NFR + §5 AC-08, abridged` · full text: [spec.md](../spec.md)
 
 Values come from content (T2): `contact.email` → `mailto:`; the `contact.links` entry with a

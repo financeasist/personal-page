@@ -1,6 +1,7 @@
 # Launch checklist — personal-landing
 
-Run before each release. The automated gates (content completeness, 0 KB JS, CV
+Run before each release. The automated gates (content completeness, client-JS
+budget — ≤ 1 KB / one inline PE script / no bundle / no island per ADR-0009, CV
 PDF exists) are enforced by CI (`npm run check` + `npm test` + `npm run build`
 on both the PR and the deploy path). The rows below are **manual** and a miss
 **blocks the launch** until fixed or waived in writing here (spec.md §6).

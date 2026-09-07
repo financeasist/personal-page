@@ -25,10 +25,20 @@ beforeAll(() => {
 });
 
 describe('Header.astro', () => {
-  it('is one <header> landmark, CSS-only (no script / island)', () => {
+  it('is one <header> landmark; at most one tiny inline PE script, no island (ADR-0009)', () => {
     expect(doc.querySelectorAll('header')).toHaveLength(1);
-    expect(doc.querySelectorAll('script')).toHaveLength(0);
     expect(doc.querySelectorAll('astro-island')).toHaveLength(0);
+    // The only script Header may ship is the scroll-spy active-section
+    // indicator (ADR-0009): one inline module, no src bundle, < 1 KB,
+    // progressive enhancement.
+    const scripts = [...doc.querySelectorAll('script')];
+    expect(scripts.length).toBeLessThanOrEqual(1);
+    for (const s of scripts) {
+      expect(s.getAttribute('type')).toBe('module');
+      expect(s.hasAttribute('src')).toBe(false);
+      expect((s.textContent ?? '').length).toBeLessThan(1024);
+      expect(s.textContent).toContain('IntersectionObserver');
+    }
   });
 
   it('email control: mailto in href, addressed to Roman, value never in text (AC-02, AC-10)', () => {

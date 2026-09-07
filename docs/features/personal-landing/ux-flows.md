@@ -31,7 +31,10 @@ updated_at: "2026-09-07"
   (above the fold) and the **About section** (one scroll below it). "Screens" below are those two
   sections of the page, not separate routes. The only navigations are in-page vertical scroll and
   three hand-offs that leave the page (mail client, LinkedIn tab, file download).
-- **No client JavaScript.** Every interaction is a plain link or a scroll. The phone-line
+- **Client JavaScript is one small progressive enhancement.** Every interaction is a plain link
+  or a scroll and works with no script. The one script that ships is the **scroll-spy
+  active-section indicator** (ADR-0009) — it marks the header "About me" link while the About
+  section is in view; blocked/off ⇒ no highlight, nothing else changes. The phone-line
   disclosure is gone with the phone control; the one remaining disclosure is the **mobile header
   menu** (a native `<details>` holding Download CV + an in-page About link). `design` owns the
   formal call; this is the flow-level assumption the flows are drawn against.
