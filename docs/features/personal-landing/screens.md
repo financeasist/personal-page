@@ -247,22 +247,24 @@ stays a content field, rendered only on the CV route.
 
 ## Components
 
-Registered in `docs/design-system.md` §Component inventory. `implement` replaces each
-`pending` there with the real `site/src/components/<Name>.astro` `file:line` anchor.
+Registered in `docs/design-system.md` §Component inventory with real
+`site/src/{layouts,components}/<Name>.astro` `file:line` anchors (done — T11).
 
-| Component | `screens.pen` | v1 status | Notes |
+| Component | `file:line` (shipped) | v1 status | Notes |
 |---|---|---|---|
-| `Header` | reusable frame `dvllD` | in v1 (D-1 / D-3 ratified) | Fixed / sticky dark-navy bar (CSS only). Laptop: name + the three contact controls (email, LinkedIn, Download CV), each labelled, each a stable `data-*` hook for step 8. Mobile: name + `LinkedIn` (`fusdv`) + `Gmail` (`z9saN`) icon controls + a native `<details>` menu holding Download CV + an `#about` link. **No phone.** |
-| `ContactActions` | to be redrawn (was `xSFYJ`-era frame, deleted) | in v1 (D-1 ratified) | The three labelled controls (email, LinkedIn, Download CV), rendered inside `Header`. Each carries a stable `data-contact-channel` (`email` / `linkedin`) or `data-cv-download` hook for step 8. Email + LinkedIn values live only in `href` (AC-10). |
-| `Footer` | reusable frame `W7AZlV` | in v1 (D-3 ratified) | Dark-navy bar, centered "Copyright © Hrupskyi R. Bio 2026". Flush to the viewport bottom (`min-height: 100vh` page). |
-| `Hero` | inline (`Sh75H` › `xEwZk`; `XKUfO` › `Avanx`) | in v1 (D-7 / D-10 ratified) | Photo (`me.png`) + name + headline + optional tagline (≤ ~300 chars — carries what was the positioning block) + `AvailabilityBlock` (left) + optional `Industries` (right). White band. Responsive-both. Contact controls are in the `Header`, not the hero (D-1). |
-| `AvailabilityBlock` | reusable frame `k6V1ni` | in v1 | `status` + `location`. The `.pen` frame draws no notice-period / work-auth line; `data-model.md` makes both **optional** `availability` fields — add them to the frame if Roman supplies values. |
-| `Industries` | inline (`Sh75H` › `QfCVa`; `XKUfO` › `WMCWv`) | in v1, optional (D-7 ratified) | Hero right column (laptop) / below availability (phone). Renders the `industries` Profile field (`{ domain, note? }`, ≤ 6); absent → the column is omitted, build still passes (AC-15). Static text, no assets. |
-| `Section` | inline (`GSu58` › `Section` frames) | in v1 | Centered heading + short rule + spacing rhythm; layout-only wrapper. Full-bleed background colour. |
-| `AboutMe` (block inside `Section`) | inline (`GSu58` › `k0sIs`) | in v1 (ratified, D-4) | `narrative` (`B6zSXN`, from `linkedin-about.md`) + `highlights` (`MKVFu`, Roman's own bullets + a LinkedIn link); reflows to one column on phone. Grey band. |
-| `ExperienceTimeline` | frame `jgvYw` (stale) | **v2** (SCR-02) | Delete from `.pen`; re-instate with US-04. |
-| `SelectedProjects` | frame `b9PNeG` (stale) | **v2** (SCR-03) | Delete from `.pen`; re-instate with US-09. |
-| `ProjectCard` | reusable frame `J2r0z` (stale) | **v2** (SCR-03, D-8) | Native `<details>` accordion. Delete from `.pen`; re-instate with US-09. |
+| `Layout` | `site/src/layouts/Layout.astro:1` | in v1 (new) | Page shell — `<html lang="en">`, `<title>` prop, `min-height:100vh` flex column, `Footer` last. |
+| `Band` | `site/src/components/Band.astro:1` | in v1 (new primitive) | Full-bleed colour band + centered column; `Hero` / `Section` / `Footer` compose from it. |
+| `Header` | `site/src/components/Header.astro:1` | in v1 (D-1 / D-3) | Fixed / sticky dark-navy bar (CSS only). Name + email/LinkedIn icon controls + About + Download CV; phone condenses to a native `<details>` menu (About + Download CV). Value only in `href`; `data-contact-channel` / `data-cv-download` step-8 hooks. **No phone, no "Contact" item.** |
+| `ContactActions` | folded into `Header.astro` | in v1 (D-1) | Not a separate file — the three controls are `<a>` elements inside `Header`. |
+| `Footer` | `site/src/components/Footer.astro:1` | in v1 (D-3) | Dark-navy bar (via `Band`), centered "Copyright © Hrupskyi R. Bio 2026". Flush to the viewport bottom. |
+| `Hero` | `site/src/components/Hero.astro:1` | in v1 (D-7 / D-10) | `astro:assets` headshot (`me.png`, eager, < 100 KB) + `<h1>` name + headline + optional tagline + `AvailabilityBlock` (left) + optional `Industries` (right) + top-stack chips. Fills the fold. Responsive-both; `<360px` drops Industries first. |
+| `AvailabilityBlock` | `site/src/components/AvailabilityBlock.astro:1` | in v1 | `status` + `location` + optional `noticePeriod` + optional `workAuthorization`, all content-driven. |
+| `Industries` | `site/src/components/Industries.astro:1` | in v1, optional (D-7) | Hero right column / below availability on phone. Renders `industries` (`{domain, note?}`, ≤ 6); absent → omitted, build still passes (AC-15). |
+| `Section` | `site/src/components/Section.astro:1` | in v1 | Centered heading + short navy rule + spacing rhythm; wraps `Band`. `scroll-margin-top` for `#anchor`. |
+| `AboutMe` | `site/src/components/AboutMe.astro:1` | in v1 (D-4) | Grey band (`Section` canvas, `id="about"`), `narrative` (blank-line paragraphs) + `highlights` + a LinkedIn link; one column on phone. |
+| `ExperienceTimeline` | **v2 — not built** (SCR-02) | v2 | Re-instate with US-04. |
+| `SelectedProjects` | **v2 — not built** (SCR-03) | v2 | Re-instate with US-09. |
+| `ProjectCard` | **v2 — not built** (SCR-03, D-8) | v2 | Native `<details>` accordion; re-instate with US-09. |
 
 `PhoneChooser` and `ContactButton` are **deleted** — phone dropped (D-2). `ContactActions` is
 **kept** — it renders the three controls *inside* `Header` (D-1 ratified), not a hero row; the

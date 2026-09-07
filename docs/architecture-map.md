@@ -120,11 +120,13 @@ C4Container
 - **Design tokens:** Tailwind v4 `@theme` block in `site/src/styles/global.css` (colors, spacing,
   font scale).
 - **Styling approach:** Tailwind v4 utility classes in `.astro` templates; no CSS-in-JS, no CSS modules.
-- **Shared primitives:** to be established by the first UI feature — expect `Section.astro`,
-  `ContactButton.astro`, `AvailabilityBlock.astro`, `ProjectCard.astro` under `site/src/components/`.
-  The primary above-the-fold actions are phone, email, LinkedIn, **and a "Download CV" button**
-  (points at the named PDF); each is a tracked click event (`contact_click` with a channel, and
-  `cv_download`).
+- **Shared primitives:** established by `personal-landing` (canonical inventory:
+  `docs/design-system.md` §Component inventory) — `Layout`, `Band`, `Header`, `Footer`, `Section`,
+  `Hero`, `AvailabilityBlock`, `Industries`, `AboutMe` under `site/src/{layouts,components}/`.
+  The above-the-fold contact actions are email, LinkedIn **and Download CV** (no phone in v1),
+  rendered in a sticky `Header`; each carries a `data-contact-channel` / `data-cv-download` hook
+  for the roadmap-step-8 click beacon (`contact_click` / `cv_download`). v2 components
+  (`ExperienceTimeline`, `SelectedProjects`, `ProjectCard`) are not built.
 - **State / data-fetching:** none — the page is static HTML. A single inline `<script>` fires
   `fetch()` calls to the tracker for contact-button and Download-CV clicks (the download proceeds
   regardless of whether the beacon succeeds — fire-and-forget).
