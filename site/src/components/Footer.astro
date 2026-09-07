@@ -19,8 +19,11 @@ const year = new Date().getFullYear();
 </Band>
 
 <style>
-  .footer :global(.band__inner) {
-    padding-block: 0.7rem;
+  /* `:global` — the class lands on Band's root element, which does not carry
+     this component's scope attribute, so a scoped `.footer` selector wouldn't
+     match. The custom property then inherits into Band's `.band__inner`. */
+  :global(.footer) {
+    --band-pad-block: 0.7rem;
   }
   .footer__copy {
     margin: 0;

@@ -39,8 +39,10 @@ const toneClass = TONE_CLASS[tone];
     max-width: 72rem;
     margin-inline: auto;
     padding-inline: clamp(1rem, 5vw, 2.5rem);
-    padding-block: clamp(2rem, 6vw, 4rem);
+    padding-block: var(--band-pad-block, clamp(2rem, 6vw, 4rem));
   }
-  /* The chrome bars (Header/Footer) are thin — a caller passes `class` to
-     tighten the block padding when it renders one. */
+  /* The chrome bars (Header/Footer) are thin — a caller sets `--band-pad-block`
+     on the band element to tighten the block padding when it renders one.
+     (A `:global(.band__inner)` override can't win the specificity fight against
+     the rule above; the custom property inherits in cleanly instead.) */
 </style>
