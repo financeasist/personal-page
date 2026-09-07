@@ -4,13 +4,14 @@ import {
   cpSync,
   existsSync,
   mkdirSync,
+  readdirSync,
   readFileSync,
   rmSync,
   symlinkSync,
   writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { dirname, join } from 'node:path';
+import { dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseHTML } from 'linkedom';
 
@@ -27,6 +28,36 @@ import { parseHTML } from 'linkedom';
  */
 const siteRoot = fileURLToPath(new URL('../../', import.meta.url));
 const cacheRoot = join(tmpdir(), 'personal-landing-build-fixture');
+
+/**
+ * A content hash of everything under `src/` — folded into the build cache key so
+ * a source edit (a component, the schema, a page) invalidates a stale cached
+ * `dist/`. Without this the cache is keyed only on the fixture inputs and a
+ * component regression can pass green against an old build.
+ */
+function hashSrcTree(): string {
+  const srcDir = join(siteRoot, 'src');
+  const hash = createHash('sha1');
+  const walk = (dir: string): void => {
+    for (const entry of readdirSync(dir, { withFileTypes: true }).sort((a, b) =>
+      a.name < b.name ? -1 : 1,
+    )) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(full);
+      } else if (entry.isFile() && !entry.name.endsWith('.test.ts')) {
+        hash.update(relative(srcDir, full).split(sep).join('/'));
+        hash.update('\0');
+        hash.update(readFileSync(full));
+        hash.update('\0');
+      }
+    }
+  };
+  walk(srcDir);
+  return hash.digest('hex');
+}
+
+const srcHash = hashSrcTree();
 
 export interface BuildResult {
   ok: boolean;
@@ -54,7 +85,7 @@ export function buildFixture(opts: BuildFixtureOptions = {}): BuildResult {
   const { profile, pages = {}, remove = [], skipPostbuild = true } = opts;
 
   const key = createHash('sha1')
-    .update(JSON.stringify({ profile, pages, remove, skipPostbuild }))
+    .update(JSON.stringify({ profile, pages, remove, skipPostbuild, srcHash }))
     .digest('hex')
     .slice(0, 16);
   const root = join(cacheRoot, key);
@@ -69,13 +100,21 @@ export function buildFixture(opts: BuildFixtureOptions = {}): BuildResult {
       if (existsSync(target)) symlinkSync(target, join(root, entry));
     }
     cpSync(join(siteRoot, 'src'), join(root, 'src'), { recursive: true });
-    // Per-fixture astro.config that re-exports the real one but pins Vite's
-    // cacheDir INSIDE the temp root — otherwise every parallel `astro build`
-    // shares the real `node_modules/.vite` dep-optimizer cache and races.
+    // Per-fixture astro.config that re-exports the real one but pins BOTH cache
+    // dirs INSIDE the temp root:
+    //   - `vite.cacheDir` — otherwise every parallel `astro build` shares the
+    //     real `node_modules/.vite` dep-optimizer cache and races.
+    //   - `cacheDir` — Astro's content-layer data store lives at
+    //     `<cacheDir>/data-store.json` (default `./node_modules/.astro`, and
+    //     `node_modules` is symlinked to the real one here). Without this every
+    //     parallel build reads/writes ONE shared store, so one fixture's
+    //     `profile` content leaks into another build (the committed content
+    //     rendering as a test fixture, or vice-versa).
     writeFileSync(
       join(root, 'astro.config.mjs'),
       `import base from ${JSON.stringify(join(siteRoot, 'astro.config.mjs'))};\n` +
-        `export default { ...base, vite: { ...(base.vite ?? {}), ` +
+        `export default { ...base, cacheDir: './.astro-cache', ` +
+        `vite: { ...(base.vite ?? {}), ` +
         `cacheDir: new URL('./.vite/', import.meta.url).pathname } };\n`,
     );
     // package.json: keep build, drop/neutralise postbuild for a clean unit of work.

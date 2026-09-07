@@ -226,7 +226,7 @@ _The About section is below the fold by design — it is not part of the AC-01 /
 **When** the hero renders
 **Then** if the list is present the hero shows it as a short column straight from the Profile content (no hard-coded copy), reflowing below the availability block on the phone viewport; if the list is absent the hero renders without that column and the build still succeeds. An `industries` entry with an empty `domain`, or more than six entries, fails the build with a message naming the field (AC-06).
 
-_`industries` is not an above-the-fold essential — it is not in the AC-01 / AC-05 canonical list and never blocks a build by being absent._
+_`industries` is not an above-the-fold essential — it is not in the AC-01 / AC-05 canonical list, never blocks a build by being absent, and collapses on the phone viewport as step 1 of the §6 drop order so the essentials stay above the fold at 390×844 (AC-08). <!-- added-by-fix: 2026-09-07 --> "Reflowing below the availability block" above describes the layout on viewports wide enough to show the list (below the two-column breakpoint on a wider phone, before it collapses)._
 
 ## 6. Non-functional requirements
 

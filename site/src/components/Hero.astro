@@ -173,9 +173,14 @@ const hasIndustries = Array.isArray(industries) && industries.length > 0;
     }
   }
 
-  /* Very narrow (<360px, spec §6 drop order step 1): drop the optional
-     Industries column first; essentials never drop. */
-  @media (max-width: 359.98px) {
+  /* Phone viewport: keep every AC-01 essential (incl. the top stack) above the
+     fold at 390×844 (spec.md §6 "Above-the-fold fit (binding)", AC-08). The
+     hero overflows the fold once the optional Industries list stacks into the
+     single column, so collapse it here — step 1 of the §6 drop order
+     (Industries → Tagline → top-stack truncates); essentials never drop. The
+     list is not an AC-01 essential (AC-15). Below the two-column breakpoint the
+     aside carries no layout weight anyway. */
+  @media (max-width: 767.98px) {
     .hero__aside {
       display: none;
     }

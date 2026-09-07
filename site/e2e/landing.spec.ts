@@ -20,6 +20,33 @@ test('AC-01 — every above-the-fold essential is visible', async ({ page }) => 
   await expect(page.locator('[data-contact-channel="linkedin"]').first()).toBeVisible();
 });
 
+test('AC-01 / AC-08 — every above-the-fold essential sits within the fold, no scrolling', async ({
+  page,
+}, testInfo) => {
+  // `toBeVisible()` is true for an element rendered below the viewport, so the
+  // fold guarantee ("visible without scrolling at 1280×800 and 390×844",
+  // spec.md §6 "Above-the-fold fit (binding)") needs an explicit geometry check.
+  // The optional Industries list and Tagline are NOT essentials — when the hero
+  // would overflow the phone fold they collapse per the §6 drop order; only the
+  // AC-01 canonical essentials are asserted here.
+  const viewportHeight = page.viewportSize()!.height;
+  const essentials: Record<string, ReturnType<typeof page.locator>> = {
+    headshot: page.locator('.hero__photo'),
+    name: page.locator('h1'),
+    headline: page.locator('.hero__headline'),
+    'availability + location': page.locator('.availability'),
+    'top stack': page.locator('.hero__stack'),
+  };
+  for (const [label, locator] of Object.entries(essentials)) {
+    const box = await locator.boundingBox();
+    expect(box, `${label}: has a layout box`).not.toBeNull();
+    expect(
+      Math.round(box!.y + box!.height),
+      `${label}: bottom edge within the ${viewportHeight}px fold at ${testInfo.project.name}`,
+    ).toBeLessThanOrEqual(viewportHeight);
+  }
+});
+
 test('AC-02 — the email action hands off a pre-addressed mailto', async ({ page }) => {
   const href = await page
     .locator('[data-contact-channel="email"]')
