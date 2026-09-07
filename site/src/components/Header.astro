@@ -75,7 +75,13 @@ const mailto = `mailto:${email}`;
     </div>
 
     <nav class="site-header__actions" aria-label="Contact Roman and page navigation">
-      <a class="site-header__action site-header__action--inline" href="#about">About me</a>
+      <a
+        class="site-header__action site-header__action--inline"
+        href="#about"
+        data-nav-link="about"
+      >
+        About me
+      </a>
 
       <a
         class="site-header__action site-header__action--inline"
@@ -102,7 +108,7 @@ const mailto = `mailto:${email}`;
         </svg>
       </summary>
       <div class="site-header__menu-panel">
-        <a class="site-header__menu-item" href="#about">About me</a>
+        <a class="site-header__menu-item" href="#about" data-nav-link="about">About me</a>
         <a class="site-header__menu-item" href={cvHref} download data-cv-download>Download CV</a>
         <a class="site-header__menu-item" href={mailto} data-contact-channel="email">Contact</a>
       </div>
@@ -126,14 +132,14 @@ const mailto = `mailto:${email}`;
     gap: 0.35rem;
     max-width: 72rem;
     margin-inline: auto;
-    padding: 0.95rem clamp(1rem, 5vw, 2.5rem);
+    padding: 1.9rem clamp(1rem, 5vw, 2.5rem);
   }
   .site-header__name {
     color: #fff;
     font-weight: 800;
     text-decoration: none;
-    font-size: 1.05rem;
-    letter-spacing: -0.01em;
+    font-size: 1.25rem;
+    letter-spacing: 0.01em;
     min-height: 44px;
     display: inline-flex;
     align-items: center;
@@ -166,9 +172,18 @@ const mailto = `mailto:${email}`;
     border-radius: 0.4rem;
     color: #c9d4e6;
     text-decoration: none;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
+  }
+  /* Scroll-spy active state — the darker filled block behind the current
+     section's link (matches the reference resume header). Toggled by the
+     inline IntersectionObserver below; no JS ⇒ the class is never added and
+     the link just styles like any other (progressive enhancement). */
+  .site-header__action.is-active,
+  .site-header__menu-item.is-active {
+    background: rgba(0, 0, 0, 0.28);
+    color: #fff;
   }
   .site-header__action--icon {
     color: #fff;
@@ -303,15 +318,32 @@ const mailto = `mailto:${email}`;
       }
       @keyframes site-header-tighten {
         to {
-          padding-top: 0.4rem;
-          padding-bottom: 0.4rem;
+          padding-top: 1rem;
+          padding-bottom: 1rem;
         }
       }
       @keyframes site-header-name {
         to {
-          font-size: 0.95rem;
+          font-size: 1.1rem;
         }
       }
     }
   }
 </style>
+
+<script>
+  // Scroll-spy: mark the "About me" nav link active while the #about section
+  // sits in the reading zone (a band around the viewport middle). Progressive
+  // enhancement — the page is fully usable with this script blocked.
+  const about = document.getElementById('about');
+  const links = document.querySelectorAll<HTMLElement>('[data-nav-link="about"]');
+  if (about && links.length && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        for (const link of links) link.classList.toggle('is-active', entry.isIntersecting);
+      },
+      { rootMargin: '-30% 0px -45% 0px' },
+    );
+    io.observe(about);
+  }
+</script>
