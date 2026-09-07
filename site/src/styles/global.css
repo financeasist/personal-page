@@ -7,7 +7,36 @@
   --color-navy-dark: #1f2a3f;
   --color-ink: #1a1a1a;
   --color-muted: #5b6472;
+  /* Section bands (personal-landing T5): Hero renders on `surface`, About on
+     `canvas`; Header/Footer on `navy`. The code file stays the source of truth
+     for colour — a component never re-declares one inline (design-system.md). */
+  --color-surface: #ffffff;
+  --color-canvas: #f4f5f7;
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Page baseline: ≥16 px root text (AC-08) and never a horizontal scrollbar at
+   any width (spec.md §6: 360 / 768 / 1280 / 1920). The shell uses no fixed
+   widths; media stays inside its box. */
+html {
+  font-size: 100%;
+  overflow-x: clip;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: var(--color-surface);
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
 }
 
 /* Print route (cv.astro) renders to A4 via headless Chromium at build time. */

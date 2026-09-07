@@ -1,0 +1,22 @@
+---
+// Site footer — dark-navy full-bleed bar, flush to the viewport bottom via the
+// `min-height: 100vh` flex column in Layout.astro (screens.md §Source). The
+// copyright line is structural chrome, not recruiter content, so a literal is
+// acceptable under the locale-clean rule (CLAUDE.md §site).
+import Band from './Band.astro';
+---
+
+<Band as="footer" tone="navy" class="footer">
+  <p class="footer__copy">Copyright © Hrupskyi R. Bio 2026</p>
+</Band>
+
+<style>
+  .footer :global(.band__inner) {
+    padding-block: 1.5rem;
+  }
+  .footer__copy {
+    margin: 0;
+    text-align: center;
+    font-size: 0.95rem;
+  }
+</style>

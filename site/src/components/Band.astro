@@ -1,0 +1,45 @@
+---
+// Full-bleed colour band with a centered max-width content column. The one
+// primitive every page section composes from so the alternating-background
+// rhythm (Header navy -> Hero surface -> About canvas -> Footer navy,
+// screens.md §Source) stays consistent and no section re-declares a colour.
+//
+// Layout-only: no copy, no data. `as` lets a caller pick the semantic element
+// (`section` default; `header` / `footer` for the chrome bars).
+interface Props {
+  tone?: 'surface' | 'canvas' | 'navy';
+  as?: 'section' | 'header' | 'footer' | 'div';
+  id?: string;
+  class?: string;
+}
+
+const { tone = 'surface', as = 'section', id, class: className } = Astro.props;
+const Tag = as;
+
+const TONE_CLASS: Record<NonNullable<Props['tone']>, string> = {
+  surface: 'bg-surface text-ink',
+  canvas: 'bg-canvas text-ink',
+  navy: 'bg-navy-dark text-white',
+};
+const toneClass = TONE_CLASS[tone];
+---
+
+<Tag id={id} class:list={['band', toneClass, className]}>
+  <div class="band__inner">
+    <slot />
+  </div>
+</Tag>
+
+<style>
+  .band {
+    width: 100%;
+  }
+  .band__inner {
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 5vw, 2.5rem);
+    padding-block: clamp(2rem, 6vw, 4rem);
+  }
+  /* The chrome bars (Header/Footer) are thin — a caller passes `class` to
+     tighten the block padding when it renders one. */
+</style>

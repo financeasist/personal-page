@@ -1,0 +1,44 @@
+---
+// Base page shell for the static landing site. One <html lang="en">, a
+// <title> from a prop, the global stylesheet, and a `min-height: 100vh` flex
+// column so <Footer /> is always flush to the viewport bottom — even on a short
+// page (screens.md §Source). Zero client JS.
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {description && <meta name="description" content={description} />}
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+    <Footer />
+  </body>
+</html>
+
+<style>
+  body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+  /* Everything the page slots in takes the slack; the footer keeps its size. */
+  body > :global(:not(footer)) {
+    flex: 0 0 auto;
+  }
+  body > :global(main) {
+    flex: 1 0 auto;
+  }
+</style>

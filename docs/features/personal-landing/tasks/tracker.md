@@ -9,7 +9,7 @@
 | T2 | Profile content schema + invariants + `roman.json` reshape | domain | Roman | M | T1 | todo |
 | T3 | Shared CV-filename helper | app | Roman | S | T1 | done |
 | T4 | Committed CV PDF + build-time "file exists" assertion | wiring | Roman | S | T3 | todo |
-| T5 | Design tokens + page shell (`Layout`) + `Footer` | ui | Roman | S | T1 | todo |
+| T5 | Design tokens + page shell (`Layout`) + `Footer` | ui | Roman | S | T1 | done |
 | T6 | `Header` — contact actions + mobile `<details>` menu | ui | Roman | M | T1, T3, T5 | todo |
 | T7 | `Hero` + `AvailabilityBlock` + optional `Industries` | ui | Roman | M | T1, T2, T5 | todo |
 | T8 | About section — `Section` + `AboutMe` | ui | Roman | S | T1, T2, T5 | todo |
