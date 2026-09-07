@@ -55,7 +55,7 @@ describe('assembled index.astro — need-to-know exposure (AC-07 / AC-10)', () =
   it('renders neither the email address nor the LinkedIn URL as visible text', () => {
     expect(visibleText).not.toContain('roman.grupskyi@gmail.com');
     expect(visibleText).not.toMatch(/linkedin\.com\/in\//i);
-    expect(visibleText.toLowerCase()).not.toContain('romangrupskiy');
+    expect(visibleText.toLowerCase()).not.toContain('roman-grupskiy');
   });
 
   it('contains no phone number anywhere in the delivered page — not even in an attribute', () => {
@@ -78,7 +78,9 @@ describe('assembled index.astro — need-to-know exposure (AC-07 / AC-10)', () =
 
   it('still makes contact reachable — mailto, new-tab LinkedIn, downloadable CV in href', () => {
     expect(html).toContain('mailto:roman.grupskyi@gmail.com');
-    expect(html).toMatch(/href="https:\/\/linkedin\.com\/in\/romangrupskiy"[^>]*target="_blank"/);
+    expect(html).toMatch(
+      /href="https:\/\/www\.linkedin\.com\/in\/roman-grupskiy\/"[^>]*target="_blank"/,
+    );
     expect(html).toMatch(/href="\/Roman-Hrupskyi-Senior-Java-Engineer-CV\.pdf"[^>]*download/);
   });
 });

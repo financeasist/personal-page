@@ -1,8 +1,8 @@
 ---
-// Optional hero right column — the domains Roman has delivered in (US-11 /
-// AC-15). Renders straight from the `industries` content field; when the array
-// is absent or empty the component renders nothing and the hero closes up
-// (the caller also guards, so this is belt-and-braces).
+// Optional hero column — the domains Roman has delivered in (US-11 / AC-15).
+// Renders straight from the `industries` content field; when the array is
+// absent or empty the component renders nothing (the caller also guards).
+// Redesign (screens.pen): one line per domain, `domain — note`, muted.
 interface Props {
   industries?: { domain: string; note?: string }[];
 }
@@ -16,10 +16,7 @@ const { industries = [] } = Astro.props;
       <p class="industries__heading">Industries</p>
       <ul class="industries__list">
         {industries.map((it) => (
-          <li>
-            <span class="industries__domain">{it.domain}</span>
-            {it.note && <span class="industries__note">{it.note}</span>}
-          </li>
+          <li>{it.note ? `${it.domain} — ${it.note}` : it.domain}</li>
         ))}
       </ul>
     </section>
@@ -31,7 +28,7 @@ const { industries = [] } = Astro.props;
     margin: 0 0 0.5rem;
     font-size: 0.8rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.09em;
     text-transform: uppercase;
     color: var(--color-muted);
   }
@@ -40,18 +37,19 @@ const { industries = [] } = Astro.props;
     padding: 0;
     list-style: none;
     display: grid;
-    gap: 0.6rem;
+    gap: 0.5rem;
   }
   .industries__list li {
-    display: flex;
-    flex-direction: column;
-  }
-  .industries__domain {
-    font-weight: 600;
-    color: var(--color-navy);
-  }
-  .industries__note {
+    display: grid;
+    grid-template-columns: 0.9rem 1fr;
+    gap: 0.4rem;
     font-size: 1rem;
+    line-height: 1.4;
     color: var(--color-muted);
+  }
+  .industries__list li::before {
+    content: '·';
+    color: var(--color-navy);
+    font-weight: 700;
   }
 </style>

@@ -163,10 +163,10 @@ export function undersizeTopStackProfile(): ProfileInput {
   return p;
 }
 
-/** 9 `topStack` entries → INV-07 max (AC-06, E10). */
+/** 13 `topStack` entries → INV-07 max (AC-06, E10). */
 export function oversizeTopStackProfile(): ProfileInput {
   const p = validProfile();
-  p.topStack = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'];
+  p.topStack = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'];
   return p;
 }
 

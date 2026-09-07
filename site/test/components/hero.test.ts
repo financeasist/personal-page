@@ -56,9 +56,10 @@ describe('Hero — AC-01 essentials render from content', () => {
     expect(text).toContain(P.contact.location);
   });
 
-  it('every top-stack technology is listed', () => {
-    const chips = Array.from(doc.querySelectorAll('.hero__chips li')).map((li) => li.textContent);
-    for (const tech of P.topStack) expect(chips).toContain(tech);
+  it('every top-stack technology is listed in the top-stack line', () => {
+    const stack = doc.querySelector('.hero__stack')!;
+    const text = stack.textContent ?? '';
+    for (const tech of P.topStack) expect(text).toContain(tech);
   });
 
   it('headshot: astro:assets output, content alt text, eager + high priority', () => {

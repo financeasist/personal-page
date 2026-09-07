@@ -7,7 +7,7 @@
 // Layout-only: no copy, no data. `as` lets a caller pick the semantic element
 // (`section` default; `header` / `footer` for the chrome bars).
 interface Props {
-  tone?: 'surface' | 'canvas' | 'navy';
+  tone?: 'surface' | 'canvas' | 'canvas-sunken' | 'navy';
   as?: 'section' | 'header' | 'footer' | 'div';
   id?: string;
   class?: string;
@@ -19,6 +19,7 @@ const Tag = as;
 const TONE_CLASS: Record<NonNullable<Props['tone']>, string> = {
   surface: 'bg-surface text-ink',
   canvas: 'bg-canvas text-ink',
+  'canvas-sunken': 'bg-canvas-sunken text-ink',
   navy: 'bg-navy-dark text-white',
 };
 const toneClass = TONE_CLASS[tone];

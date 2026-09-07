@@ -93,7 +93,9 @@ export const profileObjectSchema = z.object({
   name: z.string().min(1),
   headline: z.string().min(1),
   tagline: z.string().min(1).max(300).optional(),
-  topStack: z.array(z.string().min(1)).min(4).max(8),
+  // Rendered as one middot-joined sentence in the hero (not chips), so the cap
+  // is generous — it only guards against an unbounded list.
+  topStack: z.array(z.string().min(1)).min(4).max(12),
   headshot,
   industries: z.array(industry).max(6).optional(),
   contact,

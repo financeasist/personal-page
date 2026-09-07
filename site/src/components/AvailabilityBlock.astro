@@ -16,70 +16,35 @@ const { status, location, noticePeriod, workAuthorization } = Astro.props;
 <section class="availability" aria-label="Availability">
   <p class="availability__heading">Availability</p>
   <p class="availability__status">{status}</p>
-  <dl class="availability__detail">
-    <div>
-      <dt>Location</dt>
-      <dd>{location}</dd>
-    </div>
-    {
-      noticePeriod && (
-        <div>
-          <dt>Notice period</dt>
-          <dd>{noticePeriod}</dd>
-        </div>
-      )
-    }
-    {
-      workAuthorization && (
-        <div>
-          <dt>Work authorisation</dt>
-          <dd>{workAuthorization}</dd>
-        </div>
-      )
-    }
-  </dl>
+  <p class="availability__line">{location}</p>
+  {noticePeriod && <p class="availability__line">Notice period: {noticePeriod}</p>}
+  {workAuthorization && <p class="availability__line">Work authorisation: {workAuthorization}</p>}
 </section>
 
 <style>
   .availability {
-    border: 1px solid color-mix(in srgb, var(--color-navy) 25%, transparent);
-    border-radius: 0.6rem;
-    padding: 1rem 1.25rem;
-    background: color-mix(in srgb, var(--color-navy) 4%, transparent);
-    max-width: 24rem;
+    border: 1px solid var(--color-line);
+    border-radius: 0.625rem;
+    padding: 1rem 1.1rem;
+    background: var(--color-raised);
   }
   .availability__heading {
-    margin: 0 0 0.25rem;
+    margin: 0 0 0.35rem;
     font-size: 0.8rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.09em;
     text-transform: uppercase;
     color: var(--color-muted);
   }
   .availability__status {
-    margin: 0 0 0.5rem;
-    font-size: 1.05rem;
+    margin: 0;
+    font-size: 1.02rem;
     font-weight: 600;
-    color: var(--color-navy);
+    color: var(--color-ink);
   }
-  .availability__detail {
-    margin: 0;
-    display: grid;
-    gap: 0.35rem;
-  }
-  .availability__detail div {
-    display: flex;
-    gap: 0.5rem;
+  .availability__line {
+    margin: 0.3rem 0 0;
     font-size: 1rem;
-  }
-  .availability__detail dt {
     color: var(--color-muted);
-  }
-  .availability__detail dt::after {
-    content: ':';
-  }
-  .availability__detail dd {
-    margin: 0;
-    font-weight: 500;
   }
 </style>

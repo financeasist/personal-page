@@ -1,11 +1,13 @@
 ---
-// Above-the-fold hero (US-01 / AC-01). Every essential renders straight from
-// the profile content: headshot, name (<h1>), headline, optional tagline,
-// AvailabilityBlock, top stack. Optional Industries column on the right.
+// Hero (US-01 / AC-01). Every essential renders straight from the profile
+// content: headshot, name (<h1>), headline, optional tagline, AvailabilityBlock,
+// Industries, top stack. The redesign (screens.pen SCR-01) is a centered intro
+// column above a two-column Availability / Industries block, then the top stack
+// as one line. The page flows naturally — the hero no longer forces the fold.
 //
 // The headshot is the LCP element — processed by `astro:assets` (modern format,
 // responsive sizes, explicit dimensions) and hinted eager + high priority
-// (sad.md §8, §11 — the raw ~1.9 MB PNG would blow the 500 KB budget).
+// (sad.md §8, §11 — the raw ~1.9 MB PNG would blow the budget).
 import { Image } from 'astro:assets';
 import AvailabilityBlock from './AvailabilityBlock.astro';
 import Band from './Band.astro';
@@ -37,159 +39,127 @@ const headshotImage = headshotEntry.default;
 const hasIndustries = Array.isArray(industries) && industries.length > 0;
 ---
 
-<Band tone="surface" class="hero">
-  <div class="hero__fill">
-  <div class:list={['hero__grid', hasIndustries && 'hero__grid--two']}>
-    <div class="hero__main">
-      <Image
-        class="hero__photo"
-        src={headshotImage}
-        alt={headshot.alt}
-        width={320}
-        height={400}
-        widths={[240, 320, 480]}
-        sizes="(min-width: 768px) 320px, 240px"
-        loading="eager"
-        fetchpriority="high"
-      />
-      <div class="hero__intro">
-        <h1 class="hero__name">{name}</h1>
-        <p class="hero__headline">{headline}</p>
-        {tagline && <p class="hero__tagline">{tagline}</p>}
-        <AvailabilityBlock
-          status={availability.status}
-          location={location}
-          noticePeriod={availability.noticePeriod}
-          workAuthorization={availability.workAuthorization}
-        />
-      </div>
-    </div>
+<Band tone="canvas" class="hero">
+  <div class="hero__intro">
+    <Image
+      class="hero__photo"
+      src={headshotImage}
+      alt={headshot.alt}
+      width={336}
+      height={336}
+      widths={[192, 288, 336]}
+      sizes="(min-width: 768px) 168px, 136px"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <h1 class="hero__name">{name}</h1>
+    <div class="hero__rule" aria-hidden="true"></div>
+    <p class="hero__headline">{headline}</p>
+    {tagline && <p class="hero__tagline">{tagline}</p>}
+  </div>
 
-    {
-      hasIndustries && (
-        <div class="hero__aside">
-          <Industries industries={industries} />
-        </div>
-      )
-    }
+  <div class:list={['hero__cols', hasIndustries && 'hero__cols--two']}>
+    <AvailabilityBlock
+      status={availability.status}
+      location={location}
+      noticePeriod={availability.noticePeriod}
+      workAuthorization={availability.workAuthorization}
+    />
+    {hasIndustries && <Industries industries={industries} />}
   </div>
 
   <section class="hero__stack" aria-label="Top stack">
-    <span class="hero__stack-label">Top stack</span>
-    <ul class="hero__chips">
-      {topStack.map((tech) => <li>{tech}</li>)}
-    </ul>
+    <p class="hero__stack-label">Top stack</p>
+    <p class="hero__stack-text">{topStack.join(' · ')}</p>
   </section>
-  </div>
 </Band>
 
 <style>
-  /* The hero fills the fold so the About section sits below it at load
-     (AC-14 "below the fold by design"). Band padding is subtracted. */
-  .hero__fill {
+  .hero__intro {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    min-height: calc(100dvh - 3.75rem - clamp(4rem, 12vw, 8rem));
-  }
-  .hero__grid {
-    display: grid;
-    gap: 2rem;
-  }
-  .hero__main {
-    display: flex;
-    gap: clamp(1rem, 4vw, 2rem);
-    align-items: flex-start;
-    flex-wrap: wrap;
+    align-items: center;
+    text-align: center;
   }
   .hero__photo {
-    width: clamp(9rem, 28vw, 12.5rem);
+    width: clamp(8.5rem, 20vw, 10.5rem);
     height: auto;
-    border-radius: 0.75rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
     object-fit: cover;
-    flex: none;
-  }
-  .hero__intro {
-    flex: 1 1 16rem;
-    min-width: 0;
+    border: 5px solid var(--color-surface);
+    box-shadow: 0 14px 34px -12px color-mix(in srgb, var(--color-navy-dark) 42%, transparent);
   }
   .hero__name {
-    margin: 0;
-    font-size: clamp(1.9rem, 5vw, 2.6rem);
-    line-height: 1.1;
-    color: var(--color-navy);
+    margin: 1.1rem 0 0;
+    font-size: clamp(1.6rem, 4.2vw, 2.15rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--color-navy-dark);
+  }
+  .hero__rule {
+    width: 150px;
+    max-width: 60%;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--color-navy);
+    margin: 0.85rem 0 0.95rem;
   }
   .hero__headline {
-    margin: 0.4rem 0 0;
-    font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+    margin: 0;
+    font-size: clamp(1.05rem, 2.2vw, 1.35rem);
     font-weight: 600;
-    color: var(--color-ink);
+    color: var(--color-muted);
   }
   .hero__tagline {
-    margin: 0.75rem 0 0;
-    font-size: 1rem;
-    color: var(--color-muted);
-    max-width: 44rem;
-  }
-  .hero__intro :global(.availability) {
-    margin-top: 1.25rem;
+    margin: 1rem 0 0;
+    font-style: italic;
+    font-size: clamp(1rem, 1.7vw, 1.18rem);
+    line-height: 1.55;
+    color: var(--color-ink);
+    max-width: 46rem;
   }
 
+  .hero__cols {
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+    display: grid;
+    gap: 1.5rem;
+  }
   .hero__stack {
-    margin-top: 1.75rem;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.5rem 0.75rem;
+    margin-top: 1.6rem;
   }
   .hero__stack-label {
+    margin: 0 0 0.4rem;
     font-size: 0.8rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.09em;
     text-transform: uppercase;
     color: var(--color-muted);
   }
-  .hero__chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
+  .hero__stack-text {
+    /* >= 16px — the top stack is an AC-01 essential, "all text legible"
+       (AC-08, spec §6 "body text >= 16px"). */
     margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .hero__chips li {
-    padding: 0.25rem 0.6rem;
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--color-navy) 8%, transparent);
-    color: var(--color-navy);
-    /* ≥ 16px — the top stack is an AC-01 essential, "all text legible" (AC-08,
-       spec §6 "body text ≥ 16px"). */
     font-size: 1rem;
-    font-weight: 500;
+    line-height: 1.7;
+    color: var(--color-ink);
   }
 
-  /* Laptop: two columns when there is an Industries aside. */
+  /* Laptop: Availability + Industries side by side, the block centered under
+     the intro. */
   @media (min-width: 768px) {
-    .hero__grid--two {
-      grid-template-columns: minmax(0, 1fr) minmax(12rem, 18rem);
+    .hero__cols {
+      max-width: 60rem;
+      margin-inline: auto;
+      gap: 3rem;
     }
-  }
-
-  /* Phone viewport: keep every AC-01 essential (incl. the top stack) above the
-     fold at 390×844 (spec.md §6 "Above-the-fold fit (binding)", AC-08). The
-     hero overflows the fold once the optional Industries list stacks into the
-     single column, so collapse it here — step 1 of the §6 drop order
-     (Industries → Tagline → top-stack truncates); essentials never drop. The
-     list is not an AC-01 essential (AC-15). Below the two-column breakpoint the
-     aside carries no layout weight anyway. */
-  @media (max-width: 767.98px) {
-    .hero__aside {
-      display: none;
+    .hero__cols--two {
+      grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+      align-items: start;
     }
-    /* Tighten the stack gap on the phone so the 16px chips (AC-08) still clear
-       the 390×844 fold with margin. */
     .hero__stack {
-      margin-top: 1.25rem;
+      max-width: 60rem;
+      margin-inline: auto;
     }
   }
 </style>

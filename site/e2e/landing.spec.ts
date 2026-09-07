@@ -9,50 +9,50 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/');
 });
 
-test('AC-01 — every above-the-fold essential is visible', async ({ page }) => {
+test('AC-01 — every hero essential renders from content', async ({ page }) => {
   await expect(page.locator('h1')).toHaveText('Roman Hrupskyi');
   await expect(page.getByText('Senior Java Engineer | Lead Backend Engineer').first()).toBeVisible();
   await expect(page.getByText('Open to Remote & Hybrid Opportunities')).toBeVisible();
   await expect(page.getByText('Krakow, Poland')).toBeVisible();
-  await expect(page.locator('.hero__chips li')).toHaveCount(8);
-  await expect(page.locator('img').first()).toBeVisible();
+  await expect(page.locator('.hero__photo')).toBeVisible();
   await expect(page.locator('[data-contact-channel="email"]').first()).toBeVisible();
   await expect(page.locator('[data-contact-channel="linkedin"]').first()).toBeVisible();
 
-  // AC-08 "all text is legible" / spec §6 "body text ≥ 16px" — the top-stack
-  // chips carry an AC-01 essential, so they are held to the body-text floor.
-  const chipFont = await page
-    .locator('.hero__chips li')
-    .first()
+  // The top stack is an AC-01 essential rendered as one line (screens.pen
+  // redesign — no longer chips). Every technology from the content is present…
+  const stack = page.locator('.hero__stack');
+  await expect(stack).toContainText('Java');
+  await expect(stack).toContainText('Kubernetes');
+  // …and AC-08 "all text is legible" / spec §6 "body text ≥ 16px" holds for it.
+  const stackFont = await page
+    .locator('.hero__stack-text')
     .evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
-  expect(chipFont).toBeGreaterThanOrEqual(16);
+  expect(stackFont).toBeGreaterThanOrEqual(16);
 });
 
-test('AC-01 / AC-08 — every above-the-fold essential sits within the fold, no scrolling', async ({
+test('AC-01 / AC-08 — the hero reads top-to-bottom with no horizontal scroll', async ({
   page,
 }, testInfo) => {
-  // `toBeVisible()` is true for an element rendered below the viewport, so the
-  // fold guarantee ("visible without scrolling at 1280×800 and 390×844",
-  // spec.md §6 "Above-the-fold fit (binding)") needs an explicit geometry check.
-  // The optional Industries list and Tagline are NOT essentials — when the hero
-  // would overflow the phone fold they collapse per the §6 drop order; only the
-  // AC-01 canonical essentials are asserted here.
-  const viewportHeight = page.viewportSize()!.height;
-  const essentials: Record<string, ReturnType<typeof page.locator>> = {
-    headshot: page.locator('.hero__photo'),
-    name: page.locator('h1'),
-    headline: page.locator('.hero__headline'),
-    'availability + location': page.locator('.availability'),
-    'top stack': page.locator('.hero__stack'),
-  };
-  for (const [label, locator] of Object.entries(essentials)) {
-    const box = await locator.boundingBox();
-    expect(box, `${label}: has a layout box`).not.toBeNull();
+  // The redesign (screens.pen) drops the binding "everything within the fold"
+  // constraint — the page is a natural vertical flow. What still holds: the
+  // essentials are on the page, in reading order, and the document never scrolls
+  // sideways at either reference viewport.
+  const order = ['.hero__photo', 'h1', '.hero__rule', '.hero__headline', '.hero__stack'];
+  let previousBottom = -1;
+  for (const selector of order) {
+    const box = await page.locator(selector).boundingBox();
+    expect(box, `${selector}: has a layout box`).not.toBeNull();
     expect(
-      Math.round(box!.y + box!.height),
-      `${label}: bottom edge within the ${viewportHeight}px fold at ${testInfo.project.name}`,
-    ).toBeLessThanOrEqual(viewportHeight);
+      box!.y,
+      `${selector} follows the previous essential at ${testInfo.project.name}`,
+    ).toBeGreaterThanOrEqual(previousBottom - 1);
+    previousBottom = box!.y + box!.height;
   }
+
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+  expect(overflow, `no horizontal scroll at ${testInfo.project.name}`).toBeLessThanOrEqual(0);
 });
 
 test('AC-02 — the email action hands off a pre-addressed mailto', async ({ page }) => {
@@ -151,13 +151,15 @@ test('AC-08 — header focus order is Name → LinkedIn → email → About → 
   expect(ids).toEqual(['name', 'linkedin', 'email', '#about', 'cv']);
 });
 
-test('AC-14 — About sits below the fold and reflows to one column ≥ 16px on phone', async ({
+test('AC-14 — About follows the hero and reflows to one column ≥ 16px on phone', async ({
   page,
 }, testInfo) => {
   const about = page.locator('#about');
-  const box = await about.boundingBox();
-  const viewportHeight = page.viewportSize()!.height;
-  expect(box!.y).toBeGreaterThanOrEqual(viewportHeight); // below the fold at load
+  const aboutBox = await about.boundingBox();
+  const heroBox = await page.locator('.hero__stack').boundingBox();
+  // The redesign drops "below the fold at load"; About still comes after the
+  // whole hero in the flow.
+  expect(aboutBox!.y).toBeGreaterThanOrEqual(heroBox!.y + heroBox!.height - 1);
 
   const bodyFontOk = await about.evaluate((el) => {
     const p = el.querySelector('.about__narrative p') as HTMLElement;

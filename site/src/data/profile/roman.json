@@ -6,32 +6,42 @@
     "src": "me.png",
     "alt": "Roman Hrupskyi"
   },
-  "topStack": ["Java", "Spring Boot", "Spring WebFlux", "Kafka", "PostgreSQL", "Redis", "Kubernetes", "Docker"],
+  "topStack": [
+    "Java",
+    "Spring ecosystem (Boot, Cloud, WebFlux, Data, Security)",
+    "Kafka",
+    "Postgres",
+    "Redis",
+    "Hazelcast",
+    "Kubernetes",
+    "GitLab",
+    "and more"
+  ],
   "industries": [
     { "domain": "iGaming", "note": "Remote Game Servers (RGS)" },
-    { "domain": "FinTech & E-commerce", "note": "AI-driven value-intelligence platform" },
-    { "domain": "Healthcare", "note": "Medical software for hospitals" },
-    { "domain": "Retail", "note": "Automated decision-intelligence systems" }
+    { "domain": "FinTech & E-commerce", "note": "Value Intelligence AI platform" },
+    { "domain": "Healthcare", "note": "medical software for hospitals" },
+    { "domain": "Retail", "note": "Automated Decision Intelligence systems" }
   ],
   "contact": {
     "phones": ["+38 063 199 08484", "+48 662 477 198"],
     "email": "roman.grupskyi@gmail.com",
     "location": "Krakow, Poland",
     "links": [
-      { "label": "LinkedIn", "url": "https://linkedin.com/in/romangrupskiy" }
+      { "label": "LinkedIn", "url": "https://www.linkedin.com/in/roman-grupskiy/" }
     ]
   },
   "availability": {
     "status": "Open to Remote & Hybrid Opportunities"
   },
   "about": {
-    "narrative": "Seasoned Java engineer with 9+ years designing and building scalable, high-performance business applications — backend development, microservices architecture, and technical leadership, with a track record of improving software quality, system performance, and engineering workflows.\n\nMy way of working is rooted in systems thinking — a holistic view of the big picture together with the ability to dive deep into the implementation detail of complex systems.\n\nA background in sales and project management gives me a product-focused perspective: aligning engineering effort with business goals and communicating with technical and non-technical stakeholders alike.\n\nI use AI coding assistants and LLM-based tools as productivity multipliers for development, debugging, refactoring, testing, and technical research, and I'm adopting agentic coding workflows.",
+    "narrative": "Seasoned Java professional with 9+ years designing and building scalable, high-performance business applications — backend development, microservices architecture, and technical leadership, with a track record of improving software quality, system performance, and engineering workflows.\n\nMy way of working is rooted in systems thinking — a holistic view of the big picture together with the ability to dive deep into the implementation details of complex systems.\n\nA background in sales and project management gives me a perspective on delivering business value through technology — aligning engineering with product goals and communicating with both technical and non-technical stakeholders.\n\nComfortable using AI coding assistants and LLM-based tools as productivity multipliers for development, debugging, refactoring, testing, and technical research.",
     "highlights": [
-      "Experience managing engineers",
-      "Projects spanning legacy systems to greenfield startups",
-      "Architectures from monolith to microservices",
-      "Teams from co-located to hundreds worldwide",
-      "Deep Java, relational-database and distributed-systems expertise"
+      "Experience managing engineers.",
+      "Worked on a variety of projects, from large legacy systems to early- and mid-stage startups.",
+      "Worked with architectures from large legacy monoliths to complex distributed systems of dozens of microservices.",
+      "Worked with teams from small co-located groups to large international teams with hundreds of members distributed worldwide.",
+      "Strong expertise in Java and its ecosystem, relational databases, and distributed systems."
     ]
   },
   "competencies": ["STUB — see docs/reference/cv-template-reference.pdf"],

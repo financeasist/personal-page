@@ -94,7 +94,7 @@ describe('profileSchema', () => {
       expect(failurePaths(malformedProfile('tagline'))).toContain('tagline');
     });
 
-    it('names topStack for more than 8 entries (E10)', () => {
+    it('names topStack for more than 12 entries (E10)', () => {
       expect(failurePaths(oversizeTopStackProfile())).toContain('topStack');
     });
 

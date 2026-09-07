@@ -1,8 +1,12 @@
 ---
-// The one below-the-fold section in v1 (US-10 / AC-14). Renders `about.narrative`
+// The one below-the-fold section in v1 (US-10). Renders `about.narrative`
 // (paragraphs split on blank lines) and `about.highlights` straight from the
-// profile content — NO hard-coded copy. Grey band, `id="about"` (the Header menu
-// "About me" item anchors here). Two columns on laptop, one on phone.
+// profile content — NO hard-coded copy. `id="about"` (the Header "About me"
+// item anchors here). Two columns on laptop, one on phone.
+//
+// Redesign (screens.pen): first narrative paragraph in ink, the rest muted;
+// the "See my LinkedIn profile" line sits at the foot of the Highlights column
+// with an arrow marker.
 //
 // Precondition: the build guarantees a non-empty narrative and >=1 highlight
 // (INV-09) — this component is never asked to render blank.
@@ -18,7 +22,7 @@ const { narrative, highlights, linkedInUrl } = Astro.props;
 const paragraphs = narrative.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
 ---
 
-<Section id="about" tone="canvas" heading="About me">
+<Section id="about" tone="canvas-sunken" heading="About me">
   <div class="about">
     <div class="about__narrative">
       {paragraphs.map((p) => <p>{p}</p>)}
@@ -30,9 +34,11 @@ const paragraphs = narrative.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean
       </ul>
       {
         linkedInUrl && (
-          <a class="about__link" href={linkedInUrl} target="_blank" rel="noopener">
-            See my LinkedIn profile
-          </a>
+          <p class="about__more">
+            <a class="about__link" href={linkedInUrl} target="_blank" rel="noopener">
+              See my LinkedIn profile for more details.
+            </a>
+          </p>
         )
       }
     </div>
@@ -42,42 +48,68 @@ const paragraphs = narrative.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean
 <style>
   .about {
     display: grid;
-    gap: 2rem;
-    max-width: 60rem;
+    gap: 2.25rem;
+    max-width: 62rem;
     margin-inline: auto;
     font-size: 1rem;
     line-height: 1.65;
   }
   .about__narrative p {
     margin: 0 0 1rem;
+    color: var(--color-ink);
   }
   .about__narrative p:last-child {
     margin-bottom: 0;
   }
   .about__highlights-heading {
-    margin: 0 0 0.5rem;
+    margin: 0 0 0.6rem;
     font-size: 0.8rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.09em;
     text-transform: uppercase;
     color: var(--color-muted);
   }
   .about__highlights ul {
     margin: 0;
-    padding-left: 1.1rem;
+    padding: 0;
+    list-style: none;
     display: grid;
-    gap: 0.4rem;
+    gap: 0.5rem;
+  }
+  .about__highlights li {
+    display: grid;
+    grid-template-columns: 0.9rem 1fr;
+    gap: 0.45rem;
+    color: var(--color-muted);
+  }
+  .about__highlights li::before {
+    content: '·';
+    color: var(--color-navy);
+    font-weight: 700;
+  }
+  .about__more {
+    margin: 0.85rem 0 0;
+    display: grid;
+    grid-template-columns: 0.9rem 1fr;
+    gap: 0.45rem;
+  }
+  .about__more::before {
+    content: '\2192';
+    color: var(--color-navy);
+    font-weight: 700;
   }
   .about__link {
-    display: inline-block;
-    margin-top: 1rem;
     color: var(--color-navy);
     font-weight: 600;
+    text-decoration: none;
+  }
+  .about__link:hover {
+    text-decoration: underline;
   }
 
   @media (min-width: 768px) {
     .about {
-      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
       gap: 3rem;
     }
   }

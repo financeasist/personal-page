@@ -21,7 +21,13 @@ updated_at: "2026-09-07"
      Contact actions are now THREE (email · LinkedIn · Download CV), no phone.
      2nd pass 2026-09-07: divergences D-1/D-3/D-7/D-10 all RATIFIED (spec §1/§4/§5 + CONTEXT.md
      + sad.md + ux-flows.md re-synced). Contact actions in a persistent sticky Header; optional
-     industries list (US-11/AC-15); tagline absorbs the old positioning block. -->
+     industries list (US-11/AC-15); tagline absorbs the old positioning block.
+     Template redesign 2026-09-07: centered hero column (circular headshot · name + navy rule ·
+     headline · tagline · Availability+Industries two-col · top stack as one middot line — no
+     chips); natural top-to-bottom flow (the binding above-the-fold-fit constraint is withdrawn —
+     spec §1 "Template redesign" note); Industries renders at every width; Header gains a Contact
+     (mailto) item + CSS-only scroll-shrink. Live mockups: screens.pen frames s7Hhu (laptop hero),
+     A3vORR (laptop About), XKUfO (phone). State-row wireframes below not yet re-synced. -->
 
 ## Source
 

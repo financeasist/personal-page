@@ -1,14 +1,16 @@
 ---
 // Persistent sticky header — the whole of US-02. CSS-only (no client JS): the
-// bar is `position: sticky` and the phone menu is a native <details> disclosure
-// (AC-08). The three contact controls (email, LinkedIn, Download CV) carry
-// their value ONLY in `href` — never as visible text (AC-07, AC-10, ADR-0006) —
-// and a stable `data-*` hook for the roadmap-step-8 beacon.
+// bar is `position: sticky`, the phone menu is a native <details> disclosure
+// (AC-08), and the scroll-shrink is a CSS scroll-driven animation (no <script>,
+// degrades to a normal sticky bar where unsupported).
 //
-// Focus / DOM order: Name → LinkedIn → email → About → Download CV
-// (screens.md SCR-01 "keyboard focus"). "Contact" nav item from the .pen frame
-// is omitted — there is no #contact section in v1 (spec §3 non-goal); email is
-// the contact action.
+// The contact controls (LinkedIn, email/Contact, Download CV) carry their value
+// ONLY in `href` — never as visible text (AC-07, AC-10, ADR-0006) — plus a
+// stable `data-*` hook for the roadmap-step-8 beacon.
+//
+// Focus / DOM order: Name → LinkedIn → email → About → Download CV → Contact
+// (screens.pen SCR-01 "keyboard focus"). "Contact" is a mailto: — the same
+// channel as the email icon, surfaced as a word on the redesigned header.
 import { cvFilename } from '../lib/cv-filename.js';
 import { hasLinkedInLink, type LinkLike } from '../lib/content-checks';
 
@@ -36,7 +38,9 @@ const mailto = `mailto:${email}`;
   <div class="site-header__bar">
     <a class="site-header__name" href={base}>{name}</a>
 
-    <nav class="site-header__actions" aria-label="Contact Roman and page navigation">
+    <span class="site-header__divider" aria-hidden="true"></span>
+
+    <div class="site-header__icons">
       <a
         class="site-header__action site-header__action--icon"
         href={linkedIn.url}
@@ -68,7 +72,9 @@ const mailto = `mailto:${email}`;
         </svg>
         <span class="site-header__label">Email</span>
       </a>
+    </div>
 
+    <nav class="site-header__actions" aria-label="Contact Roman and page navigation">
       <a class="site-header__action site-header__action--inline" href="#about">About me</a>
 
       <a
@@ -78,6 +84,14 @@ const mailto = `mailto:${email}`;
         data-cv-download
       >
         Download CV
+      </a>
+
+      <a
+        class="site-header__action site-header__action--inline site-header__action--strong"
+        href={mailto}
+        data-contact-channel="email"
+      >
+        Contact
       </a>
     </nav>
 
@@ -90,6 +104,7 @@ const mailto = `mailto:${email}`;
       <div class="site-header__menu-panel">
         <a class="site-header__menu-item" href="#about">About me</a>
         <a class="site-header__menu-item" href={cvHref} download data-cv-download>Download CV</a>
+        <a class="site-header__menu-item" href={mailto} data-contact-channel="email">Contact</a>
       </div>
     </details>
   </div>
@@ -103,29 +118,42 @@ const mailto = `mailto:${email}`;
     width: 100%;
     background: var(--color-navy-dark);
     color: #fff;
+    border-bottom: 1px solid color-mix(in srgb, #fff 8%, transparent);
   }
   .site-header__bar {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.35rem;
     max-width: 72rem;
     margin-inline: auto;
-    padding: 0.5rem clamp(1rem, 5vw, 2.5rem);
+    padding: 0.55rem clamp(1rem, 5vw, 2.5rem);
   }
   .site-header__name {
-    margin-right: auto;
     color: #fff;
-    font-weight: 700;
+    font-weight: 800;
     text-decoration: none;
     font-size: 1.05rem;
+    letter-spacing: -0.01em;
     min-height: 44px;
     display: inline-flex;
     align-items: center;
   }
-  .site-header__actions {
+  .site-header__divider {
+    width: 1px;
+    height: 18px;
+    background: #3d4b66;
+    margin-inline: 0.5rem 0.1rem;
+    flex: none;
+  }
+  .site-header__icons {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+  }
+  .site-header__actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 2.5vw, 1.6rem);
   }
   .site-header__action {
     display: inline-flex;
@@ -134,15 +162,25 @@ const mailto = `mailto:${email}`;
     gap: 0.4rem;
     min-height: 44px;
     min-width: 44px;
-    padding-inline: 0.6rem;
+    padding-inline: 0.5rem;
     border-radius: 0.4rem;
-    color: #fff;
+    color: #c9d4e6;
     text-decoration: none;
     font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
+  }
+  .site-header__action--icon {
+    color: #fff;
+    padding-inline: 0.35rem;
+  }
+  .site-header__action--strong {
+    color: #fff;
+    font-weight: 700;
   }
   .site-header__action:hover {
     background: rgba(255, 255, 255, 0.12);
+    color: #fff;
   }
   .site-header__action:focus-visible {
     outline: 2px solid #fff;
@@ -193,8 +231,8 @@ const mailto = `mailto:${email}`;
     outline-offset: -2px;
   }
 
-  /* Laptop (>=768px): show every action inline, hide the disclosure menu and
-     the icon labels stay visible. */
+  /* Laptop (>=768px): every action inline, disclosure menu hidden, icon labels
+     visible. */
   @media (min-width: 768px) {
     .site-header__menu {
       display: none;
@@ -208,10 +246,20 @@ const mailto = `mailto:${email}`;
     }
   }
 
-  /* Phone (<768px): icons only for LinkedIn/email, inline About/Download CV move
-     into the <details> menu. */
+  /* Phone (<768px): name left; LinkedIn + email + burger on the right; the
+     inline About / Download CV / Contact move into the <details> menu. */
   @media (max-width: 767.98px) {
-    .site-header__action--inline {
+    .site-header__divider {
+      display: none;
+    }
+    .site-header__icons {
+      order: 2;
+      margin-left: auto;
+    }
+    .site-header__menu {
+      order: 3;
+    }
+    .site-header__actions {
       display: none;
     }
     .site-header__label {
@@ -224,6 +272,46 @@ const mailto = `mailto:${email}`;
       clip: rect(0 0 0 0);
       white-space: nowrap;
       border: 0;
+    }
+  }
+
+  /* Scroll-shrink: as the page scrolls past the fold the bar tightens and lifts
+     off the content. Pure CSS scroll-driven animation — no client JS. Browsers
+     without support (or a reduced-motion preference) keep the full-size sticky
+     bar, which is the correct fallback. Tap targets stay >= 44px throughout. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+      .site-header {
+        animation: site-header-lift linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 24px 140px;
+      }
+      .site-header__bar {
+        animation: site-header-tighten linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 24px 140px;
+      }
+      .site-header__name {
+        animation: site-header-name linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 24px 140px;
+      }
+      @keyframes site-header-lift {
+        to {
+          box-shadow: 0 6px 20px rgba(10, 15, 26, 0.32);
+        }
+      }
+      @keyframes site-header-tighten {
+        to {
+          padding-top: 0.18rem;
+          padding-bottom: 0.18rem;
+        }
+      }
+      @keyframes site-header-name {
+        to {
+          font-size: 0.95rem;
+        }
+      }
     }
   }
 </style>

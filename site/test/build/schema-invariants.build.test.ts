@@ -41,7 +41,7 @@ describe('astro build — content invariants', () => {
     expect(b.stderr).toMatch(/about\.highlights|highlights/);
   });
 
-  it('fails and names topStack for more than 8 entries (AC-06)', () => {
+  it('fails and names topStack for more than 12 entries (AC-06)', () => {
     const b = buildFixture({ profile: oversizeTopStackProfile() });
     expect(b.ok).toBe(false);
     expect(b.stderr).toMatch(/topStack/);
