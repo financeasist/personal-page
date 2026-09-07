@@ -19,11 +19,13 @@ The trigger is immediate: Roman is interviewing this month and wants the link li
 
 The roadmap sized step 3 as **L**; it was re-classified **M** at spec time, then **S** on 2026-09-07 (`.size` → `S`; `.route` kept at `standard` — the SAD and ADRs already exist) when the below-the-fold depth was cut from v1 (see "Scope narrowing" below). Rationale: no API, no migration, no backend, no breaking change; the scaffold already established the component and styling conventions; and v1 is now an above-the-fold hero plus its contact actions and one short About section — seven user stories (US-01/02/06/10 Recruiter-facing, US-05 cross-context, US-07/08 build-time; US-03 phone removed, US-04/US-09 deferred to v2), two page sections. `ux-flows` and `screens` already ran against the M-size spec and need a re-sync pass (drop the cut flows/screens, drop the phone-chooser, add the About section).
 
-The committed approach is one static landing page rendered at build time entirely from the single typed **Profile content** entry. **v1 is the above-the-fold scan plus one short About section below it** — the deeper below-the-fold depth (experience timeline, selected-work) is cut to v2 (see "Scope narrowing" below). The **above-the-fold scan** carries Roman's headshot, his name, his **headline** (the pipe-separated positioning line — currently "Senior Java Engineer | Lead Backend Engineer" — which is also the source for the CV filename) with an optional one-line **tagline** below it and an optional short **positioning block** (a two- to three-sentence paragraph, length-capped so the above-the-fold fit still holds), the **Availability block** (availability status carrying the remote-work / relocation stance, location, notice period, optional work authorisation), his **top stack** (a curated list of four to eight technologies chosen in the Profile content), and three **Contact actions** — email, LinkedIn, and Download CV, all three mandatory. Below the fold sits the **About section** — a short prose `narrative` (reconciled from `docs/reference/linkedin-about.md`) and a `highlights` bullet list (Roman's own text) — both required Profile fields. Each contact action is a plain link that opens its channel directly and works with no JavaScript; a later inline script (roadmap step 8) adds fire-and-forget click beacons that never block the action — this confirms roadmap decision D8 (plain link + inline-script beacon, not a redirect through the tracker). **On the landing page, Roman's email address and LinkedIn URL are never rendered as visible text** — a Recruiter reaches him by activating a labelled control, not by reading and copying a string. The values live only in the controls' link attributes so the controls can function (resolved in §8 / ADR-0006: link attributes only, no visible text, no script, in v1). **The phone is not on the landing page at all in v1** (removed 2026-09-07): `contact.phones` stays in the Profile content but renders only on the CV route. This exposure rule is scoped to the landing page only: the **CV PDF** **does show the contact details as visible text** — that is the point of a CV, and the Recruiter obtains it by a deliberate download. Same source of truth (the Profile content), two exposure rules.
+The committed approach is one static landing page rendered at build time entirely from the single typed **Profile content** entry. **v1 is the above-the-fold scan plus one short About section below it** — the deeper below-the-fold depth (experience timeline, selected-work) is cut to v2 (see "Scope narrowing" below). The **above-the-fold scan** carries Roman's headshot, his name, his **headline** (the pipe-separated positioning line — currently "Senior Java Engineer | Lead Backend Engineer" — which is also the source for the CV filename) with an optional short **tagline** below it (a sentence or two, length-capped at ~300 characters so the above-the-fold fit still holds — this absorbs what an earlier draft split into a separate "positioning block"), the **Availability block** (availability status carrying the remote-work / relocation stance, location, notice period, optional work authorisation), his **top stack** (a curated list of four to eight technologies chosen in the Profile content), an optional **Industries list** (a short hero-column list of the domains he's delivered in — iGaming, fintech, healthcare, retail), and three **Contact actions** — email, LinkedIn, and Download CV, all three mandatory — presented in a **persistent header** at the top of the page (sticky, CSS-only). On the phone viewport the header condenses to Roman's name, the email and LinkedIn actions as icon controls, and a native-disclosure (`<details>`, no JavaScript) menu holding Download CV and an in-page About link. Below the fold sits the **About section** — a short prose `narrative` (reconciled from `docs/reference/linkedin-about.md`) and a `highlights` bullet list (Roman's own text) — both required Profile fields. Each contact action is a plain link that opens its channel directly and works with no JavaScript; a later inline script (roadmap step 8) adds fire-and-forget click beacons that never block the action — this confirms roadmap decision D8 (plain link + inline-script beacon, not a redirect through the tracker). **On the landing page, Roman's email address and LinkedIn URL are never rendered as visible text** — a Recruiter reaches him by activating a labelled control, not by reading and copying a string. The values live only in the controls' link attributes so the controls can function (resolved in §8 / ADR-0006: link attributes only, no visible text, no script, in v1). **The phone is not on the landing page at all in v1** (removed 2026-09-07): `contact.phones` stays in the Profile content but renders only on the CV route. This exposure rule is scoped to the landing page only: the **CV PDF** **does show the contact details as visible text** — that is the point of a CV, and the Recruiter obtains it by a deliberate download. Same source of truth (the Profile content), two exposure rules.
 
 **CV delivery in v1 is a committed static PDF, not a generated one** (decided 2026-09-07 — reverses the build-time generation ADR-0004 established for step 4). The Download-CV control points at a hand-committed PDF under `site/public/` (the reconciled "Classic" variant), named through the shared filename helper. Build-time generation of `/cv` (roadmap step 4, `cv.astro` print route) moves to the next version. **This is accepted v1 debt:** a committed PDF can drift from the Profile content the page renders from — exactly the "two divergent CVs" problem in the first paragraph — so v1 adds a manual parity check at each release (page vs committed CV: surname, headline, dates) and a revisit trigger to generation. A missing committed PDF fails the build (postbuild assertion → "file exists"). **This decision needs its own ADR (supersedes/amends ADR-0004) and a `CLAUDE.md` edit** — both are follow-ups outside this spec (see §8).
 
-This feature ships zero client JavaScript; the click-tracking beacon is roadmap step 8. Hand-rolled hero, section, contact-actions, availability-block, and about components (SAD §5) become the site's first shared primitives.
+This feature ships zero client JavaScript (the sticky header and the mobile disclosure menu are CSS-only); the click-tracking beacon is roadmap step 8. Hand-rolled header, footer, hero, section, contact-actions, availability-block, industries, and about components (SAD §5) become the site's first shared primitives.
+
+**Layout decisions ratified 2026-09-07** (came out of the Pencil iteration, `screens.md` § Divergence D-1/D-3/D-7/D-10): the three contact actions live in a **persistent sticky header**, not a hero block (D-1); the page has header + footer chrome and CSS-only in-page `#about` anchoring, which does not make it a multi-route app (D-3); the hero's right column is an optional **Industries list** backed by a new optional `industries` Profile field (D-7); and the **tagline absorbs the old "positioning block"** — one optional field, a sentence or two, ~300-char cap, no separate `positioning` field (D-10).
 
 Content is derived from `docs/reference/` (the CV template, the "Classic" variant, the LinkedIn "About", and the `me.png` headshot), reconciled into the Profile content entry. The canonical reconciliation (roadmap step 2) is **confirmed by Roman on 2026-09-06**: surname → **Hrupskyi** (email stays `roman.grupskyi@gmail.com`); experience → **"9+ years"**; headline → **"Senior Java Engineer | Lead Backend Engineer"** (the committed CV text is reconciled to match). The experience timeline, the selected-work section, and the pre-2017 "earlier background" line are all v2 (see "Scope narrowing"), so the exact employment date ranges are no longer a v1 blocker — they move to §8 as a v2 item.
 
@@ -44,7 +46,7 @@ Roadmap step 3's scope is amended to match; nothing above the fold is dropped. T
 ## 2. Goals
 
 - A Recruiter can state Roman's seniority, stack, location, and availability from the above-the-fold scan alone, without scrolling.
-- A Recruiter can reach Roman through any primary channel — email, LinkedIn, or CV — from the top of the page in one tap, on a phone or a laptop.
+- A Recruiter can reach Roman through any primary channel — email, LinkedIn, or CV — from a persistent header that stays in reach as they scroll: one tap on a laptop; on a phone, email and LinkedIn are one tap and Download CV is one tap inside the header menu.
 - A Recruiter who wants a fuller sense of Roman before reaching out can read a short About section (his own narrative + highlights) one scroll below the fold.
 - The page reflects the same reconciled professional history as the committed CV — surname, headline, and dates match at each release (a manual parity check in v1; structurally enforced once the CV is generated from the Profile content, next version).
 
@@ -69,8 +71,8 @@ Roadmap step 3's scope is amended to match; nothing above the fold is dropped. T
 ### US-02: Reach Roman in one tap
 
 **As a** Recruiter
-**I want** email, LinkedIn, and CV download as immediate actions at the top of the page
-**So that** I can contact him through my preferred channel without hunting.
+**I want** email, LinkedIn, and CV download as immediate actions in a persistent header at the top of the page
+**So that** I can contact him through my preferred channel without hunting, and the actions stay in reach as I scroll.
 
 ### US-03: Choose which number to call — REMOVED FROM v1 (not deferred)
 
@@ -126,18 +128,26 @@ _Cut from v1 on 2026-09-07 (scope narrowing, §1). Selected-work is v2. AC-11 an
 **I want** a short About section one scroll below the fold — a few sentences of narrative plus a handful of highlights
 **So that** I get a fuller sense of his focus and strengths in his own words before I decide to reach out.
 
+### US-11: See the domains he has worked in
+
+**As a** Recruiter
+**I want** a short list of the industries Roman has delivered in, in the hero
+**So that** I can judge domain fit at a glance alongside his stack.
+
+_Added 2026-09-07 (ratified divergence D-7). Backed by an **optional** `industries` Profile field — when it is absent the hero simply renders without that column; it is not an above-the-fold essential and never fails the build._
+
 ## 5. Acceptance criteria
 
 ### AC-01 (US-01) — happy path
 
 **Given** a Recruiter opens the landing page at either reference viewport (1280×800 laptop or 390×844 phone, see §6)
 **When** the page finishes loading
-**Then** without scrolling, the Recruiter sees every **above-the-fold essential**: Roman's headshot, his name, his headline, his current availability status (carrying the remote-work / relocation stance), his location, his top stack (four to eight technologies), and the three contact actions (email, LinkedIn, Download CV). This is the same list AC-05 enforces at build time — the render AC and the build gate point at one canonical set. _(The About section is below the fold — not an above-the-fold essential; it is covered by AC-14.)_
+**Then** without scrolling, the Recruiter sees every **above-the-fold essential**: Roman's headshot, his name, his headline, his current availability status (carrying the remote-work / relocation stance), his location, his top stack (four to eight technologies), and the three contact actions (email, LinkedIn, Download CV) — the contact actions rendered in the persistent header (on the phone viewport, email and LinkedIn as icon controls and Download CV inside the header menu, per AC-08). This is the same list AC-05 enforces at build time — the render AC and the build gate point at one canonical set. _(The About section is below the fold — not an above-the-fold essential; it is covered by AC-14. The optional Industries list and Tagline are hero content but not essentials — absent is valid.)_
 
 ### AC-02 (US-02) — happy path
 
-**Given** a Recruiter is viewing the top of the landing page
-**When** the Recruiter activates the email action
+**Given** a Recruiter is viewing the landing page (the header is persistent, so this holds at any scroll position)
+**When** the Recruiter activates the email action — a header icon control on the phone viewport, a header control on the laptop viewport
 **Then** their mail client opens a new message already addressed to Roman, with no further steps.
 
 ### AC-03 (US-03) — WITHDRAWN (removed from v1, not deferred)
@@ -164,7 +174,7 @@ _The "CV channel" has no Profile-content field of its own: it is satisfied when 
 **When** Roman builds or commits
 **Then** the build stops and reports which field is invalid and why, and nothing is published until it is corrected.
 
-_The optional Tagline and Positioning block are exempt: absent is valid; present-but-empty is not (an empty string fails as a malformed value). The Positioning block, when present, is capped at ~280 characters._
+_The optional Tagline and the optional Industries list are exempt: absent is valid; present-but-empty is not (an empty `tagline` string, or an `industries` entry with an empty `domain`, fails as a malformed value). The Tagline, when present, is capped at ~300 characters; `industries` at 6 entries._
 
 ### AC-07 (US-01) — authorization (need-to-know exposure)
 
@@ -176,7 +186,7 @@ _The optional Tagline and Positioning block are exempt: absent is valid; present
 
 **Given** a Recruiter opens the page at the reference phone viewport (390×844)
 **When** the page loads
-**Then** every above-the-fold essential (AC-01 list) is visible without scrolling, all text is legible, every contact action is a full tap target (≥44×44 px), and there is no horizontal scrolling. At the narrower 360 px width only the no-horizontal-scroll guarantee is binding — essentials may reflow below the fold there (see §6 for the fold-fit viewports and the drop order when the mobile hero overflows).
+**Then** every above-the-fold essential (AC-01 list) is visible without scrolling, all text is legible, and there is no horizontal scrolling. The header condenses to Roman's name, the email and LinkedIn actions as icon controls, and a menu control; the email and LinkedIn icon controls, the menu control, and every item the menu discloses (Download CV, an in-page About link) are each a full tap target (≥44×44 px); the menu is a **native disclosure** (`<details>` / `<summary>`, no JavaScript). At the narrower 360 px width only the no-horizontal-scroll guarantee is binding — essentials may reflow below the fold there (see §6 for the fold-fit viewports and the drop order when the mobile hero overflows).
 
 ### AC-09 (US-04) — WITHDRAWN (deferred to v2)
 
@@ -198,8 +208,8 @@ _Withdrawn 2026-09-07 with US-09. The placeholder-detection rule (was §8) moves
 
 ### AC-13 (US-02) — happy path
 
-**Given** a Recruiter is viewing the contact actions at the top of the page
-**When** the Recruiter activates the LinkedIn action or the Download-CV action
+**Given** a Recruiter is viewing the header contact actions
+**When** the Recruiter activates the LinkedIn action or the Download-CV action (on the phone viewport, Download CV is inside the header menu — one tap to open the menu, one to activate)
 **Then** LinkedIn opens Roman's profile in a new browser tab with the landing page left open, and Download CV saves the named PDF to the Recruiter's device as a file download rather than opening it inline.
 
 ### AC-14 (US-10) — happy path
@@ -210,6 +220,14 @@ _Withdrawn 2026-09-07 with US-09. The placeholder-detection rule (was §8) moves
 
 _The About section is below the fold by design — it is not part of the AC-01 / AC-08 above-the-fold guarantee. Both `about.narrative` and a non-empty `about.highlights` are build-required (AC-05); an empty narrative string or an empty highlights list fails the build (AC-06)._
 
+### AC-15 (US-11) — content-driven, optional
+
+**Given** the Profile content carries an `industries` list (one to six entries, each a `domain` and an optional `note`) **or** omits it entirely
+**When** the hero renders
+**Then** if the list is present the hero shows it as a short column straight from the Profile content (no hard-coded copy), reflowing below the availability block on the phone viewport; if the list is absent the hero renders without that column and the build still succeeds. An `industries` entry with an empty `domain`, or more than six entries, fails the build with a message naming the field (AC-06).
+
+_`industries` is not an above-the-fold essential — it is not in the AC-01 / AC-05 canonical list and never blocks a build by being absent._
+
 ## 6. Non-functional requirements
 
 | Aspect | Target | Measurement |
@@ -219,7 +237,7 @@ _The About section is below the fold by design — it is not part of the AC-01 /
 | Client JavaScript shipped by this feature | 0 KB | build output inspection |
 | Accessibility | Lighthouse Accessibility ≥ 95; every interactive element keyboard-reachable and operable | Lighthouse mobile audit + manual keyboard pass |
 | Above-the-fold fit (binding) | every above-the-fold essential (AC-01 list) visible with no scrolling at **1280×800** (reference laptop) and **390×844** (reference phone) | manual check at both viewports pre-launch |
-| Above-the-fold fit (narrow) | at 360 px width the essentials may reflow below the fold; only "no horizontal scroll" is guaranteed. When the mobile hero overflows the fold, optional elements are dropped / collapsed in this order: **1. Positioning block → 2. Tagline → 3. top-stack wraps and truncates toward its 8-item cap.** The essentials themselves never drop. | manual check at 360 px pre-launch |
+| Above-the-fold fit (narrow) | at 360 px width the essentials may reflow below the fold; only "no horizontal scroll" is guaranteed. When the mobile hero overflows the fold, optional elements are dropped / collapsed in this order: **1. Industries list → 2. Tagline → 3. top-stack wraps and truncates toward its 8-item cap.** The essentials themselves never drop. | manual check at 360 px pre-launch |
 | Readability & hit area | body text ≥ 16 px; every interactive target ≥ 44×44 px (WCAG 2.5.8) | manual audit + Lighthouse |
 | Supported viewports | no horizontal scroll at 360, 768, 1280, and 1920 px width | manual responsive check pre-launch |
 | Content completeness enforced at build | 100% of missing / malformed required fields fail the build | `astro check` + content-collection schema validation in CI |
@@ -256,17 +274,24 @@ _The About section is below the fold by design — it is not part of the AC-01 /
 
 - [x] **ADR for the committed-static-CV decision.** v1 ships a hand-committed CV PDF and defers build-time `/cv` generation — this supersedes/amends **ADR-0004** (site is the single source of truth, CV generated at build). Write the ADR (Accepted), link it from ADR-0004, and record the revisit trigger (move to generation with roadmap step 4 / next version). Default now: title "CV delivery is a committed static PDF in v1"; consequences section carries the drift risk and the manual-parity mitigation. — owner: Roman + design, due: before sdd:tasks (via `/sdd:decide-adr personal-landing`). **Done 2026-09-07: `adr/0008-cv-delivery-is-a-committed-static-pdf-in-v1.md` (Accepted); ADR-0004 carries a v1-exception note + back-link.**
 - [x] **`CLAUDE.md` edit.** The `## site` section states "CV PDF is generated, never committed" and describes the `postbuild` generation step as current. Reword to: v1 ships a committed static PDF under `site/public/`; generation returns with roadmap step 4. — owner: Roman, due: with the ADR above. **Done 2026-09-07: `## site` now reads "CV PDF is committed."**
-- [ ] **Re-sync `ux-flows.md` and `screens.md`** to the current scope: drop the US-04 / US-09 flows and the timeline/projects screens; **drop the phone-chooser flow + screen** (US-03 / AC-03 removed); **add the About flow + screen** (US-10 / AC-14); contact actions are now three. `ux-flows.md` done 2026-09-07; `screens.md` still pending. — owner: whoever runs the next pipeline stage, due: before sdd:tasks
-- [ ] **Re-sync `sad.md` and `data-model.md`** to the same scope: `sad.md` §5 building blocks + §6 (drop Flow 3 phone-chooser, drop Flow 4 depth sections, add an About render path, drop build-time PDF generation per ADR-0008), and `data-model.md` (add required `about.narrative` + `about.highlights`; note `contact.phones` is CV-route-only). — owner: design, due: before sdd:tasks
+- [x] **Re-sync `ux-flows.md` and `screens.md`** to the current scope: drop the US-04 / US-09 flows and the timeline/projects screens; drop the phone-chooser flow + screen (US-03 / AC-03 removed); add the About flow + screen (US-10 / AC-14); contact actions are now three. **Done 2026-09-07: `ux-flows.md` (b75fc9f), `screens.md` (0fbb877).**
+- [x] **Re-sync `sad.md` and `data-model.md`** to the same scope: `sad.md` §5 building blocks + §6 + §8 crosscutting + §10/§11 + glossary; `data-model.md` (required `about.narrative` + `about.highlights`; `contact.phones` CV-route-only; dropped v2 fields). **Done 2026-09-07: `data-model.md` (0fbb877), `sad.md` §6 (9930320), `sad.md` §5/§8/§10/§11/§12 (this pass).**
 - [ ] **Release parity check** (accepted v1 debt): before each launch and after each content edit, confirm the live page and the committed CV agree on surname, headline, and dates. Revisit trigger: retire this check when the CV is generated from the Profile content. — owner: Roman, due: ongoing from first launch
 
 ### Resolved
 
+- [x] **Four Pencil-iteration divergences ratified (D-1 / D-3 / D-7 / D-10).** **Resolved 2026-09-07 (Roman, in conversation):**
+  - **D-1** — the three contact actions live in a **persistent sticky header** (CSS-only), not a hero block. Still above the fold, still one tap on a laptop.
+  - **D-3** — the page has **header + footer chrome** and a CSS-only in-page `#about` anchor; this does not make it a multi-route app. `sad.md` §5 gains `Header` / `Footer`.
+  - **D-7** — the hero's right column is an optional **Industries list**, backed by a **new optional `industries` Profile field** (US-11 / AC-15). Absent → no column, no build failure.
+  - **D-10** — the **tagline absorbs the old "positioning block"**: one optional field, a sentence or two, **~300-char cap**; the separate `positioning` field is **removed** (it was never in the live schema).
+  - **Mobile** keeps the drawn hamburger: the header condenses to name + email/LinkedIn icon controls + a native-`<details>` menu holding Download CV + About (AC-08). Download CV is two taps on mobile — accepted.
+  §1, §2, §4 (US-02 reworded, US-11 added), §5 (AC-01/02/06/08/13 reworded, AC-15 added), §6 (drop order) updated. `CONTEXT.md`, `data-model.md`, `sad.md`, `screens.md` re-synced.
 - [x] Should the contact values (phone, email) be assembled by a small script on click so they are absent from the delivered HTML entirely, or is keeping them in the controls' link attributes (not visible text) acceptable? **Resolved 2026-09-06 by ADR-0006:** link attributes only — no visible text (AC-07, AC-10), no script, in v1. Script-assembled-on-click is the documented fallback if scraping abuse appears (SAD §11 accepted-debt revisit trigger).
 - [x] Above-the-fold essentials — one canonical list for AC-01 and AC-05, and a `topStack` minimum. **Resolved 2026-09-07:** the two ACs point at one list (name, headshot + alt, headline, availability status, location, top stack 4–8, and the contact channels); `topStack` is min 4 / max 8, build-enforced. **Amended later 2026-09-07:** contact channels went from four to three (phone removed — see below).
 - [x] **Phone removed from the landing page; About section added.** **Resolved 2026-09-07 (Roman):** the v1 landing page has no phone control and no line chooser — US-03 / AC-03 withdrawn, `contact.phones` renders only on the CV route; contact actions are now email / LinkedIn / CV. In its place, a short **About section** below the fold (US-10 / AC-14) — required `about.narrative` + `about.highlights` Profile fields. §1 (Context + Scope narrowing), §2, §3, §4, §5 (AC-01/03/05/07/10/14), §6.1, §7 updated. `CONTEXT.md` glossary updated. Downstream re-syncs tracked in the follow-ups above.
 - [x] Is a green build inside this feature's Definition of Done given §3 excludes CV work? **Resolved 2026-09-07:** yes — v1 ships a committed static PDF so the build is green here; `cv.astro` generation is deferred (see follow-ups above).
-- [x] "Positioning line" in AC-06 / US-08 vs the optional Positioning block. **Resolved 2026-09-07:** AC-06 means the **headline**; the Positioning block and Tagline stay optional (absent = valid, present-but-empty = invalid).
+- [x] "Positioning line" in AC-06 / US-08 vs the optional Positioning block. **Resolved 2026-09-07:** AC-06 means the **headline**. The Tagline stays optional (absent = valid, present-but-empty = invalid). _(Superseded 2026-09-07 by D-10: the separate "Positioning block" is removed — merged into the Tagline.)_
 - [x] Single-line phone behaviour and the `phones` array minimum. **Resolved 2026-09-07, then superseded the same day:** originally min 1 line with a `<details>` disclosure for 2+; the phone control was then removed from the landing page entirely (see "Phone removed…" above). `contact.phones` shape is now the CV route's concern only.
 - [x] Is the LinkedIn URL covered by the visible-text ban? **Resolved 2026-09-07:** yes — AC-07 matches AC-10 and §1 (email and LinkedIn URL / handle; phone is not on the page at all).
 

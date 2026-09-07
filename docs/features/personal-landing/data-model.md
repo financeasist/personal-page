@@ -17,6 +17,10 @@ feature_size: "S"
        - DROP `earlierBackground`                                  → v2 (with US-04)
        ~ `topStack` min raised 1 → 4 (INV-07, spec/CONTEXT "min 4, max 8, build-enforced")
        ~ `availability` gains optional `noticePeriod` (CONTEXT.md Availability block, spec §1)
+     2026-09-07 (2nd edit — ratified screens divergences D-7 / D-10, folded in):
+       + ADD optional `industries` list (D-7 — hero right column, US-11 / AC-15)
+       - REMOVE `positioning` (D-10 — merged into `tagline`, which now allows a sentence or two,
+         ~300-char cap; was never in the live schema)
      Deferred fields stay SCHEMA-ADDITIVE — bringing the v2 sections back needs no reshape. -->
 
 ## Scope note — no relational datastore
@@ -64,6 +68,7 @@ erDiagram
     PROFILE ||--|| CONTACT : has
     PROFILE ||--|| AVAILABILITY : has
     PROFILE ||--|| ABOUT : has
+    PROFILE ||--o{ INDUSTRY : industries
     PROFILE ||--o{ PROFILE_LINK : "contact.links"
     PROFILE ||--o{ LANGUAGE : languages
     PROFILE ||--o{ SKILL_CATEGORY : skills
@@ -73,8 +78,7 @@ erDiagram
     PROFILE {
         string name
         string headline
-        string tagline "* optional"
-        string positioning "* optional, max 280"
+        string tagline "* optional, max 300"
         string_array topStack "* 4..8"
         string_array summary "† CV route, min 1"
         string_array competencies "† CV route"
@@ -93,6 +97,10 @@ erDiagram
     ABOUT {
         string narrative "* required, non-empty"
         string_array highlights "* required, min 1"
+    }
+    INDUSTRY {
+        string domain "* required"
+        string note "* optional"
     }
     PROFILE_LINK {
         string label
@@ -132,9 +140,9 @@ are embedded shapes, not separate entities.
 |---|---|---|---|
 | `name` | `z.string().min(1)` | non-empty | feeds CV filename helper + hero (AC-05) |
 | `headline` | `z.string().min(1)` | **required, non-empty** (INV-01) | pipe-separated positioning line; source for CV filename |
-| `tagline` | `z.string().min(1).optional()` | absent OK; present-but-empty invalid (AC-06) | **NEW** — optional one-liner under the headline (spec §1) |
-| `positioning` | `z.string().min(1).max(280).optional()` | ≤ 280 chars; present-but-empty invalid | **NEW** — optional short positioning paragraph (2–3 sentences) in the hero, fuller than `tagline`; landing-page only (`summary` stays CV-route). Length-capped so it does not break the above-the-fold fit (AC-01/AC-08) — spec §1, §6 drop order |
+| `tagline` | `z.string().min(1).max(300).optional()` | absent OK; present-but-empty invalid (AC-06); ≤ 300 chars | **NEW** — optional short passage under the headline: a sentence or two (D-10 merged the old separate `positioning` block into this; the "one-line" limit is dropped, the ~300-char cap keeps the above-the-fold fit — spec §1, §6 drop order) |
 | `topStack` | `z.array(z.string().min(1)).min(4).max(8)` | **4–8 items** (INV-07) | **NEW** — hand-curated hero technology chips; *not* derived from `skills` (ADR-0005). Min raised 1→4 (spec/CONTEXT "min 4") |
+| `industries` | `z.array(industry).max(6).optional()` | absent OK; ≤ 6 entries | **NEW** (D-7) — optional hero right-column list of the domains Roman has delivered in. Renders only when present; absent → the hero's second column is omitted, no build failure (US-11 / AC-15). Not an AC-01 essential. |
 | `contact` | `z.object({…})` | required | embedded — see below |
 | `availability` | `z.object({…})` | required | **NEW** embedded — see below |
 | `about` | `z.object({…})` | **required** | **NEW** embedded — see below (US-10 / AC-14) |
@@ -195,6 +203,17 @@ CV `summary` array — a distinct field, landing-page only.
 | `narrative` | `z.string().min(1)` | **required, non-empty** (INV-09) | short prose paragraph(s); rendered straight from content, no hard-coded copy (AC-14). An empty string fails the build (AC-06). |
 | `highlights` | `z.array(z.string().min(1)).min(1)` | **required, ≥ 1 non-empty entry** (INV-09) | short highlight lines (Roman's own text). An empty list fails the build (AC-05); an empty entry fails as malformed (AC-06). |
 
+### `industry` (embedded — NEW, D-7 / US-11)
+
+The hero's right column — a short list of the domains Roman has delivered in (iGaming,
+fintech, healthcare, retail). Sourced from `docs/reference/linkedin-about.md`. Optional as a
+whole (`industries` is `.optional()`); when the array is present each entry is validated.
+
+| Field | Type | Constraints | Notes |
+|---|---|---|---|
+| `domain` | `z.string().min(1)` | non-empty | e.g. "iGaming", "FinTech & E-commerce" |
+| `note` | `z.string().min(1).optional()` | optional | short descriptor, e.g. "Remote Game Servers (RGS)" |
+
 ### `experienceEntry` (embedded — shape UNCHANGED)
 
 The live `config.ts` shape is kept as-is for v1 — `experience[]` renders only on the CV
@@ -224,7 +243,7 @@ offending field** (AC-05, AC-06).
 | INV-01 | Headline present | `headline` non-empty | AC-05 | base schema `.min(1)` |
 | INV-02 | Availability present | `availability.status` non-empty | AC-05 | base schema `.min(1)` |
 | INV-03 | All **three** contact channels present | `contact.email` valid **and** ≥ 1 `contact.links` entry whose `url` host is `linkedin.com` **and** the CV channel (`name` + `headline` present **and** the committed PDF exists at the expected path — postbuild "file exists" assertion, ADR-0008) | AC-05 | `.superRefine` (email + LinkedIn) + postbuild assertion (CV file) |
-| INV-04 | Field shapes valid | email contains `@`; every `url` parses; no empty required string; `topStack` ≤ 8 | AC-06 | base Zod (`.email()`, `.url()`, `.min(1)`, `.max(8)`) |
+| INV-04 | Field shapes valid | email contains `@`; every `url` parses; no empty required string; `topStack` ≤ 8; `tagline` ≤ 300; `industries` ≤ 6 (when present) | AC-06 | base Zod (`.email()`, `.url()`, `.min(1)`, `.max(…)`) |
 | INV-07 | Top stack size | `topStack.length` in **4..8** | AC-01, AC-06 | base schema `.min(4).max(8)` |
 | INV-08 | No over-exposure fields | schema carries no `salary` / `rate` / `homeAddress` / recruiter-link-label key | AC-07 | structural (shape has no such key) — documented |
 | INV-09 | About section present | `about.narrative` non-empty **and** `about.highlights.length ≥ 1` with every entry non-empty | AC-05, AC-06, AC-14 | base schema (`.min(1)` on both) — `about` object is required, not `.optional()` |
@@ -242,11 +261,13 @@ offending field** (AC-05, AC-06).
 No SQL. `implement` applies this under the ADR-0005 / ADR-0007 tasks:
 
 1. **`site/src/content/config.ts`** — extend the `profile` Zod schema:
-   - add `tagline?` (`.min(1).optional()`), `positioning?` (`.min(1).max(280).optional()`), `topStack` (`.min(4).max(8)`);
+   - add `tagline?` (`z.string().min(1).max(300).optional()`), `topStack` (`.min(4).max(8)`);
+   - add `industries?` (`z.array(z.object({ domain: z.string().min(1), note: z.string().min(1).optional() })).max(6).optional()`);
    - add `availability: z.object({ status: z.string().min(1), noticePeriod: z.string().min(1).optional(), workAuthorization: z.string().min(1).optional() })` (required);
    - add `about: z.object({ narrative: z.string().min(1), highlights: z.array(z.string().min(1)).min(1) })` (required);
    - require `contact.links.min(1)` (was `.default([])`);
    - remove the free-text `contact.availability` string;
+   - **do not add** a `positioning` field (D-10 — merged into `tagline`);
    - leave `contact.phones`, `experience[]`, `skills[]`, `summary`, `competencies`, `education` **unchanged**;
    - append the `.superRefine` block implementing INV-03 (email present + a `linkedin.com` link).
 2. **`site/src/lib/content-checks.ts`** (new) — `hasLinkedInLink(links)` predicate (+ any
@@ -258,7 +279,7 @@ No SQL. `implement` applies this under the ADR-0005 / ADR-0007 tasks:
 4. **`site/src/data/profile/roman.json`** — reshape to the new schema (see below). The file
    currently holds STUB content for the CV-route fields; real content reconciliation for
    those is roadmap step 2 / spec §8, not this stage. The landing-page fields
-   (`about`, `availability`, `topStack`, `tagline`, `positioning`) get real values here.
+   (`about`, `availability`, `topStack`, `tagline`, `industries`) get real values here.
 
 ### `roman.json` reshape (landing fields real; CV-route fields stay STUB)
 
@@ -268,7 +289,11 @@ Current → target deltas:
   → `availability: { "status": "Open to Remote & Hybrid Opportunities", "noticePeriod": "<Roman>", "workAuthorization": "<Roman, optional>" }`
 - add `about: { "narrative": "<reconciled from linkedin-about.md>", "highlights": ["…", "…"] }`
 - add `topStack` (4–8 items — **trim** the current ~11-item screens.md wording to the cap, spec §6 / CONTEXT D-9)
-- add `tagline?`, `positioning?` (both optional; present-but-empty is invalid)
+- `tagline` — **keep** the existing key; ensure ≤ 300 chars (D-10 — it now carries what the
+  `positioning` block used to; the current value is fine).
+- **remove** the `positioning` key from `roman.json` (D-10 — merged into `tagline`; the
+  schema will strip it anyway, but drop it for cleanliness).
+- add `industries` (optional) — e.g. `[{ "domain": "iGaming", "note": "Remote Game Servers (RGS)" }, …]`, ≤ 6, from `linkedin-about.md`.
 - `contact.phones` — **unchanged** (`["+38 063 199 08484", "+48 662 477 198"]`); the first
   value has a digit-count problem (14 digits) — Roman to confirm the correct value **for the
   CV route**, not a v1 landing blocker.
@@ -287,7 +312,8 @@ form the test tasks adopt (`plan-tests` / `tasks` decide the harness). PII guard
 - `malformedProfile(field)` — email without `@`, empty headline, unparseable url, present-but-empty `tagline` → asserts INV-04 (AC-06).
 - `undersizeTopStackProfile()` — 3 `topStack` entries → asserts INV-07 min (AC-06).
 - `oversizeTopStackProfile()` — 9 `topStack` entries → asserts INV-07 max (AC-06).
-- `oversizePositioningProfile()` — a `positioning` string > 280 chars → asserts the `.max(280)` bound (spec §1 / §6 fold-fit guard).
+- `oversizeTaglineProfile()` — a `tagline` string > 300 chars → asserts the `.max(300)` bound (spec §1 / §6 fold-fit guard).
+- `industriesOmittedProfile()` — no `industries` key → asserts the build passes and the hero renders without the right column (AC-15); `oversizeIndustriesProfile()` — 7 entries → asserts the `.max(6)` bound.
 - `missingCvPdfProfile()` — build with no committed PDF at the derived path → asserts the postbuild "file exists" assertion fails (AC-04, AC-05 CV channel).
 
 ## Drift check
@@ -297,9 +323,9 @@ The target schema compared against the live `config.ts` + `roman.json` (`--drift
 
 | Kind | Finding |
 |---|---|
-| field-without-column (target has, live lacks) | `tagline`, `positioning`, `topStack`, `availability{ status, noticePeriod?, workAuthorization? }`, `about{ narrative, highlights[] }` — all NEW, added by the ADR-0005 / this-feature task. `roman.json` already carries `tagline` + `positioning` **keys** (currently silently stripped — not in the live schema). |
+| field-without-column (target has, live lacks) | `tagline` (add to schema — `roman.json` already carries the key, currently silently stripped), `topStack`, `industries?`, `availability{ status, noticePeriod?, workAuthorization? }`, `about{ narrative, highlights[] }` — all NEW, added by the ADR-0005 / this-feature task. |
 | shape-mismatch | `contact.links` is `.default([])` live, target `.min(1)`. `contact.availability` is a live free-text string, target is the top-level `availability{}` object. |
-| column-without-field | `contact.availability` (live string) — intentionally removed, replaced by `availability{}`. No orphan after the task. |
+| column-without-field (live/JSON has, target drops) | `contact.availability` (live string) — replaced by `availability{}`. `roman.json` `positioning` key — dropped (D-10, merged into `tagline`; schema strips it regardless). No orphan after the task. |
 | no-longer-drift (was flagged 2026-09-06, now reverted) | `contact.phones` shape — target now matches live (`string[]`); the `{label,e164}` reshape is dropped with AC-03. `experienceEntry.dateRange` — kept (the `startYear`/`endYear` swap is v2). |
 | content (not schema) drift | `roman.json` CV-route fields (`competencies`, `summary`, `skills`, `experience`) are STUB — roadmap step 2 / spec §8, out of this stage. `languages[2]` reads `{ "name": "Poland", "level": "basic" }` — likely meant "Polish"; flagged for `implement`'s content task. `contact.phones[0]` = `"+38 063 199 08484"` has a digit-count problem — Roman to confirm (CV route). |
 

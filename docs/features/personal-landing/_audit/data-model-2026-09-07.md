@@ -67,16 +67,28 @@ None — no table, no running system, build-time only.
 | Deferred fields stay additive | PASS — `selectedProjects`, `startYear`/`endYear`, `earlierBackground` documented but not added; v2 features re-sync this doc without a reshape. |
 | erDiagram | Structural lint only (no `mmdc` on this machine) — valid cardinality glyphs, `type name` attribute lines. PASS. |
 
-## Open items (unchanged from spec §8, re-pointed)
+## Second edit — 2026-09-07 (ratified screens divergences folded in)
 
-- `positioning` field — kept here (optional, ≤ 280). **screens.md D-10 conflicts** (draws
-  the hero without it). Reconcile before `tasks`.
-- `industries` content field — screens.md D-7 draws a hero column with no backing field.
-  Reconcile before `tasks`.
+After the divergences were settled with Roman (D-1/D-3/D-7/D-10 all ratified):
+
+- **D-7 folded in:** added optional `industries` list (`z.array({ domain, note? }).max(6).optional()`) —
+  hero right column, US-11 / AC-15. Optional → no build failure when absent.
+- **D-10 folded in:** removed `positioning` from the target schema; `tagline` now allows a
+  sentence or two with a ~300-char cap (was an implied one-liner). `roman.json`'s
+  `positioning` key is dropped.
+- Fixtures: `oversizePositioningProfile` → `oversizeTaglineProfile`; added
+  `industriesOmittedProfile` / `oversizeIndustriesProfile`.
+- D-1/D-3 (contact in a sticky Header, mobile hamburger menu) are a component/layout
+  decision — no schema impact; ratified in spec + `sad.md` §5.
+
+## Open items
+
 - Exact employment date ranges + per-project impact statements — moved to **v2** by the
   2nd clarify (no longer v1 blockers).
+- Roman to fill real values for `about.narrative` / `about.highlights` / `industries` /
+  `availability.noticePeriod` in `roman.json` (before or during `implement`).
 
 ## Next stage
 
-Per `.route` = `standard`: `sad.md` §5 re-sync (pending spec §8 follow-up) → then
+Per `.route` = `standard`: `sad.md` §5 + crosscutting re-sync **done** (this pass) → then
 `/sdd:plan-tests personal-landing`. `api` stays N/A (no contract change — commit `7f90bb3`).

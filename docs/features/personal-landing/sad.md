@@ -14,7 +14,23 @@ target_surfaces: [web-frontend]  # single static web front-end; read (never re-d
 
 ## 1. Introduction and goals
 
-**Intent.** Build one static landing page (`site/src/pages/index.astro`) that lets a **Recruiter** judge Roman's fit in a twenty-second above-the-fold scan and reach him through phone, email, LinkedIn, or a CV download in one tap, and lets **Roman** publish every change by committing a single content file. The page renders entirely from the one typed **Profile content** entry that also feeds the CV print route (roadmap step 4). This feature is roadmap step 3; the stack (Astro 5 static site, Tailwind v4, typed content collection, zero client JS) is fixed upstream by `docs/architecture-map.md` and ADR-0001–0004.
+**Intent.** Build one static landing page (`site/src/pages/index.astro`) that lets a **Recruiter** judge Roman's fit in a twenty-second above-the-fold scan and reach him through email, LinkedIn, or a CV download from a persistent header, and lets **Roman** publish every change by committing a single content file. The page renders entirely from the one typed **Profile content** entry that also feeds the CV route. This feature is roadmap step 3; the stack (Astro 5 static site, Tailwind v4, typed content collection, zero client JS) is fixed upstream by `docs/architecture-map.md` and ADR-0001–0004 (ADR-0004 amended for v1 by ADR-0008 — v1 ships a committed static CV PDF).
+
+<!-- Re-synced 2026-09-07 to the S-size scope (spec.md §1 "Scope narrowing" / §8, screens.md commit
+     0fbb877, ux-flows.md commit b75fc9f). §6 was re-synced separately (commit 9930320). Changes:
+       - phone removed from the landing page (US-03 / AC-03 withdrawn) — PhoneChooser dropped
+       - experience timeline (US-04) + selected work (US-09) deferred to v2 — ExperienceTimeline,
+         SelectedProjects, ProjectCard dropped; selectedProjects / earlierBackground / machine-
+         readable experience years are v2-additive on the same entry
+       - About section added (US-10 / AC-14) — AboutMe component + required about.narrative/highlights
+       - contact actions (now THREE: email, LinkedIn, Download CV) move into a persistent, sticky,
+         CSS-only Header; mobile condenses to name + email/LinkedIn icons + a native <details> menu
+         (ratified divergence D-1 / D-3)
+       - optional Industries list in the hero's right column (ratified divergence D-7) — new optional
+         industries content field
+       - tagline absorbs the positioning block (ratified divergence D-10) — positioning field removed
+       - CV PDF generator container removed per ADR-0008 (committed static file, not generated) -->
+
 
 **Top-3 quality goals (1-liners; full scenarios in §10):**
 
@@ -56,7 +72,7 @@ target_surfaces: [web-frontend]  # single static web front-end; read (never re-d
 
 ## 3. Context and scope
 
-The landing site is a public, statically-hosted page. A **Recruiter** reaches it through a link Roman puts in his CV, LinkedIn, or outreach email (or, later, a labelled `/t/{label}` redirect — roadmap step 5, not part of this feature) and interacts with it entirely client-side: reading, scrolling, and activating contact actions that hand off to the recruiter's own phone, mail client, or browser. **Roman** changes what the page shows only by editing the Profile content entry and committing; GitHub Actions builds and deploys. There is no runtime backend and no external service call from the delivered page. The trust boundary is the git repository: the only input that shapes the page is content Roman commits, validated at build time.
+The landing site is a public, statically-hosted page. A **Recruiter** reaches it through a link Roman puts in his CV, LinkedIn, or outreach email (or, later, a labelled `/t/{label}` redirect — roadmap step 5, not part of this feature) and interacts with it entirely client-side: reading, scrolling, and activating contact actions that hand off to the recruiter's own mail client or browser. **Roman** changes what the page shows only by editing the Profile content entry and committing; GitHub Actions builds and deploys. There is no runtime backend and no external service call from the delivered page. The trust boundary is the git repository: the only input that shapes the page is content Roman commits, validated at build time.
 
 <!-- brownfield: the Astro site skeleton, the `profile` content collection + Zod schema, `index.astro`/`cv.astro` stubs, and the GitHub Pages deploy workflow already exist (scaffold, commit b1583df). This feature fills them in. `docs/architecture-map.md` reflects_commit a647c5d (pre-scaffold) but describes the same target baseline. -->
 
@@ -68,7 +84,7 @@ The landing site is a public, statically-hosted page. A **Recruiter** reaches it
 | Roman | Person | Edits the Profile content entry, commits to the repo |
 | GitHub Actions | System (external) | Builds the site on push to `main`, renders the CV PDF, deploys |
 | GitHub Pages | System (external) | Serves the static page over HTTPS |
-| Recruiter's device apps | System (external) | Dialer, mail client, browser — receive the contact-action hand-offs (`tel:` / `mailto:` / new tab / file download) |
+| Recruiter's device apps | System (external) | Mail client, browser — receive the contact-action hand-offs (`mailto:` / new tab / file download) |
 
 **C4 Context (L1):**
 
@@ -83,13 +99,13 @@ C4Context
 
     System_Ext(actions, "GitHub Actions", "Builds, validates content, renders the CV PDF, deploys on push to main")
     System_Ext(pages, "GitHub Pages", "Serves the static page over HTTPS")
-    System_Ext(devices, "Recruiter device apps", "Dialer / mail client / browser that receive contact hand-offs")
+    System_Ext(devices, "Recruiter device apps", "Mail client / browser that receive contact hand-offs")
 
     Rel(roman, site, "Edits content, commits", "git")
     Rel(site, actions, "Built and deployed by", "CI on push")
     Rel(actions, pages, "Publishes static output to", "deploy")
     Rel(recruiter, pages, "Reads the page", "HTTPS")
-    Rel(recruiter, devices, "Contact action opens a channel", "tel / mailto / https / download")
+    Rel(recruiter, devices, "Contact action opens a channel", "mailto / https / download")
 ```
 
 ## 4. Solution strategy
@@ -98,9 +114,9 @@ C4Context
 
 **Top strategic choices (the seeds for ADRs):**
 
-1. **One Profile content entry, extended with landing-specific structured fields** — the landing page needs data the CV template does not carry (a `tagline`, a curated `topStack`, `selectedProjects` with impact, a structured availability block, labelled phone lines, an `earlierBackground` line). These are added as fields on the same `profile` entry rather than a separate collection or derived implicitly from CV fields, so the "one source, two renderers" invariant holds and nothing drifts. → **ADR-0005**.
-2. **Contact details are actionable-only, in link attributes, zero client JavaScript** — phone / email / LinkedIn never render as visible text on the page; each is a plain link (`tel:` / `mailto:` / `https:` new tab) and the phone chooser is a native `<details>` disclosure. No script assembles or obfuscates the values in v1. → **ADR-0006** (resolves spec §8 Q3).
-3. **Content invariants enforced at build time in the content-collection schema** — required fields, all four contact channels present, a non-placeholder impact statement per selected project, non-overlapping experience dates: expressed as Zod schema rules (`.refine`) so `astro check` / the build fails and names the offending field. No incomplete page can deploy. → **ADR-0007**.
+1. **One Profile content entry, extended with landing-specific structured fields** — the landing page needs data the CV template does not carry (a `tagline`, a curated `topStack`, a structured `availability` block, an `about` section, an optional `industries` list). These are added as fields on the same `profile` entry rather than a separate collection or derived implicitly from CV fields, so the "one source, two renderers" invariant holds and nothing drifts. The v2 sections — `selectedProjects` with impact, machine-readable experience years, an `earlierBackground` line — extend the same entry additively when they land. → **ADR-0005**.
+2. **Contact details are actionable-only, in link attributes, zero client JavaScript** — email / LinkedIn never render as visible text on the landing page; each is a plain link (`mailto:` / `https:` new tab). The phone is not a landing-page channel in v1. The three contact controls live in a persistent, sticky, CSS-only `Header`; on the phone viewport the header condenses to Roman's name, the email + LinkedIn icon controls, and a native `<details>` disclosure menu holding Download CV and an About link. No script assembles or obfuscates the values in v1. → **ADR-0006** (resolves spec §8 Q3).
+3. **Content invariants enforced at build time in the content-collection schema** — required fields (including a non-empty `about.narrative` and a non-empty `about.highlights`), all three contact channels present (email, LinkedIn, and the committed CV PDF): expressed as Zod schema rules (`.refine`) so `astro check` / the build fails and names the offending field. No incomplete page can deploy. → **ADR-0007**.
 
 Tactical decisions (hand-rolled components, the shared CV-filename helper, image optimisation via `astro:assets`) trace to these seeds and to the repo conventions; they are recorded in §5 / §8, not as ADRs.
 
@@ -119,21 +135,25 @@ site/
 │   │   ├── index.astro                 the landing page — THIS feature
 │   │   └── cv.astro                    CV print route — roadmap step 4 (shares content + helper)
 │   ├── components/
+│   │   ├── Header.astro                persistent sticky top bar (CSS only) — name + ContactActions;
+│   │   │                               mobile: name + email/LinkedIn icons + a native <details> menu (Download CV, About)
+│   │   ├── Footer.astro                copyright line, flush to the viewport bottom (min-height:100vh page)
 │   │   ├── Section.astro               below-the-fold section wrapper
-│   │   ├── Hero.astro                  above-the-fold: headshot, name, headline, tagline, positioning
-│   │   ├── AvailabilityBlock.astro     status / location / remote / notice / work auth
-│   │   ├── ContactActions.astro        the four labelled controls (ADR-0006); each carries a stable data-* hook for step 8
-│   │   ├── PhoneChooser.astro          native <details> — two labelled call controls
-│   │   ├── ExperienceTimeline.astro    most-recent-first roles
-│   │   ├── SelectedProjects.astro      3–5 project entries
-│   │   └── ProjectCard.astro           one project + impact statement
+│   │   ├── Hero.astro                  above-the-fold: headshot, name, headline, optional tagline, AvailabilityBlock, optional Industries
+│   │   ├── AvailabilityBlock.astro     status / location / optional notice / optional work auth
+│   │   ├── ContactActions.astro        the three labelled controls, rendered inside Header (ADR-0006); each carries a stable data-* hook for step 8
+│   │   ├── Industries.astro            optional hero list — domain + optional note (renders only when present)
+│   │   └── AboutMe.astro               below-the-fold About section — narrative + highlights (US-10)
 │   ├── lib/
-│   │   ├── cv-filename.ts              name + headline → "Roman-Hrupskyi-…-CV.pdf"  (shared with cv.astro + generate-pdf.mjs)
-│   │   └── content-checks.ts           placeholder/overlap helpers used by config.ts refinements
+│   │   ├── cv-filename.ts              name + headline → "Roman-Hrupskyi-…-CV.pdf"  (shared with cv.astro; generate-pdf.mjs is v2)
+│   │   └── content-checks.ts           the LinkedIn-link predicate used by config.ts refinements
 │   ├── assets/roman.jpg                optimised headshot (via astro:assets)
 │   └── styles/global.css               Tailwind v4 @theme tokens
-└── scripts/generate-pdf.mjs            roadmap step 4 — consumes cv.astro + cv-filename.ts
+└── public/<Roman-Hrupskyi-…-CV.pdf>    v1 — hand-committed CV PDF (ADR-0008); build asserts it exists
 ```
+
+*(v2 additions on the same entry: `ExperienceTimeline` + `SelectedProjects` + `ProjectCard`
+components, and `scripts/generate-pdf.mjs` when build-time CV generation returns.)*
 
 **C4 Container (L2):**
 
@@ -147,19 +167,20 @@ C4Container
     Container_Boundary(build, "Site build (GitHub Actions)") {
         Container(content, "Profile content + schema", "JSON + Zod (astro:content)", "One typed entry; build-time invariant checks")
         Container(astro, "Astro static build", "Astro 5 / Tailwind v4", "Renders index.astro (+ cv.astro) to static HTML/CSS/img")
-        Container(pdf, "CV PDF generator", "Playwright / Chromium (postbuild)", "roadmap step 4 — renders cv.astro to a named PDF")
+        Container(cvpdf, "Committed CV PDF", "static file in site/public/", "v1 — hand-maintained (ADR-0008); postbuild asserts the named file exists")
     }
 
     Container(pages, "Static page", "HTML + CSS + images on GitHub Pages", "The delivered landing page — zero JavaScript")
 
-    System_Ext(devices, "Recruiter device apps", "Dialer / mail client / browser")
+    System_Ext(devices, "Recruiter device apps", "Mail client / browser")
 
     Rel(roman, content, "Edits + commits", "git")
+    Rel(roman, cvpdf, "Hand-maintains + commits", "git")
     Rel(content, astro, "Validated content feeds the render")
-    Rel(astro, pdf, "cv.astro + shared filename helper")
-    Rel(astro, pages, "Publishes static output", "deploy")
+    Rel(astro, cvpdf, "asserts the name-derived file exists (postbuild)")
+    Rel(astro, pages, "Publishes static output + the committed CV PDF", "deploy")
     Rel(recruiter, pages, "Reads the page", "HTTPS")
-    Rel(recruiter, devices, "Contact action opens a channel", "tel / mailto / https / download")
+    Rel(recruiter, devices, "Contact action opens a channel", "mailto / https / download")
 ```
 
 ## 6. Runtime view
@@ -252,7 +273,7 @@ sequenceDiagram
     CI->>CI: validate content — Zod schema + refine() invariants (ADR-0007)
     alt a required field is missing (name, headshot path or alt, headline, availability, location, fewer than four top-stack entries, any of the three contact channels, about.narrative, or a non-empty about.highlights)
         CI-->>Roman: build fails, naming the missing field — nothing deploys (AC-05)
-    else a field is malformed (email without an @, empty headline, malformed link, more than eight top-stack entries, present-but-empty tagline or positioning)
+    else a field is malformed (email without an @, empty headline, malformed link, more than eight top-stack entries, fewer than four, present-but-empty tagline)
         CI-->>Roman: build fails, naming the field and why — nothing deploys (AC-06)
     else content valid
         CI->>CI: render index.astro and cv.astro
@@ -287,16 +308,16 @@ Reuses the scaffold's deployment unit unchanged: GitHub Actions builds `site/` o
 | Concept | Convention | Where defined |
 |---|---|---|
 | Single source of truth | The landing page and the CV route both render from one `profile` entry; no page-specific copy in components | `CONTEXT.md` invariant · ADR-0005 |
-| Content validation | Zod schema + `.refine()` invariants (required fields, all four contact channels, non-placeholder impact, non-overlapping dates) fail the build and name the field | ADR-0007 · `site/src/content/config.ts` |
-| Client JavaScript | None. Progressive enhancement only; phone chooser is a native `<details>`; contact actions are plain links | ADR-0001 · ADR-0006 |
-| Contact-detail exposure | Phone / email / LinkedIn never rendered as visible text on the page; values live only in link attributes; not obfuscated in v1 (revisit — §11) | ADR-0006 · `CONTEXT.md` invariant |
+| Content validation | Zod schema + `.refine()` invariants (required fields incl. `about.narrative` + `about.highlights`, all three contact channels: email, LinkedIn, committed CV) fail the build and name the field | ADR-0007 · `site/src/content/config.ts` |
+| Client JavaScript | None. Progressive enhancement only; the mobile header menu is a native `<details>` disclosure; contact actions are plain links | ADR-0001 · ADR-0006 |
+| Contact-detail exposure | Email / LinkedIn never rendered as visible text on the landing page; values live only in the header controls' link attributes; not obfuscated in v1 (revisit — §11). Phone is not a landing-page channel in v1 | ADR-0006 · `CONTEXT.md` invariant |
 | Images | Headshot processed by `astro:assets` — responsive sizes, modern format, explicit dimensions, eager + high fetch-priority for the LCP element | §5 `src/assets/` · here |
 | Accessibility | Semantic HTML, one `<h1>`, keyboard-operable controls, body text ≥ 16 px, interactive targets ≥ 44×44 px (WCAG 2.5.8), Lighthouse a11y ≥ 95 | spec §6 · here |
-| Tracking hooks (for step 8) | Every contact control carries a stable `data-contact-channel` (`phone` / `email` / `linkedin`) or `data-cv-download` attribute; roadmap step 8's inline beacon script binds to these — no markup change needed then | spec §3 · `architecture-map.md` §Frontend · here |
+| Tracking hooks (for step 8) | Every header contact control carries a stable `data-contact-channel` (`email` / `linkedin`) or `data-cv-download` attribute; roadmap step 8's inline beacon script binds to these — no markup change needed then | spec §3 · `architecture-map.md` §Frontend · here |
 | Error handling | Build-time only — a validation failure stops the build with a named field. No runtime error path exists (static delivery) | ADR-0007 |
 | Localisation | Single language (English) in v1; schema and components stay locale-clean so a per-locale entry is additive later | `architecture-map.md` §Constraints |
 | Observability / logging | N/A at runtime (static files); build logs are the GitHub Actions run | — |
-| CV filename | Derived from `name` + `headline` by `site/src/lib/cv-filename.ts`, shared by `index.astro`, `cv.astro`, and `generate-pdf.mjs` — never hand-copied. Roadmap step 4 owns the derivation rule; this feature consumes the same helper | §5 `lib/cv-filename.ts` · `docs/adr/0004` |
+| CV filename | Derived from `name` + `headline` by `site/src/lib/cv-filename.ts`, shared by `index.astro` and `cv.astro` (`generate-pdf.mjs` is v2) — never hand-copied. In v1 the postbuild step asserts the committed `site/public/` PDF exists at the derived name | §5 `lib/cv-filename.ts` · `docs/adr/0004` (amended by ADR-0008) |
 
 ## 9. Architecture decisions
 
@@ -319,7 +340,7 @@ ADR files live under `docs/features/personal-landing/adr/NNNN-<title>.md`.
 - **How verify:** Lighthouse mobile audit run manually pre-launch; build-output inspection for the JS figure; build size report for weight.
 
 **QG-2. Never ship a broken or incomplete page**
-- **When:** the Profile content is missing or has a malformed required field — no headline, no availability, any of the four contact channels absent, an empty/placeholder project impact statement, or overlapping experience dates.
+- **When:** the Profile content is missing or has a malformed required field — no headline, no availability status, no location, a missing/empty `about.narrative` or an empty `about.highlights`, fewer than four `topStack` entries, any of the three contact channels absent (email, LinkedIn, or the committed CV PDF), or a malformed value (email without an `@`, unparseable link, more than eight `topStack` entries, present-but-empty `tagline`).
 - **Then:** 100% of missing / malformed required fields fail the build, which names the offending field; nothing is published.
 - **How verify:** `astro build` enforces the content-collection schema and its `.refine()` invariants and gates the deploy (ADR-0007); unit tests over the invariant predicates with fixture profiles; `astro check` on pull requests (and, once `tasks` adds it, on the deploy path).
 
@@ -332,12 +353,11 @@ ADR files live under `docs/features/personal-landing/adr/NNNN-<title>.md`.
 
 | Risk / debt | Severity | Mitigation | Owner |
 |---|---|---|---|
-| Roadmap step 4 (CV PDF) slips — the Download-CV control has no file | Medium | Steps 3 and 4 sequenced together; a missing generated PDF fails the build (postbuild assertion) so a dead link never ships | Roman |
+| Committed CV PDF drifts from the page (surname / headline / dates) — the "two divergent CVs" problem the feature exists to fix | Medium | ADR-0008: v1 ships a hand-committed PDF under `site/public/`; a missing file fails the build (postbuild "file exists" assertion). Manual page-vs-CV parity check each release + each content edit; revisit trigger = build-time generation returns (roadmap step 4 / v2) | Roman |
 | Headshot asset is ~2 MB — blows the 500 KB page-weight budget if shipped raw | Medium | `astro:assets` optimisation, responsive sizes, target < 100 KB at display size; checked in the QG-1 Lighthouse pass | Roman |
-| Optional `positioning` block + tagline together push the contact actions off the fold at 390×844 (AC-08) | Low | Schema caps `positioning` at 280 chars (`data-model`); manual above-the-fold check at 390×844 in the QG-3 pass; both fields are optional so the tight layout is opt-in | Roman |
+| Optional `tagline` + `industries` list together push the header contact actions off the fold at 390×844 (AC-08) | Low | Schema caps `tagline` at ~300 chars (`data-model`); both fields optional so the tight layout is opt-in; §6 drop order (Industries → Tagline → top-stack truncates) + manual above-the-fold check at 390×844 in the QG-3 pass | Roman |
 | Lighthouse checks (and `astro check` on the deploy path) are manual / PR-only, not on push to `main` — quality can regress silently on a later direct content edit | Low | `tasks` adds `npm run check` + invariant unit tests to `deploy.yml`; document the pre-launch Lighthouse checklist; wire Lighthouse CI as a later improvement | Roman |
-| Open question: exact non-overlapping employment date ranges | Open question | Resolve before `sdd:tasks`; spec §8 — default is the CV-template ranges with the EveryMatrix overlap collapsed | Roman |
-| Open question: per-project impact statements + the build-time placeholder-detection rule | Open question | Resolve before `sdd:implement`; spec §8 — Roman supplies statements; rule default is non-empty + ≥ 40 chars + blocked-words list | Roman / design |
+| Ratified screens divergences (D-1 header contact / D-3 header+footer chrome / D-7 industries list / D-10 tagline absorbs positioning) landed after the SAD's first pass | Low | Resolved 2026-09-07 in spec §1/§4/§5 + `CONTEXT.md` + this re-sync; `screens.md` § Divergence tracks them as RESOLVED | Roman |
 
 **Accepted debt (acceptable in v1, plan to fix later):**
 - Contact values obfuscation: **resolved for v1 by ADR-0006** — link-attributes-only, no script. Casual scraping is still possible (the values are in the `href`s); the same data is in Roman's public CV. Revisit trigger: observed scraping abuse → switch to script-assembled-on-click (spec §8 Q3).
@@ -345,12 +365,12 @@ ADR files live under `docs/features/personal-landing/adr/NNNN-<title>.md`.
 
 ## 12. Glossary
 
-Domain terms are canonical in `CONTEXT.md` (Recruiter, Roman, Profile content, Availability block, Contact action, Above-the-fold scan, Headline, Tagline, Top stack, Experience timeline, Selected project, Impact statement, Labelled link). SAD-specific terms:
+Domain terms are canonical in `CONTEXT.md` (Recruiter, Roman, Profile content, Availability block, Contact action, About section, Industries list, Above-the-fold scan, Headline, Tagline, Top stack, Experience timeline *(v2)*, Selected project *(v2)*, Impact statement *(v2)*, Labelled link). SAD-specific terms:
 
 | Term | Meaning |
 |---|---|
 | SSG (static site generation) | The whole page is rendered to HTML/CSS/images at build time; no server rendering, no client hydration, no router |
-| Content invariant | A rule the Profile content must satisfy to build — e.g. "all four contact channels present", "no placeholder impact statement", "experience dates do not overlap"; expressed as a Zod `.refine()` |
-| Actionable-only | A contact detail exposed only as an activatable control (a link), never as readable text on the page |
+| Content invariant | A rule the Profile content must satisfy to build — e.g. "all three contact channels present", "the About section is complete (non-empty narrative + at least one highlight)"; expressed as a Zod `.refine()` |
+| Actionable-only | A contact detail exposed only as an activatable control (a link), never as readable text on the landing page |
 | Reference viewport | 1280×800 (laptop) and 390×844 (phone) — the sizes "fits above the fold" and "no horizontal scroll" are checked against |
 | LCP | Largest Contentful Paint — the render-speed metric in QG-1, target ≤ 2.5 s on the Lighthouse mobile preset |
