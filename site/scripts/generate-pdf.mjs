@@ -1,3 +1,8 @@
+// DEFERRED — not wired in v1 (ADR-0008). v1 ships a hand-committed CV PDF under
+// site/public/ and the postbuild step is scripts/assert-cv-pdf.mjs ("file
+// exists"). Roadmap step 4 re-enables this generator together with the cv.astro
+// print route. Kept in the tree unreferenced; do not delete.
+//
 // Build-time CV PDF generator (postbuild hook).
 // Serves site/dist, loads /cv in headless Chromium, writes a MEANINGFULLY-NAMED
 // A4 PDF into dist/ (derived from the profile name + headline). The site is the
