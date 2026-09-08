@@ -1,7 +1,15 @@
-import { readdirSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { buildFixture, type BuildResult } from '../helpers/build-fixture';
+
+// Contact channels are content — assert against the committed profile, never a
+// hard-coded address (the email moved to the apex domain on 2026-09-08).
+const profileEmail = (
+  JSON.parse(
+    readFileSync(new URL('../../src/data/profile/roman.json', import.meta.url), 'utf8'),
+  ) as { contact: { email: string } }
+).contact.email;
 
 // T9 — the assembled page, verified over the REAL delivered `dist/` (built from
 // the committed roman.json). AC-07 / AC-10 delivered-source half + the client-JS
@@ -65,7 +73,7 @@ describe('assembled index.astro — client JS is one tiny inline PE script (NFR,
 
 describe('assembled index.astro — need-to-know exposure (AC-07 / AC-10)', () => {
   it('renders neither the email address nor the LinkedIn URL as visible text', () => {
-    expect(visibleText).not.toContain('roman.grupskyi@gmail.com');
+    expect(visibleText).not.toContain(profileEmail);
     expect(visibleText).not.toMatch(/linkedin\.com\/in\//i);
     expect(visibleText.toLowerCase()).not.toContain('roman-grupskiy');
   });
@@ -89,7 +97,7 @@ describe('assembled index.astro — need-to-know exposure (AC-07 / AC-10)', () =
   });
 
   it('still makes contact reachable — mailto, new-tab LinkedIn, downloadable CV in href', () => {
-    expect(html).toContain('mailto:roman.grupskyi@gmail.com');
+    expect(html).toContain(`mailto:${profileEmail}`);
     expect(html).toMatch(
       /href="https:\/\/www\.linkedin\.com\/in\/roman-grupskiy\/"[^>]*target="_blank"/,
     );
