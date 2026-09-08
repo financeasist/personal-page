@@ -59,380 +59,6 @@
     },
     {
       "type": "frame",
-      "id": "Sh75H",
-      "x": 0,
-      "y": 420,
-      "name": "SCR-01 · laptop default (1280×800)",
-      "clip": true,
-      "width": 1200,
-      "height": 590,
-      "fill": "$color/surface",
-      "layout": "vertical",
-      "children": [
-        {
-          "id": "u3xWDb",
-          "type": "ref",
-          "ref": "dvllD",
-          "name": "Header",
-          "width": "fill_container"
-        },
-        {
-          "type": "frame",
-          "id": "hHrJT",
-          "name": "page",
-          "width": 1199,
-          "fill": "$color/surface",
-          "layout": "vertical",
-          "gap": 26,
-          "padding": [
-            44,
-            60
-          ],
-          "children": [
-            {
-              "type": "frame",
-              "id": "xEwZk",
-              "name": "Hero",
-              "width": "fill_container",
-              "gap": 40,
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "V3GYm",
-                  "name": "Headshot",
-                  "width": 172,
-                  "height": 208,
-                  "fill": [
-                    "$color/navy",
-                    {
-                      "type": "image",
-                      "enabled": true,
-                      "url": "../../reference/me.png",
-                      "mode": "fill"
-                    }
-                  ],
-                  "cornerRadius": 12,
-                  "layout": "none"
-                },
-                {
-                  "type": "frame",
-                  "id": "hWxQs",
-                  "name": "Hero copy",
-                  "width": "fill_container",
-                  "layout": "vertical",
-                  "gap": 10,
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "M2uBJ",
-                      "fill": "$color/navy-dark",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "Roman Hrupskyi",
-                      "fontFamily": "Inter",
-                      "fontSize": 34,
-                      "fontWeight": "800"
-                    },
-                    {
-                      "type": "text",
-                      "id": "whdan",
-                      "fill": "$color/muted",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "Senior Java Engineer | Lead Backend Engineer",
-                      "fontFamily": "Inter",
-                      "fontSize": 18,
-                      "fontWeight": "600"
-                    },
-                    {
-                      "type": "frame",
-                      "id": "PXgxV",
-                      "name": "Tagline",
-                      "width": "fill_container",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "n5YsHN",
-                          "fill": "$color/ink",
-                          "textGrowth": "fixed-width",
-                          "width": "fill_container",
-                          "content": "Java engineer and technical leader with 9+ years of experience designing, building, and scaling high-load distributed systems, leading engineering teams, and delivering business-critical platforms across multiple domains.",
-                          "fontFamily": "Inter",
-                          "fontSize": 15,
-                          "fontWeight": "normal",
-                          "fontStyle": "italic"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "l81pSK",
-                      "name": "AvailabilityBlock slot",
-                      "padding": [
-                        8,
-                        0,
-                        0,
-                        0
-                      ],
-                      "children": [
-                        {
-                          "id": "idXz3",
-                          "type": "ref",
-                          "ref": "k6V1ni",
-                          "name": "AvailabilityBlock",
-                          "width": 400
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "QfCVa",
-                  "name": "Industries",
-                  "width": 300,
-                  "layout": "vertical",
-                  "gap": 8,
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "FqZFa",
-                      "name": "label",
-                      "fill": "$color/muted",
-                      "content": "INDUSTRIES",
-                      "fontFamily": "Inter",
-                      "fontSize": 11,
-                      "fontWeight": "700",
-                      "letterSpacing": 1
-                    },
-                    {
-                      "type": "frame",
-                      "id": "gFa2S",
-                      "name": "li",
-                      "width": "fill_container",
-                      "gap": 8,
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "M7BcW",
-                          "name": "b",
-                          "fill": "$color/navy",
-                          "content": "·",
-                          "fontFamily": "Inter",
-                          "fontSize": 14,
-                          "fontWeight": "700"
-                        },
-                        {
-                          "type": "text",
-                          "id": "xUouJ",
-                          "name": "t",
-                          "fill": "$color/muted",
-                          "textGrowth": "fixed-width",
-                          "width": "fill_container",
-                          "content": "iGaming — Remote Game Servers (RGS)",
-                          "lineHeight": 1.4,
-                          "fontFamily": "Inter",
-                          "fontSize": 13,
-                          "fontWeight": "normal"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "ZedWa",
-                      "name": "li",
-                      "width": "fill_container",
-                      "gap": 8,
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "jNXGO",
-                          "name": "b",
-                          "fill": "$color/navy",
-                          "content": "·",
-                          "fontFamily": "Inter",
-                          "fontSize": 14,
-                          "fontWeight": "700"
-                        },
-                        {
-                          "type": "text",
-                          "id": "o2pQK",
-                          "name": "t",
-                          "fill": "$color/muted",
-                          "textGrowth": "fixed-width",
-                          "width": "fill_container",
-                          "content": "FinTech & E-commerce — Value Intelligence AI platform",
-                          "lineHeight": 1.4,
-                          "fontFamily": "Inter",
-                          "fontSize": 13,
-                          "fontWeight": "normal"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "m6b8g3",
-                      "name": "li",
-                      "width": "fill_container",
-                      "gap": 8,
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "q34JXo",
-                          "name": "b",
-                          "fill": "$color/navy",
-                          "content": "·",
-                          "fontFamily": "Inter",
-                          "fontSize": 14,
-                          "fontWeight": "700"
-                        },
-                        {
-                          "type": "text",
-                          "id": "U2e5n",
-                          "name": "t",
-                          "fill": "$color/muted",
-                          "textGrowth": "fixed-width",
-                          "width": "fill_container",
-                          "content": "Healthcare — medical software for hospitals",
-                          "lineHeight": 1.4,
-                          "fontFamily": "Inter",
-                          "fontSize": 13,
-                          "fontWeight": "normal"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "pfBYO",
-                      "name": "li",
-                      "width": "fill_container",
-                      "gap": 8,
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "K4WGsy",
-                          "name": "b",
-                          "fill": "$color/navy",
-                          "content": "·",
-                          "fontFamily": "Inter",
-                          "fontSize": 14,
-                          "fontWeight": "700"
-                        },
-                        {
-                          "type": "text",
-                          "id": "LUKDE",
-                          "name": "t",
-                          "fill": "$color/muted",
-                          "textGrowth": "fixed-width",
-                          "width": "fill_container",
-                          "content": "Retail — Automated Decision Intelligence systems",
-                          "lineHeight": 1.4,
-                          "fontFamily": "Inter",
-                          "fontSize": 13,
-                          "fontWeight": "normal"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "F4Meci",
-              "name": "Top stack",
-              "width": "fill_container",
-              "layout": "vertical",
-              "gap": 6,
-              "children": [
-                {
-                  "type": "text",
-                  "id": "SzwWg",
-                  "fill": "$color/muted",
-                  "textGrowth": "fixed-width",
-                  "width": "fill_container",
-                  "content": "TOP STACK",
-                  "fontFamily": "Inter",
-                  "fontSize": 11,
-                  "fontWeight": "700",
-                  "letterSpacing": 1
-                },
-                {
-                  "type": "text",
-                  "id": "jsUrq",
-                  "fill": "$color/ink",
-                  "textGrowth": "fixed-width",
-                  "width": "fill_container",
-                  "content": "Java · Spring ecosystem (Boot, Cloud, WebFlux, Data, Security) · Kafka · Postgres · Redis · Hazelcast · Kubernetes · GitLab · and more",
-                  "fontFamily": "Inter",
-                  "fontSize": 15,
-                  "fontWeight": "normal"
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "xK32U",
-              "name": "Fold marker",
-              "width": "fill_container",
-              "layout": "vertical",
-              "gap": 8,
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "eW4Py",
-                  "name": "rule",
-                  "opacity": 0.35,
-                  "width": "fill_container",
-                  "height": 2,
-                  "fill": "$color/navy"
-                },
-                {
-                  "type": "frame",
-                  "id": "vhR4s",
-                  "name": "caption",
-                  "width": 620,
-                  "fill": "#fff8e1",
-                  "cornerRadius": 6,
-                  "stroke": "#f0d98a",
-                  "strokeWidth": 1,
-                  "strokeAlignment": "inner",
-                  "layout": "vertical",
-                  "padding": [
-                    8,
-                    10
-                  ],
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "Ul38h",
-                      "name": "t",
-                      "fill": "#7a6a2e",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "⚑ AC-01 / AC-08 — every above-the-fold essential visible with no scrolling at 1280×800 and 390×844. Header + Footer are NEW (not yet in spec §1 / sad §5).",
-                      "lineHeight": 1.45,
-                      "fontFamily": "Inter",
-                      "fontSize": 10,
-                      "fontWeight": "normal"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "W5vee",
-          "type": "ref",
-          "ref": "W7AZlV",
-          "name": "Footer",
-          "width": "fill_container"
-        }
-      ]
-    },
-    {
-      "type": "frame",
       "id": "XKUfO",
       "x": 2700,
       "y": 420,
@@ -448,6 +74,7 @@
           "id": "j3fNa",
           "name": "Header",
           "width": "fill_container",
+          "height": 54,
           "fill": "$color/navy-dark",
           "padding": [
             12,
@@ -823,7 +450,12 @@
           "type": "ref",
           "ref": "W7AZlV",
           "name": "Footer",
-          "width": "fill_container"
+          "width": "fill_container",
+          "flipX": false,
+          "flipY": false,
+          "height": 51,
+          "x": 0,
+          "y": 746
         }
       ]
     },
@@ -1715,581 +1347,6 @@
     },
     {
       "type": "frame",
-      "id": "AKdd9",
-      "x": 0,
-      "y": 2300,
-      "name": "SCR-01 · tagline omitted",
-      "clip": true,
-      "width": 1200,
-      "height": 539,
-      "fill": "$color/canvas",
-      "layout": "vertical",
-      "children": [
-        {
-          "id": "zWATg",
-          "type": "ref",
-          "ref": "dvllD",
-          "name": "Header",
-          "width": "fill_container"
-        },
-        {
-          "type": "frame",
-          "id": "wkJRD",
-          "name": "page",
-          "width": "fill_container",
-          "layout": "vertical",
-          "gap": 26,
-          "padding": [
-            44,
-            60
-          ],
-          "children": [
-            {
-              "type": "frame",
-              "id": "Nz7Sx",
-              "name": "Hero",
-              "width": "fill_container",
-              "gap": 40,
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "A4W9Q",
-                  "name": "Headshot",
-                  "width": 172,
-                  "height": 208,
-                  "fill": [
-                    "$color/navy",
-                    {
-                      "type": "image",
-                      "enabled": true,
-                      "url": "../../reference/me.png",
-                      "mode": "fill"
-                    }
-                  ],
-                  "cornerRadius": 12,
-                  "layout": "none"
-                },
-                {
-                  "type": "frame",
-                  "id": "Ey2NT",
-                  "name": "Hero copy",
-                  "width": "fill_container",
-                  "layout": "vertical",
-                  "gap": 10,
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "BxGCL",
-                      "fill": "$color/navy-dark",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "Roman Hrupskyi",
-                      "fontFamily": "Inter",
-                      "fontSize": 34,
-                      "fontWeight": "800"
-                    },
-                    {
-                      "type": "text",
-                      "id": "PbtLr",
-                      "fill": "$color/muted",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "Senior Java Engineer | Lead Backend Engineer",
-                      "fontFamily": "Inter",
-                      "fontSize": 18,
-                      "fontWeight": "600"
-                    },
-                    {
-                      "type": "frame",
-                      "id": "ESDhK",
-                      "name": "AvailabilityBlock slot",
-                      "padding": [
-                        8,
-                        0,
-                        0,
-                        0
-                      ],
-                      "children": [
-                        {
-                          "id": "V73Lf",
-                          "type": "ref",
-                          "ref": "k6V1ni",
-                          "name": "AvailabilityBlock",
-                          "width": 400
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "w8IISt",
-              "name": "Top stack",
-              "width": "fill_container",
-              "layout": "vertical",
-              "gap": 6,
-              "children": [
-                {
-                  "type": "text",
-                  "id": "RYtvX",
-                  "fill": "$color/muted",
-                  "textGrowth": "fixed-width",
-                  "width": "fill_container",
-                  "content": "TOP STACK",
-                  "fontFamily": "Inter",
-                  "fontSize": 11,
-                  "fontWeight": "700",
-                  "letterSpacing": 1
-                },
-                {
-                  "type": "text",
-                  "id": "PD5cX",
-                  "fill": "$color/ink",
-                  "textGrowth": "fixed-width",
-                  "width": "fill_container",
-                  "content": "Java · Spring ecosystem (Boot, Cloud, WebFlux, Data, Security) · Kafka · Postgres · Redis · Hazelcast · Kubernetes · GitLab · and more",
-                  "fontFamily": "Inter",
-                  "fontSize": 15,
-                  "fontWeight": "normal"
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "G569yN",
-              "name": "Fold marker",
-              "width": "fill_container",
-              "layout": "vertical",
-              "gap": 8,
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "rfgIl",
-                  "name": "rule",
-                  "opacity": 0.35,
-                  "width": "fill_container",
-                  "height": 2,
-                  "fill": "$color/navy"
-                },
-                {
-                  "type": "frame",
-                  "id": "rNNkY",
-                  "name": "caption",
-                  "width": 620,
-                  "fill": "#fff8e1",
-                  "cornerRadius": 6,
-                  "stroke": "#f0d98a",
-                  "strokeWidth": 1,
-                  "strokeAlignment": "inner",
-                  "layout": "vertical",
-                  "padding": [
-                    8,
-                    10
-                  ],
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "e7mjRN",
-                      "name": "t",
-                      "fill": "#7a6a2e",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "⚑ Both optional fields (tagline, positioning) empty — tightest, fastest-scanning hero; availability sits directly under the headline. AC-01 still holds. Header + Footer frame the page.",
-                      "lineHeight": 1.45,
-                      "fontFamily": "Inter",
-                      "fontSize": 10,
-                      "fontWeight": "normal"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "mknmh",
-          "type": "ref",
-          "ref": "W7AZlV",
-          "name": "Footer",
-          "width": "fill_container"
-        }
-      ]
-    },
-    {
-      "type": "frame",
-      "id": "GSu58",
-      "x": 9,
-      "y": 1214,
-      "name": "SCR-05 · about me",
-      "clip": true,
-      "width": 1200,
-      "height": 491,
-      "fill": "$color/canvas",
-      "layout": "vertical",
-      "children": [
-        {
-          "type": "frame",
-          "id": "HO9ni",
-          "name": "Section",
-          "width": "fill_container",
-          "layout": "vertical",
-          "gap": 22,
-          "padding": [
-            48,
-            80
-          ],
-          "children": [
-            {
-              "type": "frame",
-              "id": "Pj3Bd",
-              "name": "heading",
-              "width": "fill_container",
-              "layout": "vertical",
-              "gap": 8,
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "x6AiM0",
-                  "name": "t",
-                  "fill": "$color/navy",
-                  "content": "ABOUT ME",
-                  "textAlign": "center",
-                  "fontFamily": "Inter",
-                  "fontSize": 13,
-                  "fontWeight": "800",
-                  "letterSpacing": 2
-                },
-                {
-                  "type": "frame",
-                  "id": "V3azz",
-                  "name": "rule",
-                  "width": 56,
-                  "height": 3,
-                  "fill": "$color/navy",
-                  "cornerRadius": 2
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "k0sIs",
-              "name": "AboutMe",
-              "width": "fill_container",
-              "gap": 48,
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "B6zSXN",
-                  "name": "narrative",
-                  "width": "fill_container",
-                  "layout": "vertical",
-                  "gap": 12,
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "q9REd",
-                      "fill": "$color/ink",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "Seasoned Java professional with 9+ years designing and building scalable, high-performance business applications — backend development, microservices architecture, and technical leadership, with a track record of improving software quality, system performance, and engineering workflows.",
-                      "lineHeight": 1.55,
-                      "fontFamily": "Inter",
-                      "fontSize": 14,
-                      "fontWeight": "normal"
-                    },
-                    {
-                      "type": "text",
-                      "id": "Obofu",
-                      "fill": "$color/muted",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "My way of working is rooted in systems thinking — a holistic view of the big picture together with the ability to dive deep into the implementation details of complex systems.",
-                      "lineHeight": 1.55,
-                      "fontFamily": "Inter",
-                      "fontSize": 14,
-                      "fontWeight": "normal"
-                    },
-                    {
-                      "type": "text",
-                      "id": "adgPe",
-                      "fill": "$color/muted",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "A background in sales and project management gives me a perspective on delivering business value through technology — aligning engineering with product goals and communicating with both technical and non-technical stakeholders.",
-                      "lineHeight": 1.55,
-                      "fontFamily": "Inter",
-                      "fontSize": 14,
-                      "fontWeight": "normal"
-                    },
-                    {
-                      "type": "text",
-                      "id": "wJJMU",
-                      "fill": "$color/muted",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "Comfortable using AI coding assistants and LLM-based tools as productivity multipliers for development, debugging, refactoring, testing, and technical research.",
-                      "lineHeight": 1.55,
-                      "fontFamily": "Inter",
-                      "fontSize": 14,
-                      "fontWeight": "normal"
-                    }
-                  ]
-                },
-                {
-                  "type": "frame",
-                  "id": "MKVFu",
-                  "name": "highlights",
-                  "width": 400,
-                  "layout": "vertical",
-                  "gap": 8,
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "ClaHF",
-                      "name": "label",
-                      "fill": "$color/muted",
-                      "content": "HIGHLIGHTS",
-                      "fontFamily": "Inter",
-                      "fontSize": 11,
-                      "fontWeight": "700",
-                      "letterSpacing": 1
-                    },
-                    {
-                      "type": "frame",
-                      "id": "uHyia",
-                      "name": "li",
-                      "width": "fill_container",
-                      "gap": 8,
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "BLJZr",
-                          "name": "b",
-                          "fill": "$color/navy",
-                          "content": "·",
-                          "fontFamily": "Inter",
-                          "fontSize": 13,
-                          "fontWeight": "700"
-                        },
-                        {
-                          "type": "text",
-                          "id": "S5gqAq",
-                          "name": "t",
-                          "fill": "$color/muted",
-                          "textGrowth": "fixed-width",
-                          "width": "fill_container",
-                          "content": "Experience managing engineers.",
-                          "lineHeight": 1.45,
-                          "fontFamily": "Inter",
-                          "fontSize": 13,
-                          "fontWeight": "normal"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "SvKQX",
-                      "name": "li",
-                      "width": "fill_container",
-                      "gap": 8,
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "DuUnW",
-                          "name": "b",
-                          "fill": "$color/navy",
-                          "content": "·",
-                          "fontFamily": "Inter",
-                          "fontSize": 13,
-                          "fontWeight": "700"
-                        },
-                        {
-                          "type": "text",
-                          "id": "jwB2Y",
-                          "name": "t",
-                          "fill": "$color/muted",
-                          "textGrowth": "fixed-width",
-                          "width": "fill_container",
-                          "content": "Worked on a variety of projects, from large legacy systems to early- and mid-stage startups.",
-                          "lineHeight": 1.45,
-                          "fontFamily": "Inter",
-                          "fontSize": 13,
-                          "fontWeight": "normal"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "p2XPqh",
-                      "name": "li",
-                      "width": "fill_container",
-                      "gap": 8,
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "L79IQm",
-                          "name": "b",
-                          "fill": "$color/navy",
-                          "content": "·",
-                          "fontFamily": "Inter",
-                          "fontSize": 13,
-                          "fontWeight": "700"
-                        },
-                        {
-                          "type": "text",
-                          "id": "rrs2Q",
-                          "name": "t",
-                          "fill": "$color/muted",
-                          "textGrowth": "fixed-width",
-                          "width": "fill_container",
-                          "content": "Worked with architectures from large legacy monoliths to complex distributed systems of dozens of microservices.",
-                          "lineHeight": 1.45,
-                          "fontFamily": "Inter",
-                          "fontSize": 13,
-                          "fontWeight": "normal"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "XtxXV",
-                      "name": "li",
-                      "width": "fill_container",
-                      "gap": 8,
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "hLLlA",
-                          "name": "b",
-                          "fill": "$color/navy",
-                          "content": "·",
-                          "fontFamily": "Inter",
-                          "fontSize": 13,
-                          "fontWeight": "700"
-                        },
-                        {
-                          "type": "text",
-                          "id": "pK0HO",
-                          "name": "t",
-                          "fill": "$color/muted",
-                          "textGrowth": "fixed-width",
-                          "width": "fill_container",
-                          "content": "Worked with teams from small co-located groups to large international teams with hundreds of members distributed worldwide.",
-                          "lineHeight": 1.45,
-                          "fontFamily": "Inter",
-                          "fontSize": 13,
-                          "fontWeight": "normal"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "IqHvi",
-                      "name": "li",
-                      "width": "fill_container",
-                      "gap": 8,
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "Je3r6",
-                          "name": "b",
-                          "fill": "$color/navy",
-                          "content": "·",
-                          "fontFamily": "Inter",
-                          "fontSize": 13,
-                          "fontWeight": "700"
-                        },
-                        {
-                          "type": "text",
-                          "id": "hbarj",
-                          "name": "t",
-                          "fill": "$color/muted",
-                          "textGrowth": "fixed-width",
-                          "width": "fill_container",
-                          "content": "Strong expertise in Java and its ecosystem, relational databases, and distributed systems.",
-                          "lineHeight": 1.45,
-                          "fontFamily": "Inter",
-                          "fontSize": 13,
-                          "fontWeight": "normal"
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "UdrW9",
-                      "name": "li",
-                      "width": "fill_container",
-                      "gap": 8,
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "x6xJr8",
-                          "name": "b",
-                          "fill": "$color/navy",
-                          "content": "→",
-                          "fontFamily": "Inter",
-                          "fontSize": 13,
-                          "fontWeight": "700"
-                        },
-                        {
-                          "type": "text",
-                          "id": "vAv8s",
-                          "name": "t",
-                          "fill": "$color/navy",
-                          "textGrowth": "fixed-width",
-                          "width": "fill_container",
-                          "content": "See my LinkedIn profile for more details.",
-                          "lineHeight": 1.45,
-                          "fontFamily": "Inter",
-                          "fontSize": 13,
-                          "fontWeight": "600"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "frame",
-              "id": "CuUR2",
-              "name": "caption",
-              "width": 640,
-              "fill": "#fff8e1",
-              "cornerRadius": 6,
-              "stroke": "#f0d98a",
-              "strokeWidth": 1,
-              "strokeAlignment": "inner",
-              "layout": "vertical",
-              "padding": [
-                8,
-                10
-              ],
-              "children": [
-                {
-                  "type": "text",
-                  "id": "l3gLze",
-                  "name": "t",
-                  "fill": "#7a6a2e",
-                  "textGrowth": "fixed-width",
-                  "width": "fill_container",
-                  "content": "⚑ NEW section (Roman's request). Copy is from docs/reference/linkedin-about.md — the \"over 8 years\" figure is reconciled to \"9+\" (CV). Header \"About me\" item anchors here (#about). Not in spec §4 / sad.md §5 — needs an upstream touch-up.",
-                  "lineHeight": 1.45,
-                  "fontFamily": "Inter",
-                  "fontSize": 10,
-                  "fontWeight": "normal"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "frame",
       "id": "wSrnk",
       "x": 900,
       "y": 0,
@@ -2477,6 +1534,1131 @@
                   "fontWeight": "600"
                 }
               ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mknmh",
+      "type": "ref",
+      "ref": "W7AZlV",
+      "name": "Footer",
+      "width": "fill_container(1201)",
+      "x": -78,
+      "y": 3880,
+      "flipX": false,
+      "flipY": false,
+      "height": 82,
+      "children": [
+        {
+          "id": "o1bAy",
+          "type": "ref",
+          "ref": "o1bAy",
+          "fontSize": 14,
+          "layoutPosition": "absolute",
+          "x": 488,
+          "y": 41
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "id": "A3vORR",
+      "x": -81,
+      "y": 3151,
+      "children": [
+        {
+          "type": "frame",
+          "id": "ucM5t",
+          "x": 0,
+          "y": 0,
+          "name": "Section",
+          "width": 1181,
+          "height": 436,
+          "layout": "vertical",
+          "gap": 22,
+          "padding": [
+            48,
+            80
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "uG1vI",
+              "name": "heading",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "tm7db",
+                  "name": "t",
+                  "fill": "$color/navy",
+                  "content": "ABOUT ME",
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "800",
+                  "letterSpacing": 2
+                },
+                {
+                  "type": "frame",
+                  "id": "bLjfe",
+                  "name": "rule",
+                  "width": 56,
+                  "height": 3,
+                  "fill": "$color/navy",
+                  "cornerRadius": 2
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Pqp2D",
+              "name": "AboutMe",
+              "width": "fill_container",
+              "gap": 48,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "g4Yoy7",
+                  "name": "narrative",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 12,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "VnTDU",
+                      "fill": "$color/ink",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Seasoned Java professional with 9+ years designing and building scalable, high-performance business applications — backend development, microservices architecture, and technical leadership, with a track record of improving software quality, system performance, and engineering workflows.",
+                      "lineHeight": 1.55,
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "RoH7n",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "My way of working is rooted in systems thinking — a holistic view of the big picture together with the ability to dive deep into the implementation details of complex systems.",
+                      "lineHeight": 1.55,
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "plMz5",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "A background in sales and project management gives me a perspective on delivering business value through technology — aligning engineering with product goals and communicating with both technical and non-technical stakeholders.",
+                      "lineHeight": 1.55,
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "a1NAQ5",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Comfortable using AI coding assistants and LLM-based tools as productivity multipliers for development, debugging, refactoring, testing, and technical research.",
+                      "lineHeight": 1.55,
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "wks2J",
+                  "name": "highlights",
+                  "width": 400,
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "EWdzV",
+                      "name": "label",
+                      "fill": "$color/muted",
+                      "content": "HIGHLIGHTS",
+                      "fontFamily": "Inter",
+                      "fontSize": 11,
+                      "fontWeight": "700",
+                      "letterSpacing": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "vIULD",
+                      "name": "li",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "m6Kqmq",
+                          "name": "b",
+                          "fill": "$color/navy",
+                          "content": "·",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Xsru8",
+                          "name": "t",
+                          "fill": "$color/muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Experience managing engineers.",
+                          "lineHeight": 1.45,
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "voXIa",
+                      "name": "li",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "wYIrJ",
+                          "name": "b",
+                          "fill": "$color/navy",
+                          "content": "·",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "K5HrY3",
+                          "name": "t",
+                          "fill": "$color/muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Worked on a variety of projects, from large legacy systems to early- and mid-stage startups.",
+                          "lineHeight": 1.45,
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "bRu4v",
+                      "name": "li",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "P7CuQ",
+                          "name": "b",
+                          "fill": "$color/navy",
+                          "content": "·",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "eQ74y",
+                          "name": "t",
+                          "fill": "$color/muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Worked with architectures from large legacy monoliths to complex distributed systems of dozens of microservices.",
+                          "lineHeight": 1.45,
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "EV2ai",
+                      "name": "li",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "JfTu4",
+                          "name": "b",
+                          "fill": "$color/navy",
+                          "content": "·",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "y4fZtm",
+                          "name": "t",
+                          "fill": "$color/muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Worked with teams from small co-located groups to large international teams with hundreds of members distributed worldwide.",
+                          "lineHeight": 1.45,
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "lHAWD",
+                      "name": "li",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "FuimG",
+                          "name": "b",
+                          "fill": "$color/navy",
+                          "content": "·",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "S9BjWh",
+                          "name": "t",
+                          "fill": "$color/muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Strong expertise in Java and its ecosystem, relational databases, and distributed systems.",
+                          "lineHeight": 1.45,
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "nfji3",
+                      "name": "li",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "hNdou",
+                          "name": "b",
+                          "fill": "$color/navy",
+                          "content": "→",
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "K4nBeY",
+                          "name": "t",
+                          "fill": "$color/navy",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "See my LinkedIn profile for more details.",
+                          "lineHeight": 1.45,
+                          "fontFamily": "Inter",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "XpCTC",
+      "x": -81,
+      "y": 3096,
+      "clip": true,
+      "width": 1203,
+      "height": 801,
+      "fill": "#dfe3e6ff",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "vk6U0",
+          "name": "Frame 1",
+          "width": 1201,
+          "height": 788,
+          "layout": "vertical",
+          "gap": 10,
+          "padding": 10,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "group",
+              "id": "tPTaO",
+              "children": [
+                {
+                  "type": "group",
+                  "id": "i91CtO",
+                  "x": 47.32072370650142,
+                  "y": 257.4200622161875,
+                  "rotation": -0.06914788766871634,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "lA53q",
+                      "x": -46.65737930690467,
+                      "y": -257.3639408100544,
+                      "name": "Section",
+                      "width": 1201.9926642101752,
+                      "height": 781.0359090902306,
+                      "layout": "vertical",
+                      "gap": 22,
+                      "padding": [
+                        48,
+                        80
+                      ],
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "IQtvH",
+                          "name": "heading",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "g0cb0g",
+                              "name": "t",
+                              "fill": "$color/navy",
+                              "content": "ABOUT ME",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 24,
+                              "fontWeight": "800",
+                              "letterSpacing": 2
+                            },
+                            {
+                              "type": "frame",
+                              "id": "ZmWSE",
+                              "name": "rule",
+                              "width": 56,
+                              "height": 3,
+                              "fill": "$color/navy",
+                              "cornerRadius": 2
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "AzHF6",
+                          "name": "AboutMe",
+                          "width": 1015,
+                          "height": 607,
+                          "gap": 48,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "RPIni",
+                              "name": "narrative",
+                              "width": "fill_container",
+                              "layout": "vertical",
+                              "gap": 12,
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "BKLLL",
+                                  "fill": [
+                                    "$color/ink",
+                                    "$color/muted"
+                                  ],
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Seasoned Java professional with 9+ years designing and building scalable, high-performance business applications — backend development, microservices architecture, and technical leadership, with a track record of improving software quality, system performance, and engineering workflows.",
+                                  "lineHeight": 1.55,
+                                  "fontFamily": "Inter",
+                                  "fontSize": 20,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "V3YIPY",
+                                  "fill": "$color/muted",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "My way of working is rooted in systems thinking — a holistic view of the big picture together with the ability to dive deep into the implementation details of complex systems.",
+                                  "lineHeight": 1.55,
+                                  "fontFamily": "Inter",
+                                  "fontSize": 20,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "m03vzs",
+                                  "fill": "$color/muted",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "A background in sales and project management gives me a perspective on delivering business value through technology — aligning engineering with product goals and communicating with both technical and non-technical stakeholders.",
+                                  "lineHeight": 1.55,
+                                  "fontFamily": "Inter",
+                                  "fontSize": 20,
+                                  "fontWeight": "normal"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "cAAPG",
+                                  "fill": "$color/muted",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Comfortable using AI coding assistants and LLM-based tools as productivity multipliers for development, debugging, refactoring, testing, and technical research.",
+                                  "lineHeight": 1.55,
+                                  "fontFamily": "Inter",
+                                  "fontSize": 20,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "dlj8t",
+                              "name": "highlights",
+                              "width": 478,
+                              "height": 525,
+                              "layout": "vertical",
+                              "gap": 8,
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "rjFau",
+                                  "name": "label",
+                                  "fill": "$color/muted",
+                                  "content": "HIGHLIGHTS",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 20,
+                                  "fontWeight": "700",
+                                  "letterSpacing": 1
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "ZJCcp",
+                                  "name": "li",
+                                  "width": "fill_container",
+                                  "gap": 8,
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "T2BVL",
+                                      "name": "b",
+                                      "fill": "$color/navy",
+                                      "content": "·",
+                                      "fontFamily": "Inter",
+                                      "fontSize": 13,
+                                      "fontWeight": "700"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "e2Agl",
+                                      "name": "t",
+                                      "fill": "$color/muted",
+                                      "textGrowth": "fixed-width",
+                                      "width": "fill_container",
+                                      "content": "Experience managing engineers.",
+                                      "lineHeight": 1.45,
+                                      "fontFamily": "Inter",
+                                      "fontSize": 20,
+                                      "fontWeight": "normal"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "IJsH8",
+                                  "name": "li",
+                                  "width": "fill_container",
+                                  "gap": 8,
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "D79Grm",
+                                      "name": "b",
+                                      "fill": "$color/navy",
+                                      "content": "·",
+                                      "fontFamily": "Inter",
+                                      "fontSize": 13,
+                                      "fontWeight": "700"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "R96sMh",
+                                      "name": "t",
+                                      "fill": "$color/muted",
+                                      "textGrowth": "fixed-width",
+                                      "width": "fill_container",
+                                      "content": "Worked on a variety of projects, from large legacy systems to early- and mid-stage startups.",
+                                      "lineHeight": 1.45,
+                                      "fontFamily": "Inter",
+                                      "fontSize": 20,
+                                      "fontWeight": "normal"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "zHho4",
+                                  "name": "li",
+                                  "width": "fill_container",
+                                  "gap": 8,
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "xlQCU",
+                                      "name": "b",
+                                      "fill": "$color/navy",
+                                      "content": "·",
+                                      "fontFamily": "Inter",
+                                      "fontSize": 13,
+                                      "fontWeight": "700"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "Hf1qS",
+                                      "name": "t",
+                                      "fill": "$color/muted",
+                                      "textGrowth": "fixed-width",
+                                      "width": "fill_container",
+                                      "content": "Worked with architectures from large legacy monoliths to complex distributed systems of dozens of microservices.",
+                                      "lineHeight": 1.45,
+                                      "fontFamily": "Inter",
+                                      "fontSize": 20,
+                                      "fontWeight": "normal"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "QIyLr",
+                                  "name": "li",
+                                  "width": "fill_container",
+                                  "gap": 8,
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "zotmi",
+                                      "name": "b",
+                                      "fill": "$color/navy",
+                                      "content": "·",
+                                      "fontFamily": "Inter",
+                                      "fontSize": 13,
+                                      "fontWeight": "700"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "x80JC",
+                                      "name": "t",
+                                      "fill": "$color/muted",
+                                      "textGrowth": "fixed-width",
+                                      "width": "fill_container",
+                                      "content": "Worked with teams from small co-located groups to large international teams with hundreds of members distributed worldwide.",
+                                      "lineHeight": 1.45,
+                                      "fontFamily": "Inter",
+                                      "fontSize": 20,
+                                      "fontWeight": "normal"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "eX9UO",
+                                  "name": "li",
+                                  "width": "fill_container",
+                                  "gap": 8,
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "YN1Ut",
+                                      "name": "b",
+                                      "fill": "$color/navy",
+                                      "content": "·",
+                                      "fontFamily": "Inter",
+                                      "fontSize": 13,
+                                      "fontWeight": "700"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "EaefD",
+                                      "name": "t",
+                                      "fill": "$color/muted",
+                                      "textGrowth": "fixed-width",
+                                      "width": "fill_container",
+                                      "content": "Strong expertise in Java and its ecosystem, relational databases, and distributed systems.",
+                                      "lineHeight": 1.45,
+                                      "fontFamily": "Inter",
+                                      "fontSize": 20,
+                                      "fontWeight": "normal"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "GwQE3",
+                                  "name": "li",
+                                  "width": "fill_container",
+                                  "gap": 8,
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "tkjEY",
+                                      "name": "b",
+                                      "fill": "$color/navy",
+                                      "content": "→",
+                                      "fontFamily": "Inter",
+                                      "fontSize": 13,
+                                      "fontWeight": "700"
+                                    },
+                                    {
+                                      "type": "text",
+                                      "id": "MKFIu",
+                                      "name": "t",
+                                      "fill": "$color/navy",
+                                      "textGrowth": "fixed-width",
+                                      "width": "fill_container",
+                                      "content": "See my LinkedIn profile for more details.",
+                                      "lineHeight": 1.45,
+                                      "fontFamily": "Inter",
+                                      "fontSize": 20,
+                                      "fontWeight": "600"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "id": "s7Hhu",
+      "x": -80,
+      "y": 2086,
+      "children": [
+        {
+          "type": "frame",
+          "id": "AKdd9",
+          "x": 0,
+          "y": 0,
+          "name": "SCR-01 · tagline omitted",
+          "clip": true,
+          "width": 1203,
+          "height": 1010,
+          "fill": "$color/canvas",
+          "layout": "vertical",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "qNSuU",
+              "layoutPosition": "absolute",
+              "x": 485,
+              "y": 105,
+              "name": "Headshot",
+              "clip": true,
+              "width": 234,
+              "height": 253,
+              "fill": [
+                "$color/navy",
+                {
+                  "type": "image",
+                  "enabled": true,
+                  "url": "../../reference/me.png",
+                  "mode": "fill"
+                }
+              ],
+              "cornerRadius": 60,
+              "layout": "vertical",
+              "alignItems": "center"
+            },
+            {
+              "type": "text",
+              "id": "gKEFk",
+              "layoutPosition": "absolute",
+              "x": 21,
+              "y": 388,
+              "fill": "$color/navy-dark",
+              "textGrowth": "fixed-width-height",
+              "width": "fill_container(1160)",
+              "height": "fit_content(40)",
+              "content": "Roman Hrupskyi",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 34,
+              "fontWeight": "800"
+            },
+            {
+              "type": "text",
+              "id": "L0vzfC",
+              "layoutPosition": "absolute",
+              "x": 20.5,
+              "y": 469,
+              "fill": "$color/muted",
+              "textGrowth": "fixed-width-height",
+              "width": "fill_container(1162)",
+              "height": 36,
+              "content": "Senior Java Engineer | Lead Backend Engineer",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 24,
+              "fontWeight": "600"
+            },
+            {
+              "type": "frame",
+              "id": "d8KHhq",
+              "layoutPosition": "absolute",
+              "x": 27,
+              "y": 505,
+              "name": "Tagline",
+              "width": "fill_container(1148)",
+              "height": 127,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "VKy7W",
+                  "fill": "$color/ink",
+                  "textGrowth": "fixed-width-height",
+                  "width": 1001,
+                  "height": 66,
+                  "content": "Java engineer and technical leader with 9+ years of experience designing, building, and scaling high-load distributed systems, leading engineering teams, and delivering business-critical platforms across multiple domains.",
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 22,
+                  "fontWeight": "normal",
+                  "fontStyle": "italic"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "u63b0",
+              "layoutPosition": "absolute",
+              "x": 599,
+              "y": 648,
+              "name": "Industries",
+              "width": 517,
+              "height": 211,
+              "layout": "vertical",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "uA0cs",
+                  "name": "label",
+                  "fill": "$color/muted",
+                  "content": "INDUSTRIES",
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "700",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "frame",
+                  "id": "c30iK",
+                  "name": "li",
+                  "width": 538,
+                  "height": 23,
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Lj3K2",
+                      "name": "b",
+                      "fill": "$color/navy",
+                      "content": "·",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "dHaIm",
+                      "name": "t",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "iGaming — Remote Game Servers (RGS)",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "jVR5A",
+                  "name": "li",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "KdZ3l",
+                      "name": "b",
+                      "fill": "$color/navy",
+                      "content": "·",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "S6bSO",
+                      "name": "t",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "FinTech & E-commerce — Value Intelligence AI platform",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "CFdiv",
+                  "name": "li",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "wkf5U",
+                      "name": "b",
+                      "fill": "$color/navy",
+                      "content": "·",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "kTr9w",
+                      "name": "t",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Healthcare — medical software for hospitals",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "y7E33r",
+                  "name": "li",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "lopTg",
+                      "name": "b",
+                      "fill": "$color/navy",
+                      "content": "·",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "iXTBS",
+                      "name": "t",
+                      "fill": "$color/muted",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Retail — Automated Decision Intelligence systems",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Oj7mE",
+              "layoutPosition": "absolute",
+              "x": 516,
+              "y": 440,
+              "name": "rule",
+              "width": 165,
+              "height": 5,
+              "fill": "$color/navy",
+              "cornerRadius": 2
+            },
+            {
+              "id": "Q1Z17O",
+              "type": "ref",
+              "ref": "k6V1ni",
+              "name": "AvailabilityBlock",
+              "width": 420,
+              "x": 84,
+              "y": 648,
+              "flipX": false,
+              "flipY": false,
+              "height": 148,
+              "layoutPosition": "absolute",
+              "justifyContent": "center",
+              "alignItems": "start",
+              "descendants": {
+                "TNYgr": {
+                  "fontSize": 18,
+                  "textAlign": "center"
+                },
+                "bepuU": {
+                  "fontSize": 20
+                },
+                "Bm9Tb": {
+                  "fontSize": 20
+                }
+              }
+            },
+            {
+              "type": "frame",
+              "id": "v4hGm",
+              "layoutPosition": "absolute",
+              "x": 84,
+              "y": 871,
+              "name": "Top stack",
+              "width": "fill_container(1033)",
+              "height": 87,
+              "layout": "vertical",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "RxH5j",
+                  "fill": "$color/muted",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "TOP STACK",
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "700",
+                  "letterSpacing": 1
+                },
+                {
+                  "type": "text",
+                  "id": "tIzMC",
+                  "fill": "$color/ink",
+                  "textGrowth": "fixed-width-height",
+                  "width": 1059,
+                  "height": 72,
+                  "content": "Java · Spring ecosystem (Boot, Cloud, WebFlux, Data, Security) · Kafka · Postgres · Redis · Hazelcast · Kubernetes · GitLab · and more",
+                  "fontFamily": "Inter",
+                  "fontSize": 20,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "id": "zWATg",
+              "type": "ref",
+              "ref": "dvllD",
+              "name": "Header",
+              "width": "fill_container",
+              "flipX": false,
+              "flipY": false,
+              "height": 89,
+              "x": 0,
+              "y": 0,
+              "descendants": {
+                "fHuJ6": {
+                  "height": 48,
+                  "flipX": false,
+                  "flipY": false,
+                  "width": 422,
+                  "x": 40,
+                  "y": 20.5
+                },
+                "P66r2g": {
+                  "fontSize": 30
+                },
+                "n85kV": {
+                  "width": 24,
+                  "height": 24
+                },
+                "iOsDW": {
+                  "height": 24,
+                  "width": 24
+                },
+                "hFprU": {
+                  "height": "fit_content"
+                },
+                "xOEcG": {
+                  "fontSize": 20
+                },
+                "bigIn": {
+                  "fontSize": 20
+                },
+                "rMJQ4": {
+                  "fontSize": 20
+                }
+              }
+            },
+            {
+              "type": "rectangle",
+              "id": "u0gyxa",
+              "fill": "#CCCCCC",
+              "width": 1,
+              "height": 3
             }
           ]
         }

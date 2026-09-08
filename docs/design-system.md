@@ -3,7 +3,7 @@ status: Living
 tool: pencil
 figma_file: ""
 pen_file: "docs/design-system.pen"
-updated_at: "2026-09-06"
+updated_at: "2026-09-07"
 ---
 
 # Design system — personal-landing
@@ -51,34 +51,37 @@ updated_at: "2026-09-06"
 
 ## Component inventory
 
-> `site/src/components/` is empty today. The rows below are the first shared primitives, all
-> created by **personal-landing** (`docs/features/personal-landing/screens.md` §New components).
-> `implement` replaces `pending` with the real `file:line` anchor as it registers each one; the
-> `.pen` node id is filled in as `screens` draws it. A later UI feature reuses these names or
-> declares `NEW: <name>` with a why-no-primitive-fits justification and registers it back here.
+> The first shared primitives, all created by **personal-landing** (registered by `implement`,
+> task T11). A later UI feature reuses these names or declares `NEW: <name>` with a
+> why-no-primitive-fits justification and registers it back here.
 >
 > **Removed** (personal-landing revision, `screens.md` §Divergence D-1/D-2): `ContactActions`,
 > `ContactButton`, `PhoneChooser` — the hero contact row moved into the `Header` and phone was
-> dropped. Not re-add unless a spec revision brings phone back.
+> dropped. Not re-add unless a spec revision brings phone back. `ContactActions` was ultimately
+> **folded into `Header`** rather than shipped as its own file (the three controls are `<a>`
+> elements inside `Header.astro`).
 
 | Component | Source (`file:line` / node / URL) | States it supports | Notes |
 |---|---|---|---|
-| `Header` | `site/src/components/` — pending (personal-landing) · `screens.pen` reusable `dvllD` | default / phone-condensed / keyboard-focus | **Fixed / sticky** dark-navy top bar (CSS only). Left: name + `LinkedIn` / `Gmail` **icon controls** → the LinkedIn URL / `mailto:` (these ARE the LinkedIn + email contact actions). Right: `About me` (`#about`), `Download CV`, `Contact` (`#contact`) **menu items**. **No phone.** ⚠ not in `sad.md` §5 — `screens.md` §Divergence D-1/D-3. |
-| `Footer` | `site/src/components/` — pending (personal-landing) · `screens.pen` reusable `W7AZlV` | default | Dark-navy bottom bar, centered "Copyright © Hrupskyi R. Bio 2026". ⚠ not in `sad.md` §5 — D-3. |
-| `Section` | `site/src/components/` — pending (personal-landing) · `screens.pen` inline `mQ0Vj` | default | Below-the-fold section wrapper: centered heading + short rule + spacing rhythm. Reused by SCR-02, SCR-03, SCR-05. |
-| `AboutMe` | `site/src/components/` — pending (personal-landing) · `screens.pen` inline (`GSu58` › `k0sIs`) | default / phone-reflow / ai-line-omitted | Grey band, two columns: `narrative` (from `linkedin-about.md`) + `highlights` (Roman's own bullets + a LinkedIn link). ⚠ new section — D-4. |
-| `Industries` | `site/src/components/` — pending (personal-landing) · `screens.pen` inline (`Sh75H` › `QfCVa` / `XKUfO` › `WMCWv`) | default / phone-stacked | Hero right column — the INDUSTRIES list from `linkedin-about.md` (iGaming / FinTech & E-commerce / Healthcare / Retail). Static text. ⚠ D-7. |
-| `Hero` | `site/src/components/` — pending (personal-landing) · `screens.pen` `xEwZk` (laptop) / `Avanx` (phone) | default / tagline-omitted | White band. Headshot (LCP, `astro:assets` eager, real `docs/reference/me.png`) + name + headline + optional tagline (~40-word sentence, D-10) + `AvailabilityBlock` (left) + `Industries` (right). **No `positioning` block.** Laptop + phone layouts differ (responsive-both). No hero contact row (D-1). |
-| `AvailabilityBlock` | `site/src/components/` — pending (personal-landing) · `screens.pen` reusable `k6V1ni` | default / work-auth-omitted | Structured block: availability `status` (carries remote stance) + `location` + optional `workAuthorization`. No notice period. |
-| `ExperienceTimeline` | `site/src/components/` — pending (personal-landing) · `screens.pen` inline `jgvYw` | default / current-role / earlier-background-omitted | White band. 4 real roles most-recent-first + the optional single "earlier background" line. |
-| `SelectedProjects` | `site/src/components/` — pending (personal-landing) · `screens.pen` inline `b9PNeG` | default | Grey band. **Vertical stack** of `ProjectCard` accordions (3–5). |
-| `ProjectCard` | `site/src/components/` — pending (personal-landing) · `screens.pen` reusable `J2r0z` | collapsed / expanded / quantified-impact / qualitative-impact | **Accordion** — native `<details>`, no JS. Collapsed: name + role + one-line impact + chevron. Expanded: + `Detail` (CV description, tech stack, date range). ⚠ D-8 — needs `data-model` fields. |
+| `Layout` | `site/src/layouts/Layout.astro:1` · new (not in the screens manifest) | default | Base page shell: `<html lang="en">`, `<title>` from a prop, imports `global.css`, `min-height:100vh` flex column with `Footer` as the last flow child. Zero JS. |
+| `Band` | `site/src/components/Band.astro:1` · new primitive (not in the screens manifest) | tone: surface / canvas / navy | Full-bleed colour band + centered max-width column; `as` picks the element (`section`/`header`/`footer`). The primitive `Hero` / `Section` / `Footer` compose from — keeps the alternating-band rhythm consistent, no inline colours. |
+| `Header` | `site/src/components/Header.astro:1` · `screens.pen` reusable `dvllD` | default / phone-condensed / keyboard-focus | **Fixed / sticky** dark-navy top bar (CSS only). Name + LinkedIn / Email **icon controls** (→ LinkedIn URL / `mailto:`, value only in `href`) + `About me` (`#about`) + `Download CV` (derived filename, `download`). Phone: name + icons + native `<details>` menu holding About + Download CV. **No phone number. No "Contact" item** (no `#contact` section in v1). Each contact control carries a `data-contact-channel` / `data-cv-download` step-8 hook. |
+| `Footer` | `site/src/components/Footer.astro:1` · `screens.pen` reusable `W7AZlV` | default | Dark-navy bottom bar (via `Band` navy), centered "Copyright © Hrupskyi R. Bio 2026". Flush to the viewport bottom. |
+| `Section` | `site/src/components/Section.astro:1` · `screens.pen` inline `mQ0Vj` | default | Below-the-fold section wrapper (wraps `Band`): centered heading + short navy rule + spacing rhythm + `scroll-margin-top` for `#anchor` jumps. Reused by About now; Experience / Selected-projects in v2. |
+| `AboutMe` | `site/src/components/AboutMe.astro:1` · `screens.pen` inline (`GSu58` › `k0sIs`) | default / phone-reflow / ai-line-omitted | Grey band (`Section` canvas, `id="about"`), two columns → one on phone: `narrative` (paragraphs split on blank lines) + `highlights` list + a "See my LinkedIn profile" link. All from content — no hard-coded copy. |
+| `Industries` | `site/src/components/Industries.astro:1` · `screens.pen` inline (`Sh75H` › `QfCVa` / `XKUfO` › `WMCWv`) | default / phone-stacked / absent | Hero right column — renders the optional `industries` content field (`{domain, note?}`, ≤ 6); renders nothing when absent (AC-15). Static text. |
+| `Hero` | `site/src/components/Hero.astro:1` · `screens.pen` `xEwZk` (laptop) / `Avanx` (phone) | default / tagline-omitted / industries-absent | White band (`Band` surface), fills the fold. `astro:assets` `<Image>` headshot (eager, high fetch-priority, < 100 KB) + `<h1>` name + headline + optional tagline + `AvailabilityBlock` (left) + optional `Industries` (right) + top-stack chips. Two-column laptop → single-column phone; `<360px` drops Industries first. |
+| `AvailabilityBlock` | `site/src/components/AvailabilityBlock.astro:1` · `screens.pen` reusable `k6V1ni` | default / notice-omitted / work-auth-omitted | Structured block: `status` (carries the remote/hybrid stance) + `location` + optional `noticePeriod` + optional `workAuthorization`, all content-driven. |
+| `ExperienceTimeline` | **v2 — not built** (SCR-02, US-04) | — | Re-instate with US-04; `screens.pen` inline `jgvYw`. |
+| `SelectedProjects` | **v2 — not built** (SCR-03, US-09) | — | Re-instate with US-09; `screens.pen` inline `b9PNeG`. |
+| `ProjectCard` | **v2 — not built** (SCR-03, US-09, D-8) | — | Native `<details>` accordion; re-instate with US-09; `screens.pen` reusable `J2r0z`. |
 
 ## Interaction & writing conventions
 
-- **Errors:** no runtime error state — the site is static (SSG, ADR-0001) with zero client JS by
-  default. Every completeness failure is a **build-time gate** that fails the build and names the
-  missing field (AC-05 / AC-06 / AC-12, ADR-0007); an incomplete page never deploys.
+- **Errors:** no runtime error state — the site is static (SSG, ADR-0001); the only client JS is
+  small inline progressive-enhancement scripts (scroll-spy indicator, personal-landing ADR-0009;
+  step-8 beacon later). Every completeness failure is a **build-time gate** that fails the build
+  and names the missing field (AC-05 / AC-06 / AC-12, ADR-0007); an incomplete page never deploys.
 - **Empty states:** none at runtime — optional content fields (tagline, positioning,
   `workAuthorization`, `earlierBackground`) simply don't render and the layout closes up. Required
   fields are schema-enforced, so a section is never empty at runtime.

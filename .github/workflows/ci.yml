@@ -4,7 +4,31 @@ on:
   pull_request:
 
 jobs:
+  # Which app the PR touches — the two build/test independently (CLAUDE.md).
+  # tracker CI stays dormant until a PR actually changes tracker/**.
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      site: ${{ steps.filter.outputs.site }}
+      tracker: ${{ steps.filter.outputs.tracker }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            site:
+              - 'site/**'
+              - '.github/workflows/ci.yml'
+            tracker:
+              - 'tracker/**'
+
   site:
+    needs: changes
+    if: needs.changes.outputs.site == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -17,11 +41,17 @@ jobs:
           cache: npm
           cache-dependency-path: site/package-lock.json
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
       - run: npm run check
-      - run: npm run build   # triggers the postbuild CV PDF generation
+      - run: npm test          # Vitest: unit + component + build-pipeline integration (AC-05/AC-06)
+      - run: npm run build      # postbuild asserts the committed CV PDF exists (ADR-0008)
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e   # e2e-through-UI — gating (spec.md §Test plan "still gating"): AC-01/08/13/14, E15/E16/E17
+      # Visual-regression (`npm run test:visual`) stays local-only until Linux
+      # baselines are generated in a Playwright container (launch-checklist.md).
 
   tracker:
+    needs: changes
+    if: needs.changes.outputs.tracker == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

@@ -1,0 +1,355 @@
+---
+// Persistent sticky header — the whole of US-02. CSS-only (no client JS): the
+// bar is `position: sticky`, the phone menu is a native <details> disclosure
+// (AC-08), and the scroll-shrink is a CSS scroll-driven animation (no <script>,
+// degrades to a normal sticky bar where unsupported).
+//
+// The contact controls (LinkedIn, email/Contact, Download CV) carry their value
+// ONLY in `href` — never as visible text (AC-07, AC-10, ADR-0006) — plus a
+// stable `data-*` hook for the roadmap-step-8 beacon.
+//
+// Focus / DOM order: Name → LinkedIn → email → About → Download CV → Contact
+// (screens.pen SCR-01 "keyboard focus"). "Contact" is a mailto: — the same
+// channel as the email icon, surfaced as a word on the redesigned header.
+import { cvFilename } from '../lib/cv-filename.js';
+import { hasLinkedInLink, type LinkLike } from '../lib/content-checks';
+
+interface Props {
+  name: string;
+  headline: string;
+  email: string;
+  links: LinkLike[];
+}
+
+const { name, headline, email, links } = Astro.props;
+
+const linkedIn = links.find((l) => hasLinkedInLink([l]));
+if (!linkedIn) {
+  // The build already guarantees this (INV-03); guard so a mis-wire fails loud.
+  throw new Error('Header: no linkedin.com link in contact.links');
+}
+
+const base = import.meta.env.BASE_URL;
+const cvHref = `${base}${cvFilename({ name, headline })}`;
+const mailto = `mailto:${email}`;
+---
+
+<header class="site-header">
+  <div class="site-header__bar">
+    <a class="site-header__name" href={base}>{name}</a>
+
+    <span class="site-header__divider" aria-hidden="true"></span>
+
+    <div class="site-header__icons">
+      <a
+        class="site-header__action site-header__action--icon"
+        href={linkedIn.url}
+        target="_blank"
+        rel="noopener"
+        data-contact-channel="linkedin"
+        aria-label="Roman on LinkedIn (opens in a new tab)"
+      >
+        <svg class="site-header__glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path
+            fill="currentColor"
+            d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5ZM3 9.75h4v11.25H3V9.75Zm6.5 0h3.83v1.54h.05c.53-1 1.84-2.06 3.79-2.06 4.05 0 4.8 2.67 4.8 6.14V21h-4v-4.99c0-1.19-.02-2.72-1.66-2.72-1.66 0-1.91 1.3-1.91 2.64V21h-4V9.75Z"
+          ></path>
+        </svg>
+        <span class="site-header__label">LinkedIn</span>
+      </a>
+
+      <a
+        class="site-header__action site-header__action--icon"
+        href={mailto}
+        data-contact-channel="email"
+        aria-label="Email Roman"
+      >
+        <svg class="site-header__glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path
+            fill="currentColor"
+            d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm9 7.2 8-5.2H4l8 5.2ZM4 8.4V18h16V8.4l-8 5.2-8-5.2Z"
+          ></path>
+        </svg>
+        <span class="site-header__label">Email</span>
+      </a>
+    </div>
+
+    <nav class="site-header__actions" aria-label="Contact Roman and page navigation">
+      <a
+        class="site-header__action site-header__action--inline"
+        href="#about"
+        data-nav-link="about"
+      >
+        About me
+      </a>
+
+      <a
+        class="site-header__action site-header__action--inline"
+        href={cvHref}
+        download
+        data-cv-download
+      >
+        Download CV
+      </a>
+
+      <a
+        class="site-header__action site-header__action--inline site-header__action--strong"
+        href={mailto}
+        data-contact-channel="email"
+      >
+        Contact
+      </a>
+    </nav>
+
+    <details class="site-header__menu">
+      <summary class="site-header__action" aria-label="Open menu">
+        <svg class="site-header__glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M3 6h18v2H3V6Zm0 5h18v2H3v-2Zm0 5h18v2H3v-2Z"></path>
+        </svg>
+      </summary>
+      <div class="site-header__menu-panel">
+        <a class="site-header__menu-item" href="#about" data-nav-link="about">About me</a>
+        <a class="site-header__menu-item" href={cvHref} download data-cv-download>Download CV</a>
+        <a class="site-header__menu-item" href={mailto} data-contact-channel="email">Contact</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    width: 100%;
+    background: var(--color-navy-dark);
+    color: #fff;
+    border-bottom: 1px solid color-mix(in srgb, #fff 8%, transparent);
+  }
+  .site-header__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding: 1.9rem clamp(1rem, 5vw, 2.5rem);
+  }
+  .site-header__name {
+    color: #fff;
+    font-weight: 800;
+    text-decoration: none;
+    /* Same size as the hero name under the photo (Hero.astro `.hero__name`). */
+    font-size: clamp(1.6rem, 4.2vw, 2.15rem);
+    letter-spacing: 0.01em;
+    line-height: 1.15;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .site-header__divider {
+    width: 1px;
+    height: 18px;
+    background: #3d4b66;
+    margin-inline: 0.5rem 0.1rem;
+    flex: none;
+  }
+  .site-header__icons {
+    display: flex;
+    align-items: center;
+  }
+  .site-header__actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 2.5vw, 1.6rem);
+  }
+  .site-header__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    min-width: 44px;
+    padding-inline: 0.5rem;
+    border-radius: 0.4rem;
+    color: #c9d4e6;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  /* Scroll-spy active state — the darker filled block behind the current
+     section's link (matches the reference resume header). Toggled by the
+     inline IntersectionObserver below; no JS ⇒ the class is never added and
+     the link just styles like any other (progressive enhancement). */
+  .site-header__action.is-active,
+  .site-header__menu-item.is-active {
+    background: rgba(0, 0, 0, 0.28);
+    color: #fff;
+  }
+  .site-header__action--icon {
+    color: #fff;
+    padding-inline: 0.35rem;
+  }
+  .site-header__action--strong {
+    color: #fff;
+    font-weight: 700;
+  }
+  .site-header__action:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+  }
+  .site-header__action:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+  .site-header__glyph {
+    width: 22px;
+    height: 22px;
+    flex: none;
+  }
+
+  /* Native <details> menu — phone only. */
+  .site-header__menu {
+    position: relative;
+  }
+  .site-header__menu > summary {
+    list-style: none;
+  }
+  .site-header__menu > summary::-webkit-details-marker {
+    display: none;
+  }
+  .site-header__menu-panel {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.4rem);
+    display: flex;
+    flex-direction: column;
+    min-width: 12rem;
+    padding: 0.4rem;
+    border-radius: 0.5rem;
+    background: var(--color-navy-dark);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+  .site-header__menu-item {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding-inline: 0.75rem;
+    border-radius: 0.4rem;
+    color: #fff;
+    text-decoration: none;
+  }
+  .site-header__menu-item:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+  .site-header__menu-item:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: -2px;
+  }
+
+  /* Laptop (>=960px): every action inline, disclosure menu hidden, icon labels
+     visible. The threshold is 960, not 768: the hero-sized name plus two
+     labelled icons plus three inline text actions only sit on one row without
+     compressing the name below ~960px — at 768 the row filled the viewport to
+     the exact pixel and tipped into a 1px horizontal overflow on CI's font
+     metrics. Below 960 the compact burger header (which has ample room) runs. */
+  @media (min-width: 960px) {
+    .site-header__menu {
+      display: none;
+    }
+    .site-header__action--icon .site-header__label {
+      position: static;
+      width: auto;
+      height: auto;
+      clip: auto;
+      white-space: normal;
+    }
+  }
+
+  /* Compact (<960px): name left; LinkedIn + email + burger on the right; the
+     inline About / Download CV / Contact move into the <details> menu. */
+  @media (max-width: 959.98px) {
+    .site-header__divider {
+      display: none;
+    }
+    .site-header__icons {
+      order: 2;
+      margin-left: auto;
+    }
+    .site-header__menu {
+      order: 3;
+    }
+    .site-header__actions {
+      display: none;
+    }
+    .site-header__label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  }
+
+  /* Scroll-shrink: as the page scrolls past the fold the bar tightens and lifts
+     off the content. Pure CSS scroll-driven animation — no client JS. Browsers
+     without support (or a reduced-motion preference) keep the full-size sticky
+     bar, which is the correct fallback. Tap targets stay >= 44px throughout. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+      .site-header {
+        animation: site-header-lift linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 24px 140px;
+      }
+      .site-header__bar {
+        animation: site-header-tighten linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 24px 140px;
+      }
+      .site-header__name {
+        animation: site-header-name linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 24px 140px;
+      }
+      @keyframes site-header-lift {
+        to {
+          box-shadow: 0 6px 20px rgba(10, 15, 26, 0.32);
+        }
+      }
+      @keyframes site-header-tighten {
+        to {
+          padding-top: 1rem;
+          padding-bottom: 1rem;
+        }
+      }
+      @keyframes site-header-name {
+        to {
+          font-size: 1.5rem;
+        }
+      }
+    }
+  }
+</style>
+
+<script>
+  // Scroll-spy: mark the "About me" nav link active while the #about section
+  // sits in the reading zone (a band around the viewport middle). Progressive
+  // enhancement — the page is fully usable with this script blocked.
+  const about = document.getElementById('about');
+  const links = document.querySelectorAll<HTMLElement>('[data-nav-link="about"]');
+  if (about && links.length && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        for (const link of links) link.classList.toggle('is-active', entry.isIntersecting);
+      },
+      { rootMargin: '-30% 0px -45% 0px' },
+    );
+    io.observe(about);
+  }
+</script>

@@ -2,10 +2,34 @@ name: Deploy
 
 on:
   push:
-    branches: [main]
+    branches: [master]
 
 jobs:
+  # Which app actually changed on this push — the two deploy independently
+  # (CLAUDE.md), so a site-only or docs-only change must not drag the tracker
+  # deploy (and its red X when Fly isn't configured) along with it.
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      site: ${{ steps.filter.outputs.site }}
+      tracker: ${{ steps.filter.outputs.tracker }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            site:
+              - 'site/**'
+              - '.github/workflows/deploy.yml'
+            tracker:
+              - 'tracker/**'
+
   site:
+    needs: changes
+    if: needs.changes.outputs.site == 'true'
     runs-on: ubuntu-latest
     permissions:
       pages: write
@@ -24,8 +48,9 @@ jobs:
           cache: npm
           cache-dependency-path: site/package-lock.json
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
-      - run: npm run build   # dist/ incl. the generated CV PDF
+      - run: npm run check       # type-gate the direct-push path too (sad.md §7)
+      - run: npm test            # content invariants gate the deploy, not only the PR (AC-05/AC-06)
+      - run: npm run build       # dist/ incl. the committed CV PDF; postbuild asserts it exists
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site/dist
@@ -33,6 +58,8 @@ jobs:
         uses: actions/deploy-pages@v4
 
   tracker:
+    needs: changes
+    if: needs.changes.outputs.tracker == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

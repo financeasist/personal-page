@@ -2,11 +2,19 @@
 dist/
 .astro/
 
+# test output (Playwright / Vitest); e2e/**-snapshots/ visual baselines ARE committed
+test-results/
+playwright-report/
+blob-report/
+coverage/
+
 # deps
 node_modules/
 
-# generated CV PDF(s) — build artifacts (postbuild)
+# generated CV PDF(s) in dist/ are build artifacts; the v1 committed CV PDF
+# under public/ IS tracked (ADR-0008 — postbuild asserts it exists).
 *.pdf
+!public/*.pdf
 
 # env
 .env

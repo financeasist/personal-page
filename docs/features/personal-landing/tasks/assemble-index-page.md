@@ -54,8 +54,10 @@ source, 0 KB JS).
 >
 > — `spec.md §5, AC-07, verbatim` · full text: [spec.md](../spec.md)
 
-> **Hard rule (NFR):** Client JavaScript shipped by this feature = **0 KB**. Accessibility:
-> Lighthouse ≥ 95; one `<h1>`; semantic landmarks; every interactive element keyboard-reachable.
+> **Hard rule (NFR):** Client JavaScript shipped by this feature ≤ **1 KB** — one inline
+> progressive-enhancement script (scroll-spy, **ADR-0009**), no JS bundle / framework island.
+> _(Was "= 0 KB" before the 2026-09-07 polish pass.)_ Accessibility: Lighthouse ≥ 95; one
+> `<h1>`; semantic landmarks; every interactive element keyboard-reachable.
 >
 > — `spec.md §6 NFR + sad.md §8 Accessibility row, abridged` · full text: [spec.md](../spec.md)
 
@@ -105,7 +107,8 @@ Full Given-When-Then verbatim in T6; verified here end-to-end through the built 
 - [ ] Rewrite `site/src/pages/index.astro` — use `Layout` (T5); body = `<Header {…}/>` + `<main>` (`<Hero {…}/>`, `<AboutMe {…}/>`) + `Footer` (via Layout). `<title>` = `${name} — ${headline}`.
 - [ ] One `<h1>` on the page (the name, in `Hero`); `<header>` / `<main>` / `<footer>` landmarks; `lang="en"`.
 - [ ] Pass only the needed profile slices to each component; never reference `contact.phones`.
-- [ ] No `<script>` tag, no client directives (`client:*`), no framework island.
+- [ ] No client directives (`client:*`), no framework island. One inline `<script>` is allowed —
+      the scroll-spy active-section indicator in `Header.astro` (ADR-0009); no other script.
 
 ## Edge cases
 

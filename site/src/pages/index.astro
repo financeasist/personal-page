@@ -1,29 +1,49 @@
 ---
+// The recruiter landing page (US-07) — composed entirely from the single
+// `profile` content entry. Missing/malformed required content already failed
+// the build (ADR-0007). Zero client JavaScript: no <script>, no client:*
+// directive, no framework island. The step-8 click beacon is a later feature —
+// this page only leaves the `data-*` hooks (in Header).
 import { getCollection } from 'astro:content';
-import '../styles/global.css';
+import AboutMe from '../components/AboutMe.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import { hasLinkedInLink } from '../lib/content-checks';
+import Layout from '../layouts/Layout.astro';
 
-// Stub landing page — enough to build + render the profile stub. The real
-// recruiter landing page (sections, components, tracked contact actions) is
-// personal-landing feature work.
 const profiles = await getCollection('profile');
 const { data: profile } = profiles[0];
+
+const linkedInUrl = profile.contact.links.find((l) => hasLinkedInLink([l]))?.url;
+// `contact.phones` is deliberately never read on this page (AC-07).
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{profile.name} — {profile.headline}</title>
-  </head>
-  <body class="font-sans text-ink">
-    <main class="mx-auto max-w-2xl p-8">
-      <h1 class="text-3xl font-bold text-navy">{profile.name}</h1>
-      <p class="text-muted">{profile.headline}</p>
-      <p class="mt-4">{profile.summary[0]}</p>
-      <p class="mt-6">
-        <a class="text-navy underline" href="/cv">View / download CV</a>
-      </p>
-    </main>
-  </body>
-</html>
+<Layout
+  title={`${profile.name} — ${profile.headline}`}
+  description={profile.tagline}
+  owner={profile.name}
+>
+  <Header
+    name={profile.name}
+    headline={profile.headline}
+    email={profile.contact.email}
+    links={profile.contact.links}
+  />
+  <main>
+    <Hero
+      name={profile.name}
+      headline={profile.headline}
+      tagline={profile.tagline}
+      topStack={profile.topStack}
+      headshot={profile.headshot}
+      location={profile.contact.location}
+      availability={profile.availability}
+      industries={profile.industries}
+    />
+    <AboutMe
+      narrative={profile.about.narrative}
+      highlights={profile.about.highlights}
+      linkedInUrl={linkedInUrl}
+    />
+  </main>
+</Layout>

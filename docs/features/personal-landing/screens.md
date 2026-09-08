@@ -21,7 +21,13 @@ updated_at: "2026-09-07"
      Contact actions are now THREE (email · LinkedIn · Download CV), no phone.
      2nd pass 2026-09-07: divergences D-1/D-3/D-7/D-10 all RATIFIED (spec §1/§4/§5 + CONTEXT.md
      + sad.md + ux-flows.md re-synced). Contact actions in a persistent sticky Header; optional
-     industries list (US-11/AC-15); tagline absorbs the old positioning block. -->
+     industries list (US-11/AC-15); tagline absorbs the old positioning block.
+     Template redesign 2026-09-07: centered hero column (circular headshot · name + navy rule ·
+     headline · tagline · Availability+Industries two-col · top stack as one middot line — no
+     chips); natural top-to-bottom flow (the binding above-the-fold-fit constraint is withdrawn —
+     spec §1 "Template redesign" note); Industries renders at every width; Header gains a Contact
+     (mailto) item + CSS-only scroll-shrink. Live mockups: screens.pen frames s7Hhu (laptop hero),
+     A3vORR (laptop About), XKUfO (phone). State-row wireframes below not yet re-synced. -->
 
 ## Source
 
@@ -79,10 +85,11 @@ updated_at: "2026-09-07"
 - **No `api` stage:** the feature has no datastore and no API (`data-model` → N/A → `api`
   skipped), so there are no contract error responses. Non-default states derive from spec §5 ACs
   and `sad.md` §6 `alt` / `else` branches only.
-- **Static, zero-JS delivery.** The page is fully rendered at build time (SSG, ADR-0001). There is
-  **no runtime `loading` / `empty` / `error` state** on any screen: no client fetch, no
-  hydration, and every completeness failure is a build-time gate (AC-05 / AC-06, ADR-0007) so an
-  incomplete page never deploys. Each screen carries explicit `N/A: <reason>` rows for those
+- **Static delivery, one tiny PE script.** The page is fully rendered at build time (SSG,
+  ADR-0001); the only client JavaScript is the ~320 B inline scroll-spy active-section indicator
+  (ADR-0009) — no bundle, no hydration. There is **no runtime `loading` / `empty` / `error`
+  state** on any screen: no client fetch, and every completeness failure is a build-time gate
+  (AC-05 / AC-06, ADR-0007) so an incomplete page never deploys. Each screen carries explicit `N/A: <reason>` rows for those
   classes. The real variation is **content-driven** (optional fields present / absent) and
   **viewport-driven** (laptop vs phone).
 
@@ -119,7 +126,8 @@ optional **INDUSTRIES list on the right**) → Top Stack line (≤ 8 items, D-9)
 | default — laptop | Page load at 1280×800, all above-the-fold essentials present (build-guaranteed). Fixed white-on-navy `Header` (name + LinkedIn / email **icon controls** → LinkedIn URL / `mailto:`; `About me` / `Download CV` / `Contact` menu items — **three contact actions, no phone**). Hero (white band): headshot (`me.png`), name, headline, the optional **tagline**, `AvailabilityBlock` (status + location) on the left; the **INDUSTRIES** list on the right (D-7). Then the **Top Stack** line — **≤ 8 technologies** (D-9). No scrolling. `Footer` flush to the bottom. | `Header`, `Hero`, `AvailabilityBlock`, `Footer` | `Sh75H` (Header `dvllD`, Hero `xEwZk`, Industries `QfCVa`, Footer `W5vee`) · wireframe A |
 | default — phone | Page load at 390×844. `Header` condenses to name + LinkedIn / email icons + a menu affordance. Same essentials single-column; the INDUSTRIES list sits below the `AvailabilityBlock`; body text ≥ 16 px; every contact control ≥ 44×44 px; no horizontal scroll at any width. Verified in the QG-3 manual pass at 390×844. | `Header`, `Hero`, `AvailabilityBlock`, `Footer` | `XKUfO` (Industries `WMCWv`) · wireframe B |
 | default — tagline omitted | `profile.tagline` is empty (optional, spec §1). Headline renders with `AvailabilityBlock` directly beneath — the tightest hero. AC-01 still holds. | `Header`, `Hero`, `Footer` | `AKdd9` (`Tagline` frame `PXgxV` absent in this state) |
-| default — keyboard focus | Recruiter tabs the page (QG-3). Every `Header` control takes a visible focus ring, in DOM order (Name link → LinkedIn → Gmail → About me → Download CV → Contact), operable by Enter / Space. Zero client JS. | `Header` | `heCTv` |
+| default — keyboard focus | Recruiter tabs the page (QG-3). Every `Header` control takes a visible focus ring, in DOM order (Name link → LinkedIn → Gmail → About me → Download CV → Contact), operable by Enter / Space. The only script is the scroll-spy indicator (ADR-0009) — decorative, no effect on focus or activation. | `Header` | `heCTv` |
+| about-in-view — active nav | While `#about` is in the reading band the header "About me" link + menu item carry a filled-block active state (`.is-active`), toggled by the inline `IntersectionObserver` (ADR-0009). Scroll away ⇒ state clears. JS off ⇒ state never applied; the link is otherwise unchanged. | `Header` | — (post-`screens.pen`, 2026-09-07) |
 | N/A: loading | Static HTML, no client fetch and no hydration; the headshot is `astro:assets` eager + high fetch-priority with explicit dimensions, so first paint is the `default` layout with no CLS. | — | — |
 | N/A: empty | The build fails and names the field if any AC-05 essential is missing — headline, availability status, location, headshot path / alt, fewer than four `topStack` entries, `email`, the LinkedIn link, or the committed CV PDF (ADR-0007 / ADR-0008). An empty hero can never deploy. | — | — |
 | N/A: error | No runtime error path exists on static delivery (SAD §8 "Error handling: build-time only"). | — | — |
@@ -247,22 +255,24 @@ stays a content field, rendered only on the CV route.
 
 ## Components
 
-Registered in `docs/design-system.md` §Component inventory. `implement` replaces each
-`pending` there with the real `site/src/components/<Name>.astro` `file:line` anchor.
+Registered in `docs/design-system.md` §Component inventory with real
+`site/src/{layouts,components}/<Name>.astro` `file:line` anchors (done — T11).
 
-| Component | `screens.pen` | v1 status | Notes |
+| Component | `file:line` (shipped) | v1 status | Notes |
 |---|---|---|---|
-| `Header` | reusable frame `dvllD` | in v1 (D-1 / D-3 ratified) | Fixed / sticky dark-navy bar (CSS only). Laptop: name + the three contact controls (email, LinkedIn, Download CV), each labelled, each a stable `data-*` hook for step 8. Mobile: name + `LinkedIn` (`fusdv`) + `Gmail` (`z9saN`) icon controls + a native `<details>` menu holding Download CV + an `#about` link. **No phone.** |
-| `ContactActions` | to be redrawn (was `xSFYJ`-era frame, deleted) | in v1 (D-1 ratified) | The three labelled controls (email, LinkedIn, Download CV), rendered inside `Header`. Each carries a stable `data-contact-channel` (`email` / `linkedin`) or `data-cv-download` hook for step 8. Email + LinkedIn values live only in `href` (AC-10). |
-| `Footer` | reusable frame `W7AZlV` | in v1 (D-3 ratified) | Dark-navy bar, centered "Copyright © Hrupskyi R. Bio 2026". Flush to the viewport bottom (`min-height: 100vh` page). |
-| `Hero` | inline (`Sh75H` › `xEwZk`; `XKUfO` › `Avanx`) | in v1 (D-7 / D-10 ratified) | Photo (`me.png`) + name + headline + optional tagline (≤ ~300 chars — carries what was the positioning block) + `AvailabilityBlock` (left) + optional `Industries` (right). White band. Responsive-both. Contact controls are in the `Header`, not the hero (D-1). |
-| `AvailabilityBlock` | reusable frame `k6V1ni` | in v1 | `status` + `location`. The `.pen` frame draws no notice-period / work-auth line; `data-model.md` makes both **optional** `availability` fields — add them to the frame if Roman supplies values. |
-| `Industries` | inline (`Sh75H` › `QfCVa`; `XKUfO` › `WMCWv`) | in v1, optional (D-7 ratified) | Hero right column (laptop) / below availability (phone). Renders the `industries` Profile field (`{ domain, note? }`, ≤ 6); absent → the column is omitted, build still passes (AC-15). Static text, no assets. |
-| `Section` | inline (`GSu58` › `Section` frames) | in v1 | Centered heading + short rule + spacing rhythm; layout-only wrapper. Full-bleed background colour. |
-| `AboutMe` (block inside `Section`) | inline (`GSu58` › `k0sIs`) | in v1 (ratified, D-4) | `narrative` (`B6zSXN`, from `linkedin-about.md`) + `highlights` (`MKVFu`, Roman's own bullets + a LinkedIn link); reflows to one column on phone. Grey band. |
-| `ExperienceTimeline` | frame `jgvYw` (stale) | **v2** (SCR-02) | Delete from `.pen`; re-instate with US-04. |
-| `SelectedProjects` | frame `b9PNeG` (stale) | **v2** (SCR-03) | Delete from `.pen`; re-instate with US-09. |
-| `ProjectCard` | reusable frame `J2r0z` (stale) | **v2** (SCR-03, D-8) | Native `<details>` accordion. Delete from `.pen`; re-instate with US-09. |
+| `Layout` | `site/src/layouts/Layout.astro:1` | in v1 (new) | Page shell — `<html lang="en">`, `<title>` prop, `min-height:100vh` flex column, `Footer` last. |
+| `Band` | `site/src/components/Band.astro:1` | in v1 (new primitive) | Full-bleed colour band + centered column; `Hero` / `Section` / `Footer` compose from it. |
+| `Header` | `site/src/components/Header.astro:1` | in v1 (D-1 / D-3) | Fixed / sticky dark-navy bar (CSS only). Name + email/LinkedIn icon controls + About + Download CV; phone condenses to a native `<details>` menu (About + Download CV). Value only in `href`; `data-contact-channel` / `data-cv-download` step-8 hooks. **No phone, no "Contact" item.** |
+| `ContactActions` | folded into `Header.astro` | in v1 (D-1) | Not a separate file — the three controls are `<a>` elements inside `Header`. |
+| `Footer` | `site/src/components/Footer.astro:1` | in v1 (D-3) | Dark-navy bar (via `Band`), centered "Copyright © Hrupskyi R. Bio 2026". Flush to the viewport bottom. |
+| `Hero` | `site/src/components/Hero.astro:1` | in v1 (D-7 / D-10) | `astro:assets` headshot (`me.png`, eager, < 100 KB) + `<h1>` name + headline + optional tagline + `AvailabilityBlock` (left) + optional `Industries` (right) + top-stack chips. Fills the fold. Responsive-both; `<360px` drops Industries first. |
+| `AvailabilityBlock` | `site/src/components/AvailabilityBlock.astro:1` | in v1 | `status` + `location` + optional `noticePeriod` + optional `workAuthorization`, all content-driven. |
+| `Industries` | `site/src/components/Industries.astro:1` | in v1, optional (D-7) | Hero right column / below availability on phone. Renders `industries` (`{domain, note?}`, ≤ 6); absent → omitted, build still passes (AC-15). |
+| `Section` | `site/src/components/Section.astro:1` | in v1 | Centered heading + short navy rule + spacing rhythm; wraps `Band`. `scroll-margin-top` for `#anchor`. |
+| `AboutMe` | `site/src/components/AboutMe.astro:1` | in v1 (D-4) | Grey band (`Section` canvas, `id="about"`), `narrative` (blank-line paragraphs) + `highlights` + a LinkedIn link; one column on phone. |
+| `ExperienceTimeline` | **v2 — not built** (SCR-02) | v2 | Re-instate with US-04. |
+| `SelectedProjects` | **v2 — not built** (SCR-03) | v2 | Re-instate with US-09. |
+| `ProjectCard` | **v2 — not built** (SCR-03, D-8) | v2 | Native `<details>` accordion; re-instate with US-09. |
 
 `PhoneChooser` and `ContactButton` are **deleted** — phone dropped (D-2). `ContactActions` is
 **kept** — it renders the three controls *inside* `Header` (D-1 ratified), not a hero row; the

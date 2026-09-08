@@ -1,0 +1,34 @@
+---
+// Site footer — dark-navy full-bleed bar, flush to the viewport bottom via the
+// `min-height: 100vh` flex column in Layout.astro (screens.md §Source). The
+// owner name comes from the Profile content entry (US-07: "renders entirely
+// from the Profile content entry" — no page-specific copy, SAD §8), and the
+// year is the build year, so neither can drift from the page.
+import Band from './Band.astro';
+
+interface Props {
+  owner: string;
+}
+
+const { owner } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<Band as="footer" tone="navy" class="footer">
+  <p class="footer__copy">Copyright © {year} {owner}</p>
+</Band>
+
+<style>
+  /* `:global` — the class lands on Band's root element, which does not carry
+     this component's scope attribute, so a scoped `.footer` selector wouldn't
+     match. The custom property then inherits into Band's `.band__inner`. */
+  :global(.footer) {
+    --band-pad-block: 0.7rem;
+  }
+  .footer__copy {
+    margin: 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: color-mix(in srgb, #fff 62%, var(--color-navy-dark));
+  }
+</style>

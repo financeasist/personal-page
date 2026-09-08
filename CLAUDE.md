@@ -28,8 +28,10 @@ The two build, test and deploy independently. No direct code sharing — the bro
 - **`cv.astro` layout is locked** to `docs/reference/cv-template-reference.pdf` — reproduce it,
   don't reshape it. Only section data changes.
 - **Styling:** Tailwind v4 with `@theme` tokens in `site/src/styles/global.css`; hand-rolled
-  `.astro` components in `site/src/components/`; zero client JS by default (one small inline script
-  posts contact-click / cv-download events).
+  `.astro` components in `site/src/components/`; zero client JS by default. Two small inline
+  scripts are sanctioned: the scroll-spy active-section indicator that ships now
+  (`docs/features/personal-landing/adr/0009`), and the contact-click / cv-download beacon
+  arriving in roadmap step 8. Both are progressive enhancements — no bundle, no framework island.
 - **Locale-clean:** keep the schema single-shaped and no hard-coded English in non-content-driven
   components — multi-language is a deferred but foundation-compatible direction.
 - Node 20+. Commands: `npm --prefix site run build` / `test` / `lint` (`lint` = `astro check`).

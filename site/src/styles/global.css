@@ -7,7 +7,61 @@
   --color-navy-dark: #1f2a3f;
   --color-ink: #1a1a1a;
   --color-muted: #5b6472;
+  /* Section bands (personal-landing): Hero renders on `canvas`, About on
+     `canvas-sunken` (a touch darker); Header/Footer on `navy`. `surface` is the
+     raised-card fill (AvailabilityBlock). The code file stays the source of
+     truth for colour — a component never re-declares one inline
+     (design-system.md). */
+  --color-surface: #ffffff;
+  --color-canvas: #eef1f5;
+  --color-canvas-sunken: #e3e7ed;
+  --color-raised: #f5f7fa;
+  --color-line: #d7dde5;
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Page baseline: ≥16 px root text (AC-08). The horizontal-overflow guard
+   (spec.md §6: 360 / 768 / 1280 / 1920) lives on `main`, NOT on `html` / `body`
+   — `overflow` on a scroll ancestor of the sticky <header> breaks
+   `position: sticky` in Safari. The shell uses no fixed widths; media stays
+   inside its box. */
+html {
+  font-size: 100%;
+}
+
+/* Smooth the in-page #about jump (Header menu link) only when the visitor has
+   not asked for reduced motion (QG-3 accessibility). */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  /* The page content (Header, every Band, Footer) paints its own background
+     edge to edge; `body` shows only in the chrome zones — the sticky-header
+     backdrop, any sub-pixel rounding gap under the Footer, and the
+     overscroll area — so it takes the navy chrome colour, never a content
+     tone. */
+  background: var(--color-navy-dark);
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Horizontal-overflow guard (spec.md §6). Sits on <main>, not html/body, so it
+   never becomes a scroll ancestor of the sticky <header> (a Safari
+   sticky-breaker). <main> holds all the wide content; the chrome bars are
+   width-constrained internally. */
+main {
+  overflow-x: clip;
 }
 
 /* Print route (cv.astro) renders to A4 via headless Chromium at build time. */

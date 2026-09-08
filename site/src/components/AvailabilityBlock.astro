@@ -1,0 +1,50 @@
+---
+// Availability block — `status` carries the remote / hybrid / relocation stance
+// (AC-01 essential). Location sits here in the reading order but comes from
+// `contact.location`. Notice period and work authorisation render only when the
+// content supplies them (both optional — data-model.md §availability).
+interface Props {
+  status: string;
+  location: string;
+  noticePeriod?: string;
+  workAuthorization?: string;
+}
+
+const { status, location, noticePeriod, workAuthorization } = Astro.props;
+---
+
+<section class="availability" aria-label="Availability">
+  <p class="availability__heading">Availability</p>
+  <p class="availability__status">{status}</p>
+  <p class="availability__line">{location}</p>
+  {noticePeriod && <p class="availability__line">Notice period: {noticePeriod}</p>}
+  {workAuthorization && <p class="availability__line">Work authorisation: {workAuthorization}</p>}
+</section>
+
+<style>
+  .availability {
+    border: 1px solid var(--color-line);
+    border-radius: 0.625rem;
+    padding: 1rem 1.1rem;
+    background: var(--color-raised);
+  }
+  .availability__heading {
+    margin: 0 0 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .availability__status {
+    margin: 0;
+    font-size: 1.02rem;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .availability__line {
+    margin: 0.3rem 0 0;
+    font-size: 1rem;
+    color: var(--color-muted);
+  }
+</style>

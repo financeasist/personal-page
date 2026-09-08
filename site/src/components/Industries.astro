@@ -1,0 +1,55 @@
+---
+// Optional hero column — the domains Roman has delivered in (US-11 / AC-15).
+// Renders straight from the `industries` content field; when the array is
+// absent or empty the component renders nothing (the caller also guards).
+// Redesign (screens.pen): one line per domain, `domain — note`, muted.
+interface Props {
+  industries?: { domain: string; note?: string }[];
+}
+
+const { industries = [] } = Astro.props;
+---
+
+{
+  industries.length > 0 && (
+    <section class="industries" aria-label="Industries">
+      <p class="industries__heading">Industries</p>
+      <ul class="industries__list">
+        {industries.map((it) => (
+          <li>{it.note ? `${it.domain} — ${it.note}` : it.domain}</li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .industries__heading {
+    margin: 0 0 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .industries__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.5rem;
+  }
+  .industries__list li {
+    display: grid;
+    grid-template-columns: 0.9rem 1fr;
+    gap: 0.4rem;
+    font-size: 1rem;
+    line-height: 1.4;
+    color: var(--color-muted);
+  }
+  .industries__list li::before {
+    content: '·';
+    color: var(--color-navy);
+    font-weight: 700;
+  }
+</style>
