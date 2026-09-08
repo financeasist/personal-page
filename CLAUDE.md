@@ -32,6 +32,8 @@ The two build, test and deploy independently. No direct code sharing — the bro
   scripts are sanctioned: the scroll-spy active-section indicator that ships now
   (`docs/features/personal-landing/adr/0009`), and the contact-click / cv-download beacon
   arriving in roadmap step 8. Both are progressive enhancements — no bundle, no framework island.
+  A `<script type="application/ld+json">` block (Person/ProfilePage SEO data, `src/lib/profile-jsonld.ts`,
+  emitted by `Layout.astro`) is **inert data, not client JS** — it does not count against this rule.
 - **Locale-clean:** keep the schema single-shaped and no hard-coded English in non-content-driven
   components — multi-language is a deferred but foundation-compatible direction.
 - Node 20+. Commands: `npm --prefix site run build` / `test` / `lint` (`lint` = `astro check`).

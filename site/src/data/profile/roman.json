@@ -1,5 +1,6 @@
 {
   "name": "Roman Hrupskyi",
+  "alternateNames": ["Roman Grupskiy", "Roman Grupskyi"],
   "headline": "Senior Java Engineer | Lead Backend Engineer",
   "tagline": "Java engineer and technical leader with 9+ years of experience designing, building, and scaling high-load distributed systems, leading engineering teams, and delivering business-critical platforms across multiple domains.",
   "headshot": {
@@ -30,7 +31,8 @@
     "email": "roman@romanhrupskyi.com",
     "location": "Krakow, Poland",
     "links": [
-      { "label": "LinkedIn", "url": "https://www.linkedin.com/in/roman-grupskiy/" }
+      { "label": "LinkedIn", "url": "https://www.linkedin.com/in/roman-hrupskyi/" },
+      { "label": "GitHub", "url": "https://github.com/financeasist" }
     ]
   },
   "availability": {

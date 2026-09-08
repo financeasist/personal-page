@@ -9,6 +9,7 @@ import AboutMe from '../components/AboutMe.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
 import { hasLinkedInLink } from '../lib/content-checks';
+import { profilePersonJsonLd } from '../lib/profile-jsonld';
 import Layout from '../layouts/Layout.astro';
 
 const profiles = await getCollection('profile');
@@ -16,12 +17,17 @@ const { data: profile } = profiles[0];
 
 const linkedInUrl = profile.contact.links.find((l) => hasLinkedInLink([l]))?.url;
 // `contact.phones` is deliberately never read on this page (AC-07).
+
+// Person / ProfilePage structured data — SEO entity signal + `sameAs` identity
+// consolidation across the Hrupskyi / Grupskiy surname spellings.
+const jsonLd = profilePersonJsonLd(profile, Astro.site ?? 'https://romanhrupskyi.com/');
 ---
 
 <Layout
   title={`${profile.name} — ${profile.headline}`}
   description={profile.tagline}
   owner={profile.name}
+  jsonLd={jsonLd}
 >
   <Header
     name={profile.name}

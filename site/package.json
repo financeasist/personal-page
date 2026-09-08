@@ -11,6 +11,7 @@
     "build": "astro build",
     "postbuild": "node scripts/assert-cv-pdf.mjs",
     "preview": "astro preview",
+    "gen:favicons": "node scripts/gen-favicons.mjs",
     "check": "astro check",
     "lint": "astro check",
     "test": "vitest run",
