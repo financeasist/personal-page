@@ -50,7 +50,7 @@ A recruiter opens one link, judges Roman's fit in ~20 seconds, taps to call / em
 
 | # | Question | Type | Owner | Blocks |
 |---|---|:---:|:---:|:---:|
-| D1 | ~~Which surname spelling is canonical?~~ **Resolved (personal-landing spec, 2026-09-06): Hrupskyi**. Contact email **updated 2026-09-08 to `roman@romanhrupskyi.com`** (apex-domain address; supersedes the earlier `roman.grupskyi@gmail.com` — committed CV PDF pending regeneration). | grilling | human | 2 |
+| D1 | ~~Which surname spelling is canonical?~~ **Resolved (personal-landing spec, 2026-09-06): Hrupskyi**. Contact email **updated 2026-09-08 to `roman@romanhrupskyi.com`** (apex-domain address; supersedes the earlier `roman.grupskyi@gmail.com` — committed CV PDF regenerated the same day). | grilling | human | 2 |
 | D2 | ~~Which CV variant is the content base?~~ **Resolved: the reference template** (`cv-template-reference.pdf`); the "Classic" variant is reconciliation input only. | grilling | human | 2 |
 | D3 | ~~How is the iGaming / EveryMatrix experience framed?~~ **Resolved (revised 2026-09-06): no content constraint** — Roman dropped the special framing rule; the iGaming / EveryMatrix work is described like any other role, on its engineering substance, with no requirement to downplay or foreground the domain. | grilling | human | 2 |
 | D4 | What are the corrected, non-overlapping employment dates, and how is the 2004→2017 period presented? **Partially resolved:** 2004→2017 shown as a single "earlier background" line; exact date ranges still open (personal-landing spec §8). | grilling | human | 2 |
