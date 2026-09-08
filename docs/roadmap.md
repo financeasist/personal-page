@@ -1,8 +1,9 @@
 ---
 status: living
-updated_at: "2026-09-06"
+updated_at: "2026-09-08"
 # 2026-09-06: step 3 (personal-landing) spec'd — re-sized L→M, recommendations→v2, D1/D2/D3/D5/D7/D8 resolved.
 # 2026-09-06: steps 5/6/7 (tracking-system) spec'd as one bundled M feature; D6 resolved.
+# 2026-09-08: mirrored to GitHub issues (financeasist/personal-page #6–#17); step/decision rows carry their issue link.
 ---
 
 # Roadmap — personal-landing
@@ -19,17 +20,22 @@ A recruiter opens one link, judges Roman's fit in ~20 seconds, taps to call / em
 
 ## Steps
 
-| # | Step | Source | Size | Status |
-|---|---|---|:---:|---|
-| 1 | Scaffold the skeleton — monorepo, Astro site + Tailwind v4 + typed `profile` collection, Spring Boot tracker + Flyway V1, CI/deploy workflows, build-time PDF generator | `architecture-map.md` §Module inventory + `docs/features/_scaffold/tasks.json` | M | idea |
-| 2 | Canonical profile content — reconcile surname / employment dates / years-of-experience / the 2004→2017 period into one content-collection entry; lock the Zod schema to the reference template's sections | `idea-brief.md §2 Problem` + `idea-brief.md §6 Risks` + `idea-brief.md §8 Open questions` | S | idea |
-| 3 | Recruiter landing page — `index.astro`: name, one-line positioning, availability block, top stack, above-the-fold contact actions (phone / email / LinkedIn / Download CV); experience + selected projects below the fold; the shared `Section` / `ContactButton` / `AvailabilityBlock` / `ProjectCard` primitives. Recommendations block deferred to v2. → [`docs/features/personal-landing/spec.md`](features/personal-landing/spec.md) | `idea-brief.md §7 Recommendation` + `idea-brief.md §3 Users` | M | **spec'd** |
-| 4 | CV PDF route — `cv.astro` as a faithful reproduction of `docs/reference/cv-template-reference.pdf`, fed by the same `profile` collection; meaningfully-named PDF emitted at build | `architecture-map.md §Stack` (PDF generation) + `docs/adr/0004` | M | idea |
-| 5 | Labelled-link redirect — `/t/{label}` → 302 to the site, appends a visit event; `recruiter_link` rows seeded by hand, one per outreach → [`docs/features/tracking-system/spec.md`](features/tracking-system/spec.md) | `idea-brief.md §7 Recommendation` + `idea-brief.md §5 Out of scope` | M | **spec'd** |
-| 6 | Cookieless event ingest — `/e` endpoint: page-view, contact-click (per channel), `cv_download`; city / referrer derivation; append-only → [`docs/features/tracking-system/spec.md`](features/tracking-system/spec.md) | `idea-brief.md §7 Recommendation` | M | **spec'd** |
-| 7 | View notification — Telegram "page viewed" message to Roman on every visit; a labelled visit names the recruiter, an unlabelled one carries city / referrer → [`docs/features/tracking-system/spec.md`](features/tracking-system/spec.md) | `idea-brief.md §7 Recommendation` + `architecture-map.md §Stack` (Notifications) | S | **spec'd** |
-| 8 | Site → tracker wiring — the inline `<script>` that beacons page-view + contact-click + `cv_download` to `/e`; the CV download proceeds regardless of the beacon (fire-and-forget) | `architecture-map.md §Frontend / UI foundation` (State / data-fetching) + `idea-brief.md §7 Recommendation` | S | idea |
-| 9 | Per-recruiter "why I fit you" intro → see [Not yet specified](#not-yet-specified) | `idea-brief.md §6 Risks` | fog | idea |
+> **Working board:** [personal-landing Project](https://github.com/users/financeasist/projects/4) —
+> the day-to-day view (per-issue `Status` + `Size` fields). This table stays the narrative source of
+> truth; the Project mirrors the **Issue** column below. Issues also live in the milestones
+> `personal-landing` / `tracking-system`.
+
+| # | Step | Source | Size | Status | Issue |
+|---|---|---|:---:|---|:---:|
+| 1 | Scaffold the skeleton — monorepo, Astro site + Tailwind v4 + typed `profile` collection, Spring Boot tracker + Flyway V1, CI/deploy workflows, build-time PDF generator | `architecture-map.md` §Module inventory + `docs/features/_scaffold/tasks.json` | M | ✅ shipped | [#6](https://github.com/financeasist/personal-page/issues/6) |
+| 2 | Canonical profile content — reconcile surname / employment dates / years-of-experience / the 2004→2017 period into one content-collection entry; lock the Zod schema to the reference template's sections | `idea-brief.md §2 Problem` + `idea-brief.md §6 Risks` + `idea-brief.md §8 Open questions` | S | ✅ shipped | [#7](https://github.com/financeasist/personal-page/issues/7) |
+| 3 | Recruiter landing page — `index.astro`: name, one-line positioning, availability block, top stack, above-the-fold contact actions (phone / email / LinkedIn / Download CV); experience + selected projects below the fold; the shared `Section` / `ContactButton` / `AvailabilityBlock` / `ProjectCard` primitives. Recommendations block deferred to v2. → [`docs/features/personal-landing/spec.md`](features/personal-landing/spec.md) | `idea-brief.md §7 Recommendation` + `idea-brief.md §3 Users` | M | ✅ shipped | [#8](https://github.com/financeasist/personal-page/issues/8) |
+| 4 | CV PDF route — `cv.astro` as a faithful reproduction of `docs/reference/cv-template-reference.pdf`, fed by the same `profile` collection; meaningfully-named PDF emitted at build | `architecture-map.md §Stack` (PDF generation) + `docs/adr/0004` | M | 🟡 v1 (committed PDF); build-time gen deferred | [#9](https://github.com/financeasist/personal-page/issues/9) |
+| 5 | Labelled-link redirect — `/t/{label}` → 302 to the site, appends a visit event; `recruiter_link` rows seeded by hand, one per outreach → [`docs/features/tracking-system/spec.md`](features/tracking-system/spec.md) | `idea-brief.md §7 Recommendation` + `idea-brief.md §5 Out of scope` | M | **spec'd** | [#10](https://github.com/financeasist/personal-page/issues/10) |
+| 6 | Cookieless event ingest — `/e` endpoint: page-view, contact-click (per channel), `cv_download`; city / referrer derivation; append-only → [`docs/features/tracking-system/spec.md`](features/tracking-system/spec.md) | `idea-brief.md §7 Recommendation` | M | **spec'd** | [#11](https://github.com/financeasist/personal-page/issues/11) |
+| 7 | View notification — Telegram "page viewed" message to Roman on every visit; a labelled visit names the recruiter, an unlabelled one carries city / referrer → [`docs/features/tracking-system/spec.md`](features/tracking-system/spec.md) | `idea-brief.md §7 Recommendation` + `architecture-map.md §Stack` (Notifications) | S | **spec'd** | [#12](https://github.com/financeasist/personal-page/issues/12) |
+| 8 | Site → tracker wiring — the inline `<script>` that beacons page-view + contact-click + `cv_download` to `/e`; the CV download proceeds regardless of the beacon (fire-and-forget) | `architecture-map.md §Frontend / UI foundation` (State / data-fetching) + `idea-brief.md §7 Recommendation` | S | idea | [#13](https://github.com/financeasist/personal-page/issues/13) |
+| 9 | Per-recruiter "why I fit you" intro → see [Not yet specified](#not-yet-specified) | `idea-brief.md §6 Risks` | fog | idea | [#14](https://github.com/financeasist/personal-page/issues/14) |
 
 ## Not yet specified
 
@@ -53,7 +59,7 @@ A recruiter opens one link, judges Roman's fit in ~20 seconds, taps to call / em
 | D1 | ~~Which surname spelling is canonical?~~ **Resolved (personal-landing spec, 2026-09-06): Hrupskyi**. Contact email **updated 2026-09-08 to `roman@romanhrupskyi.com`** (apex-domain address; supersedes the earlier `roman.grupskyi@gmail.com` — committed CV PDF regenerated the same day). | grilling | human | 2 |
 | D2 | ~~Which CV variant is the content base?~~ **Resolved: the reference template** (`cv-template-reference.pdf`); the "Classic" variant is reconciliation input only. | grilling | human | 2 |
 | D3 | ~~How is the iGaming / EveryMatrix experience framed?~~ **Resolved (revised 2026-09-06): no content constraint** — Roman dropped the special framing rule; the iGaming / EveryMatrix work is described like any other role, on its engineering substance, with no requirement to downplay or foreground the domain. | grilling | human | 2 |
-| D4 | What are the corrected, non-overlapping employment dates, and how is the 2004→2017 period presented? **Partially resolved:** 2004→2017 shown as a single "earlier background" line; exact date ranges still open (personal-landing spec §8). | grilling | human | 2 |
+| D4 | What are the corrected, non-overlapping employment dates, and how is the 2004→2017 period presented? **Partially resolved:** 2004→2017 shown as a single "earlier background" line; exact date ranges still open (personal-landing spec §8). Tracked: [#15](https://github.com/financeasist/personal-page/issues/15). | grilling | human | 2 |
 | D5 | ~~Is salary or rate expectation shown on the page?~~ **Resolved: no** — not shown; handled in conversation. | grilling | human | 3 |
 | D6 | ~~Is informal storage of named-recruiter visit logs acceptable as-is, or is a retention / notice line needed?~~ **Resolved (tracking-system spec, 2026-09-06): indefinite retention**, offset by a manual, Roman-only erase-by-label operation (a hand-run database operation, not automatic expiry). | grilling | human | 5 |
 | D7 | ~~Which contact channel is primary?~~ **Resolved: four equal above-the-fold actions** (phone / email / LinkedIn / Download CV); the phone action expands to two labelled call controls (Poland / international). | grilling | human | 3 |
@@ -115,4 +121,6 @@ flowchart LR
 
 | Step | Shipped | Link |
 |---|---|---|
-| — | — | — |
+| 1 · Scaffold the skeleton | 2026-09-06 (`b1583df`) | [#6](https://github.com/financeasist/personal-page/issues/6) |
+| 2 · Canonical profile content | 2026-09 (`site/src/data/profile/roman.json` + `config.ts` invariants) | [#7](https://github.com/financeasist/personal-page/issues/7) |
+| 3 · Recruiter landing page | 2026-09 ([PR #1](https://github.com/financeasist/personal-page/pull/1) + follow-ups: SEO, Person JSON-LD, favicons, apex domain) | [#8](https://github.com/financeasist/personal-page/issues/8) |

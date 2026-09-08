@@ -6,6 +6,8 @@ PDF exists) are enforced by CI (`npm run check` + `npm test` + `npm run build`
 on both the PR and the deploy path). The rows below are **manual** and a miss
 **blocks the launch** until fixed or waived in writing here (spec.md §6).
 
+**Tracked on GitHub:** DNS + Pages custom domain → [#16](https://github.com/financeasist/personal-page/issues/16); the recurring manual gates (Lighthouse, Linux visual baselines) → [#17](https://github.com/financeasist/personal-page/issues/17).
+
 ## One-time / config
 
 - [x] **`site/astro.config.mjs`** — `site: 'https://romanhrupskyi.com'`, no
