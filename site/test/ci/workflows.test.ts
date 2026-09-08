@@ -2,10 +2,13 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
-// T10 — the deploy path (push to main) must enforce the same content gate the
+// T10 — the deploy path (push to master) must enforce the same content gate the
 // PR path does. The PR path also runs the e2e-through-UI tier (spec.md §Test
 // plan CI placement: "Every PR (heavier, still gating)"); the CV-PDF postbuild
 // no longer needs Chromium (ADR-0008), so the deploy path installs no browser.
+// Both workflows front a `changes` path-filter job; the site job is `\n  site:`
+// and the tracker job `\n  tracker:` (2-space job indent) — deeper-indented
+// `tracker:` keys inside the filter are not job boundaries.
 const repoRoot = fileURLToPath(new URL('../../../', import.meta.url));
 const ci = readFileSync(`${repoRoot}.github/workflows/ci.yml`, 'utf8');
 const deploy = readFileSync(`${repoRoot}.github/workflows/deploy.yml`, 'utf8');
@@ -21,7 +24,7 @@ describe('.github/workflows — site jobs', () => {
   });
 
   it('the PR job runs the browser tier only after the build it drives', () => {
-    const site = ci.slice(ci.indexOf('jobs:'), ci.indexOf('tracker:'));
+    const site = ci.slice(ci.indexOf('\n  site:'), ci.indexOf('\n  tracker:'));
     expect(site.indexOf('npm run build')).toBeLessThan(site.indexOf('npm run test:e2e'));
   });
 
@@ -36,6 +39,14 @@ describe('.github/workflows — site jobs', () => {
   it('the PR job still runs check + test + build for the site', () => {
     for (const step of ['npm run check', 'npm test', 'npm run build']) {
       expect(ci).toContain(step);
+    }
+  });
+
+  it('tracker jobs stay dormant until tracker/** changes — CI and deploy both gate on the changes filter', () => {
+    for (const wf of [ci, deploy]) {
+      const tracker = wf.slice(wf.indexOf('\n  tracker:'));
+      expect(tracker).toContain('needs: changes');
+      expect(tracker).toContain("if: needs.changes.outputs.tracker == 'true'");
     }
   });
 });

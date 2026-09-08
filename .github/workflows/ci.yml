@@ -4,7 +4,31 @@ on:
   pull_request:
 
 jobs:
+  # Which app the PR touches — the two build/test independently (CLAUDE.md).
+  # tracker CI stays dormant until a PR actually changes tracker/**.
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      site: ${{ steps.filter.outputs.site }}
+      tracker: ${{ steps.filter.outputs.tracker }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            site:
+              - 'site/**'
+              - '.github/workflows/ci.yml'
+            tracker:
+              - 'tracker/**'
+
   site:
+    needs: changes
+    if: needs.changes.outputs.site == 'true'
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -26,6 +50,8 @@ jobs:
       # baselines are generated in a Playwright container (launch-checklist.md).
 
   tracker:
+    needs: changes
+    if: needs.changes.outputs.tracker == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

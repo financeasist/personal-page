@@ -8,10 +8,14 @@ on both the PR and the deploy path). The rows below are **manual** and a miss
 
 ## One-time / config
 
-- [ ] **`site/astro.config.mjs`** — set `site` (and `base` for a project page)
-      to the confirmed GitHub Pages URL. Until then internal absolute links
-      resolve at `/`. Header hrefs use `import.meta.env.BASE_URL`, so only the
-      config changes.
+- [x] **`site/astro.config.mjs`** — `site: 'https://romanhrupskyi.com'`, no
+      `base` (custom apex domain, served from root). `site/public/CNAME` pins the
+      domain for GitHub Pages.
+- [ ] **DNS + Pages custom domain** — at the registrar for `romanhrupskyi.com`:
+      apex `A` records → `185.199.108.153` / `.109.153` / `.110.153` / `.111.153`
+      (and `AAAA` → `2606:50c0:8000::153` … `8003::153`), plus `CNAME` on `www`
+      → `financeasist.github.io`. Then repo Settings → Pages → Custom domain =
+      `romanhrupskyi.com`, wait for the DNS check, tick **Enforce HTTPS**.
 - [ ] **Visual-regression baselines for CI** — `e2e/visual.spec.ts-snapshots/`
       holds macOS baselines. Generate Linux baselines once in a Playwright
       container (`mcr.microsoft.com/playwright`) and commit them, or keep
