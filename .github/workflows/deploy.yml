@@ -16,8 +16,8 @@ jobs:
       site: ${{ steps.filter.outputs.site }}
       tracker: ${{ steps.filter.outputs.tracker }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: dorny/paths-filter@v3
+      - uses: actions/checkout@v5
+      - uses: dorny/paths-filter@v4
         id: filter
         with:
           filters: |
@@ -41,8 +41,8 @@ jobs:
       run:
         working-directory: site
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 20
           cache: npm
@@ -51,18 +51,18 @@ jobs:
       - run: npm run check       # type-gate the direct-push path too (sad.md §7)
       - run: npm test            # content invariants gate the deploy, not only the PR (AC-05/AC-06)
       - run: npm run build       # dist/ incl. the committed CV PDF; postbuild asserts it exists
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site/dist
       - id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
   tracker:
     needs: changes
     if: needs.changes.outputs.tracker == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: flyctl deploy --remote-only --config tracker/fly.toml --dockerfile tracker/Dockerfile
         env:
