@@ -36,6 +36,10 @@ describe('Layout.astro', () => {
     expect(doc.body.querySelector('#probe')).not.toBeNull();
   });
 
+  it('emits a document author meta from the owner prop', () => {
+    expect(doc.querySelector('meta[name="author"]')?.getAttribute('content')).toBe('Casey Probe');
+  });
+
   it('renders the copyright line from the owner prop + the build year, no hard-coded name (US-07)', () => {
     const copy = doc.querySelector('footer')?.textContent ?? '';
     expect(copy).toContain('Casey Probe');

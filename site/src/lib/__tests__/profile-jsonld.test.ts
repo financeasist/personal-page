@@ -44,6 +44,11 @@ describe('profilePersonJsonLd', () => {
     expect(person.url).toBe('https://romanhrupskyi.com/');
   });
 
+  it('points image at the absolute share-card URL on the given origin', () => {
+    const person = build().mainEntity as Record<string, unknown>;
+    expect(person.image).toBe('https://romanhrupskyi.com/og-image.png?v=4');
+  });
+
   it('splits the headline into a jobTitle per pipe-separated role', () => {
     const person = build().mainEntity as Record<string, unknown>;
     expect(person.jobTitle).toEqual(['Senior Java Engineer', 'Lead Backend Engineer']);

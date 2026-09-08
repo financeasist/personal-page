@@ -145,6 +145,7 @@ describe('assembled index.astro — Person/ProfilePage JSON-LD (SEO entity data)
     expect(person.description).toBe(profile.tagline);
     expect((person.homeLocation as Record<string, unknown>).name).toBe(profile.contact.location);
     expect(person.knowsLanguage).toEqual(profile.languages.map((l) => l.name));
+    expect(person.image).toMatch(/^https:\/\/romanhrupskyi\.com\/[^"]+\.(png|jpg|webp)(\?.*)?$/);
   });
 
   it('lists every contact link in sameAs, and the alternate-name spelling, so Google ties the identities together', () => {
@@ -168,6 +169,10 @@ describe('assembled index.astro — canonical + Open Graph (link previews)', () 
     expect(html).toMatch(
       new RegExp(`<link[^>]*rel="canonical"[^>]*href="${SITE}/"`),
     );
+  });
+
+  it('names the document author', () => {
+    expect(meta('author')).toBe(profile.name);
   });
 
   it('carries og:title / og:description / og:type / og:url from the page + content', () => {
