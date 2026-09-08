@@ -16,4 +16,4 @@ elsewhere; the 2004→2017 sales / project-management period is described only i
 
 **Resolution note (2026-09-08):** these source docs still carry the old `roman.grupskyi@gmail.com`
 address. The canonical contact email is now **`roman@romanhrupskyi.com`** (personal-landing spec §5
-/ roadmap D1); the committed CV PDF is pending regeneration to match.
+/ roadmap D1); the committed CV PDF (`site/public/`) was regenerated the same day to match.
