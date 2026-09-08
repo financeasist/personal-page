@@ -17,9 +17,16 @@ interface Props {
       `src/lib/profile-jsonld.ts`). Inert data, not executable JS: no bundle,
       no island, compatible with the zero-client-JS posture (CLAUDE.md). */
   jsonLd?: Record<string, unknown>;
+  /** Open Graph object type — `profile` for a person's page, else `website`. */
+  ogType?: 'website' | 'profile';
 }
 
-const { title, description, owner, jsonLd } = Astro.props;
+const { title, description, owner, jsonLd, ogType = 'website' } = Astro.props;
+
+// Absolute, query/hash-free URL of this page — self-referencing canonical +
+// og:url. `Astro.site` is the apex domain (astro.config.mjs).
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/og-image.png?v=4', Astro.site).href;
 ---
 
 <!doctype html>
@@ -29,6 +36,17 @@ const { title, description, owner, jsonLd } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     {description && <meta name="description" content={description} />}
     <title>{title}</title>
+    <link rel="canonical" href={canonical} />
+
+    {/* Open Graph / Twitter — link-preview cards. Values come from the page
+       props + content; the share image is the avatar on brand navy. */}
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
     {
       jsonLd && (
         <script
@@ -38,9 +56,9 @@ const { title, description, owner, jsonLd } = Astro.props;
         />
       )
     }
-    {/* Favicon set — all four regenerated from docs/reference/avatar-favicon.png
-       by `npm run gen:favicons` (scripts/gen-favicons.mjs). Bump ?v= when the
-       art changes so caches refresh. */}
+    {/* Favicon set — regenerated with the OG image from
+       docs/reference/avatar-favicon.png by `npm run gen:brand-images`
+       (scripts/gen-brand-images.mjs). Bump ?v= when the art changes. */}
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon/favicon-48.png?v=4" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32.png?v=4" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16.png?v=4" />

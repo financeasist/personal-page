@@ -28,6 +28,7 @@ const jsonLd = profilePersonJsonLd(profile, Astro.site ?? 'https://romanhrupskyi
   description={profile.tagline}
   owner={profile.name}
   jsonLd={jsonLd}
+  ogType="profile"
 >
   <Header
     name={profile.name}

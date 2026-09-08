@@ -152,3 +152,49 @@ describe('assembled index.astro — Person/ProfilePage JSON-LD (SEO entity data)
     expect(person.alternateName).toEqual(profile.alternateNames);
   });
 });
+
+const SITE = 'https://romanhrupskyi.com';
+
+describe('assembled index.astro — canonical + Open Graph (link previews)', () => {
+  const meta = (prop: string) =>
+    html.match(
+      new RegExp(`<meta[^>]*(?:property|name)="${prop.replace('/', '\\/')}"[^>]*content="([^"]*)"`),
+    )?.[1] ??
+    html.match(
+      new RegExp(`<meta[^>]*content="([^"]*)"[^>]*(?:property|name)="${prop.replace('/', '\\/')}"`),
+    )?.[1];
+
+  it('has a self-referencing canonical URL at the site root', () => {
+    expect(html).toMatch(
+      new RegExp(`<link[^>]*rel="canonical"[^>]*href="${SITE}/"`),
+    );
+  });
+
+  it('carries og:title / og:description / og:type / og:url from the page + content', () => {
+    expect(meta('og:title')).toBe(`${profile.name} — Senior Java Engineer | Lead Backend Engineer`);
+    expect(meta('og:description')).toBe(profile.tagline);
+    expect(meta('og:type')).toBe('profile');
+    expect(meta('og:url')).toBe(`${SITE}/`);
+  });
+
+  it('points og:image and twitter:card at an absolute social image', () => {
+    expect(meta('og:image')).toMatch(new RegExp(`^${SITE}/[^"]+\\.(png|jpg|webp)(\\?.*)?$`));
+    expect(meta('twitter:card')).toBe('summary_large_image');
+  });
+});
+
+describe('build output — robots.txt + sitemap (crawler discovery)', () => {
+  it('emits a robots.txt that allows all and points at the sitemap index', () => {
+    const robots = build.file('robots.txt') ?? '';
+    expect(robots).toMatch(/User-agent:\s*\*/i);
+    expect(robots).toMatch(/Allow:\s*\/\s*$/im);
+    expect(robots).toMatch(new RegExp(`Sitemap:\\s*${SITE}/sitemap-index\\.xml`, 'i'));
+  });
+
+  it('emits a sitemap that lists the landing page but not the CV print route', () => {
+    const sitemap =
+      (build.file('sitemap-index.xml') ?? '') + (build.file('sitemap-0.xml') ?? '');
+    expect(sitemap).toContain(`${SITE}/`);
+    expect(sitemap).not.toContain(`${SITE}/cv`);
+  });
+});

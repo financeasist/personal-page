@@ -11,7 +11,7 @@
     "build": "astro build",
     "postbuild": "node scripts/assert-cv-pdf.mjs",
     "preview": "astro preview",
-    "gen:favicons": "node scripts/gen-favicons.mjs",
+    "gen:brand-images": "node scripts/gen-brand-images.mjs",
     "check": "astro check",
     "lint": "astro check",
     "test": "vitest run",
@@ -20,6 +20,7 @@
     "test:visual": "playwright test --grep @visual"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
     "astro": "^5.13.0",
     "zod": "^3.25.76"
   },

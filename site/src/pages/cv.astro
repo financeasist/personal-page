@@ -15,6 +15,9 @@ const { data: profile } = profiles[0];
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    {/* Print / PDF-rendering target — never a search result (also excluded from
+       the sitemap in astro.config.mjs). The downloadable CV is the PDF. */}
+    <meta name="robots" content="noindex" />
     <title>{profile.name} — CV</title>
   </head>
   <body class="font-sans text-ink">
