@@ -13,3 +13,7 @@ Known inconsistencies to resolve in `specify` (idea-brief §8): surname is spell
 (page title), **grupskyi** (email), **grupskiy** (LinkedIn); employment date ranges differ between
 the two PDFs; experience figure reads "over 9 years" (template PDF), "over 8 years" (LinkedIn), "8"
 elsewhere; the 2004→2017 sales / project-management period is described only in the LinkedIn About.
+
+**Resolution note (2026-09-08):** these source docs still carry the old `roman.grupskyi@gmail.com`
+address. The canonical contact email is now **`roman@romanhrupskyi.com`** (personal-landing spec §5
+/ roadmap D1); the committed CV PDF is pending regeneration to match.

@@ -1,4 +1,13 @@
+import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
+
+// Contact email is content — read it from the committed profile rather than
+// pin a literal (it moved to the apex domain on 2026-09-08).
+const profileEmail = (
+  JSON.parse(
+    readFileSync(new URL('../src/data/profile/roman.json', import.meta.url), 'utf8'),
+  ) as { contact: { email: string } }
+).contact.email;
 
 // T9 — the assembled landing page driven through the built static output at
 // both reference viewports (playwright.config.ts: laptop 1280×800 / phone
@@ -60,7 +69,7 @@ test('AC-02 — the email action hands off a pre-addressed mailto', async ({ pag
     .locator('[data-contact-channel="email"]')
     .first()
     .getAttribute('href');
-  expect(href).toBe('mailto:roman.grupskyi@gmail.com');
+  expect(href).toBe(`mailto:${profileEmail}`);
 });
 
 test('AC-13 — LinkedIn opens a new tab; Download CV is a file download', async ({
