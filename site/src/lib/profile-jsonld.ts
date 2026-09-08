@@ -1,4 +1,5 @@
 import type { ProfileData } from '../content/profile-schema';
+import { OG_IMAGE_PATH } from './brand';
 
 /**
  * `Person` / `ProfilePage` JSON-LD for the landing page — the structured-data
@@ -10,10 +11,11 @@ import type { ProfileData } from '../content/profile-schema';
  * (site/domain "Hrupskyi" vs the older "Grupskiy" on external profiles —
  * `profile.alternateNames`).
  *
- * Derived entirely from the single `profile` content document (CLAUDE.md —
- * content is the source of truth; nothing here is hand-authored English), and
- * kept as a pure function importing no `astro:*` so it is unit-testable without
- * the build pipeline (ADR-0007), like `content-checks` / `cv-filename`.
+ * Derived from the single `profile` content document (CLAUDE.md — content is the
+ * source of truth; nothing here is hand-authored English) plus the shared
+ * `OG_IMAGE_PATH` brand asset for `Person.image`, and kept as a pure function
+ * importing no `astro:*` so it is unit-testable without the build pipeline
+ * (ADR-0007), like `content-checks` / `cv-filename`.
  *
  * Emitted as `<script type="application/ld+json">` by `Layout.astro`. That is a
  * data block, not executable JS — no bundle, no island — so it is compatible
@@ -35,6 +37,8 @@ function pruned(obj: JsonLd): JsonLd {
 
 export function profilePersonJsonLd(profile: ProfileInput, siteUrl: string | URL): JsonLd {
   const url = siteUrl.toString();
+  // Same file linked as `og:image` by Layout.astro — the avatar on brand navy.
+  const image = new URL(OG_IMAGE_PATH, siteUrl).href;
   const jobTitle = profile.headline
     .split('|')
     .map((role) => role.trim())
@@ -47,6 +51,7 @@ export function profilePersonJsonLd(profile: ProfileInput, siteUrl: string | URL
     jobTitle,
     description: profile.tagline,
     url,
+    image,
     homeLocation: { '@type': 'Place', name: profile.contact.location },
     knowsLanguage: profile.languages.map((l) => l.name),
     alumniOf: profile.education[0]

@@ -4,6 +4,7 @@
 // column so <Footer /> is always flush to the viewport bottom — even on a short
 // page (screens.md §Source). Zero client JS.
 import Footer from '../components/Footer.astro';
+import { OG_IMAGE_PATH } from '../lib/brand';
 import '../styles/global.css';
 
 interface Props {
@@ -26,7 +27,7 @@ const { title, description, owner, jsonLd, ogType = 'website' } = Astro.props;
 // Absolute, query/hash-free URL of this page — self-referencing canonical +
 // og:url. `Astro.site` is the apex domain (astro.config.mjs).
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL('/og-image.png?v=4', Astro.site).href;
+const ogImage = new URL(OG_IMAGE_PATH, Astro.site).href;
 ---
 
 <!doctype html>
@@ -35,6 +36,7 @@ const ogImage = new URL('/og-image.png?v=4', Astro.site).href;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     {description && <meta name="description" content={description} />}
+    <meta name="author" content={owner} />
     <title>{title}</title>
     <link rel="canonical" href={canonical} />
 
