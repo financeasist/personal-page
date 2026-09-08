@@ -91,6 +91,10 @@ export const contact = z.object({
  */
 export const profileObjectSchema = z.object({
   name: z.string().min(1),
+  // Other romanisations of `name` (the surname transliterates as both
+  // "Hrupskyi" and "Grupskiy"). Landing-page-only: fed to `sameAs`/`alternateName`
+  // in the Person JSON-LD so Google ties the identities together (profile-jsonld.ts).
+  alternateNames: z.array(z.string().min(1)).default([]),
   headline: z.string().min(1),
   tagline: z.string().min(1).max(300).optional(),
   // Rendered as one middot-joined sentence in the hero (not chips), so the cap
