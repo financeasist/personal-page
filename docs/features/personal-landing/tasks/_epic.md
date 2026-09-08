@@ -1,6 +1,8 @@
 # Epic — personal-landing
 
 > **Spec:** [spec.md](../spec.md) · **Design:** [sad.md](../sad.md) · **Data model:** [data-model.md](../data-model.md) · **API:** [contracts/api-sync-report.md](../contracts/api-sync-report.md) (N/A — no interface) · **ADRs:** [adr/](../adr/) · **Screens:** [screens.md](../screens.md) · **UX flows:** [ux-flows.md](../ux-flows.md)
+>
+> **GitHub:** this epic = roadmap step 3 = issue [#8](https://github.com/financeasist/personal-page/issues/8) (shipped) · tracked on the [personal-landing Project](https://github.com/users/financeasist/projects/4). The T1–T11 tasks below are not separate issues — they were the pre-ship work breakdown; [tasks.json](../tasks.json) is the machine contract.
 
 ## Goal
 
