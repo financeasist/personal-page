@@ -1,9 +1,10 @@
 ---
 status: living
-updated_at: "2026-09-08"
+updated_at: "2026-09-09"
 # 2026-09-06: step 3 (personal-landing) spec'd — re-sized L→M, recommendations→v2, D1/D2/D3/D5/D7/D8 resolved.
 # 2026-09-06: steps 5/6/7 (tracking-system) spec'd as one bundled M feature; D6 resolved.
 # 2026-09-08: mirrored to GitHub issues (financeasist/personal-page #6–#17); step/decision rows carry their issue link.
+# 2026-09-09: added steps 10 (recruiter-gated CV download, fog) and 11 (recommendations/testimonial section, S) — both backlog, next-version, not yet specified.
 ---
 
 # Roadmap — personal-landing
@@ -36,12 +37,15 @@ A recruiter opens one link, judges Roman's fit in ~20 seconds, taps to call / em
 | 7 | View notification — Telegram "page viewed" message to Roman on every visit; a labelled visit names the recruiter, an unlabelled one carries city / referrer → [`docs/features/tracking-system/spec.md`](features/tracking-system/spec.md) | `idea-brief.md §7 Recommendation` + `architecture-map.md §Stack` (Notifications) | S | **spec'd** | [#12](https://github.com/financeasist/personal-page/issues/12) |
 | 8 | Site → tracker wiring — the inline `<script>` that beacons page-view + contact-click + `cv_download` to `/e`; the CV download proceeds regardless of the beacon (fire-and-forget) | `architecture-map.md §Frontend / UI foundation` (State / data-fetching) + `idea-brief.md §7 Recommendation` | S | idea | [#13](https://github.com/financeasist/personal-page/issues/13) |
 | 9 | Per-recruiter "why I fit you" intro → see [Not yet specified](#not-yet-specified) | `idea-brief.md §6 Risks` | fog | idea | [#14](https://github.com/financeasist/personal-page/issues/14) |
+| 10 | Recruiter-gated CV download — the Download-CV contact action becomes visible/available only to recruiters arriving via a Labelled link; anonymous visitors get some other (undecided) state → see [Not yet specified](#not-yet-specified) | `idea-brief.md §8 Open questions` | fog | idea | [#20](https://github.com/financeasist/personal-page/issues/20) |
+| 11 | Recommendations / testimonial section — below-the-fold quote/testimonial block on the landing page, deferred from step 3; additive to the `profile` schema, no quote material exists yet | `idea-brief.md §7 Recommendation` + `docs/features/personal-landing/spec.md` | S | idea | [#21](https://github.com/financeasist/personal-page/issues/21) |
 
 ## Not yet specified
 
 | Area | What we'd have to learn | Blocks | How it gets sharpened |
 |---|---|:---:|---|
 | Per-recruiter "why I fit you" intro | Whether the intro is URL-param driven or tied to the `recruiter_link` label; whether its text lives in the content collection, in the tracker, or in the link query string; how it renders without flashing default content on a static page; whether it is even in v1 at all | 9 | A conversation with Roman, then a recon pass once the shape is chosen |
+| Recruiter-gated CV download | How the label reaches a statically-built page view (query param on the redirect? a sanctioned client-script exception? something else); whether it's all-or-nothing or a "locked" state shown to anonymous visitors; whether gating survives contact with the "zero client JS by default" constraint at all | 10 | A conversation with Roman on the mechanism, then a recon pass once the shape is chosen |
 
 ## Out of scope
 
@@ -89,6 +93,8 @@ flowchart LR
   s6["6 · event ingest"]
   s7["7 · view notification"]
   s8["8 · site → tracker wiring"]
+  s10["10 · gated CV download"]
+  s11["11 · recommendations section"]
 
   s1 -->|"content collection + Zod schema must exist"| s2
   s1 -->|"Astro site skeleton must exist"| s3
@@ -102,6 +108,8 @@ flowchart LR
   s5 -->|"labelled visits let the ping name the recruiter"| s7
   s3 -->|"the contact / Download-CV buttons must exist"| s8
   s6 -->|"the /e endpoint must exist to beacon to"| s8
+  s5 -->|"gating needs a labelled-visit signal to gate against"| s10
+  s3 -->|"extends the already-shipped landing page"| s11
 ```
 
 ## Execution path
@@ -115,7 +123,7 @@ flowchart LR
 | 1 | 1 | whole repo `(new)` — runs solo, nothing to parallelise against | 2, 3, 4, 5, 6 |
 | 2 | 2 ∥ 5 | 2: `site/src/content/` `(new)` · 5: `tracker/` `(new)` — disjoint stacks | 3, 4, 6, 7 |
 | 3 | 3 ∥ 4 ∥ 6 | 3: `site/src/components/` + `site/src/pages/index.astro` `(new)` · 4: `site/src/pages/cv.astro` + print styles `(new)` · 6: `tracker/src/main/java/.../web` + `.../app` `(new)` — schema frozen in wave 2, so the two `site/` lanes touch only their own page files | 7, 8 |
-| 4 | 7 ∥ 8 | 7: `tracker/src/main/java/.../app` + `.../infra` `(new)` · 8: `site/` inline `<script>` + component props `(new)` — disjoint stacks | — |
+| 4 | 7 ∥ 8 ∥ 11 | 7: `tracker/src/main/java/.../app` + `.../infra` `(new)` · 8: `site/` inline `<script>` + component props `(new)` · 11: a new `site/src/components/` block + `site/src/data/profile/` content field `(new)` — disjoint stacks | — |
 
 ## Shipped
 
