@@ -2,7 +2,7 @@
 status: Draft
 owner: "Roman (Architect / Tech Lead)"
 reviewers: ["Roman"]
-updated_at: "2026-09-07"
+updated_at: "2026-09-22"
 feature_size: "S"
 target_surfaces: [web-frontend]  # single static web front-end; read (never re-derived) by api/sequences/tasks/plan-tests/review → _shared/surfaces.md
 ---
@@ -14,7 +14,7 @@ target_surfaces: [web-frontend]  # single static web front-end; read (never re-d
 
 ## 1. Introduction and goals
 
-**Intent.** Build one static landing page (`site/src/pages/index.astro`) that lets a **Recruiter** judge Roman's fit in a twenty-second above-the-fold scan and reach him through email, LinkedIn, or a CV download from a persistent header, and lets **Roman** publish every change by committing a single content file. The page renders entirely from the one typed **Profile content** entry that also feeds the CV route. This feature is roadmap step 3; the stack (Astro 5 static site, Tailwind v4, typed content collection, zero client JS) is fixed upstream by `docs/architecture-map.md` and ADR-0001–0004 (ADR-0004 amended for v1 by ADR-0008 — v1 ships a committed static CV PDF).
+**Intent.** Build one static landing page (`site/src/pages/index.astro`) that lets a **Recruiter** judge Roman's fit in a twenty-second scan of the essentials at the top of the page and reach him through email, LinkedIn, or a CV download from a persistent header, and lets **Roman** publish every change by committing a single content file. The page renders entirely from the one typed **Profile content** entry that also feeds the CV route. This feature is roadmap step 3; the stack (Astro 5 static site, Tailwind v4, typed content collection, zero client JS) is fixed upstream by `docs/architecture-map.md` and ADR-0001–0004 (ADR-0004 amended for v1 by ADR-0008 — v1 ships a committed static CV PDF).
 
 <!-- Re-synced 2026-09-07 to the S-size scope (spec.md §1 "Scope narrowing" / §8, screens.md commit
      0fbb877, ux-flows.md commit b75fc9f). §6 was re-synced separately (commit 9930320). Changes:
@@ -28,6 +28,10 @@ target_surfaces: [web-frontend]  # single static web front-end; read (never re-d
          (ratified divergence D-1 / D-3)
        - optional Industries list in the hero's right column (ratified divergence D-7) — new optional
          industries content field
+     Re-synced 2026-09-22 to the spec clarify sweep: the fold is no longer a layout gate (essentials
+     render together at the top in reading order; nothing is dropped at any width — the §6 drop
+     order is withdrawn); topStack max 8 → 12; the header `Contact` item is the same email Contact
+     action; parity check covers surname / headline / email / "9+ years" (no dates on the v1 page).
        - tagline absorbs the positioning block (ratified divergence D-10) — positioning field removed
        - CV PDF generator container removed per ADR-0008 (committed static file, not generated) -->
 
@@ -138,12 +142,12 @@ site/
 │   │   ├── Header.astro                persistent sticky top bar (CSS only) — name + ContactActions;
 │   │   │                               mobile: name + email/LinkedIn icons + a native <details> menu (Download CV, About)
 │   │   ├── Footer.astro                copyright line, flush to the viewport bottom (min-height:100vh page)
-│   │   ├── Section.astro               below-the-fold section wrapper
-│   │   ├── Hero.astro                  above-the-fold: headshot, name, headline, optional tagline, AvailabilityBlock, optional Industries
+│   │   ├── Section.astro               section wrapper for content below the hero
+│   │   ├── Hero.astro                  top of page: headshot, name, headline, optional tagline, AvailabilityBlock, optional Industries
 │   │   ├── AvailabilityBlock.astro     status / location / optional notice / optional work auth
 │   │   ├── ContactActions.astro        the three labelled controls, rendered inside Header (ADR-0006); each carries a stable data-* hook for step 8
 │   │   ├── Industries.astro            optional hero list — domain + optional note (renders only when present)
-│   │   └── AboutMe.astro               below-the-fold About section — narrative + highlights (US-10)
+│   │   └── AboutMe.astro               About section below the hero — narrative + highlights (US-10)
 │   ├── lib/
 │   │   ├── cv-filename.ts              name + headline → "Roman-Hrupskyi-…-CV.pdf"  (shared with cv.astro; generate-pdf.mjs is v2)
 │   │   └── content-checks.ts           the LinkedIn-link predicate used by config.ts refinements
@@ -201,12 +205,12 @@ sequenceDiagram
     actor Recruiter
     participant Pages as GitHub Pages
     participant Page as Landing page (static)
-    Note over Page: Precondition: a completed build published the page (Flow 4) — every above-the-fold essential is present
+    Note over Page: Precondition: a completed build published the page (Flow 4) — every AC-01 essential is present
     Recruiter->>Pages: open the shared link
     Pages-->>Recruiter: static HTML + CSS + optimised headshot (≤ 1 KB inline JS — scroll-spy PE only)
-    Recruiter->>Page: scan above the fold (SCR-01)
+    Recruiter->>Page: scan the hero (SCR-01)
     alt reference laptop viewport 1280x800
-        Page-->>Recruiter: headshot, name, headline, availability (location + remote stance), top stack, three contact actions — no scrolling
+        Page-->>Recruiter: headshot, name, headline, availability (location + remote stance), top stack, three contact actions — together at the top, in reading order
     else phone viewport 390x844
         Page-->>Recruiter: same essentials, single column, tap targets at least 44x44 px, no horizontal scroll
     end
@@ -249,7 +253,7 @@ sequenceDiagram
     actor Recruiter
     participant Page as Landing page (static)
     Note over Page: Precondition: the build enforced a non-empty about.narrative and a non-empty about.highlights list (AC-05, AC-06) — the section never renders blank
-    Recruiter->>Page: scroll one screen below the fold (SCR-05)
+    Recruiter->>Page: scroll past the hero (SCR-05)
     Page-->>Recruiter: About section — narrative paragraph + highlights list, rendered straight from Profile content, no hard-coded copy
     alt phone viewport 390x844
         Page-->>Recruiter: single column, body text at least 16 px, no horizontal scroll
@@ -273,7 +277,7 @@ sequenceDiagram
     CI->>CI: validate content — Zod schema + refine() invariants (ADR-0007)
     alt a required field is missing (name, headshot path or alt, headline, availability, location, fewer than four top-stack entries, any of the three contact channels, about.narrative, or a non-empty about.highlights)
         CI-->>Roman: build fails, naming the missing field — nothing deploys (AC-05)
-    else a field is malformed (email without an @, empty headline, malformed link, more than eight top-stack entries, fewer than four, present-but-empty tagline)
+    else a field is malformed (email without an @, empty headline, malformed link, more than twelve top-stack entries, fewer than four, present-but-empty tagline)
         CI-->>Roman: build fails, naming the field and why — nothing deploys (AC-06)
     else content valid
         CI->>CI: render index.astro and cv.astro
@@ -289,7 +293,7 @@ sequenceDiagram
 - **Pipeline trigger, drawn as sync.** Flow 4's `push to main triggers the build` is event-driven, but it is an internal CI trigger, not a third-party callback — no idempotency key, retry note, or dead-letter branch is warranted. GitHub Actions' own re-run semantics are outside this view.
 - **AC-07 is only partly runtime.** The "no visible contact text" / "no phone control" half is the `Note` in Flow 2. The "no salary / no home address / no per-recruiter link labels anywhere in the delivered source" half is a build-output / source-inspection property with no runtime flow — verified by `plan-tests`, not shown here.
 - **Withdrawn / deferred (no flow, by design):** AC-03 (phone control — removed from v1 with US-03), AC-09 (experience timeline — deferred to v2 with US-04), AC-11 / AC-12 (selected projects + placeholder-impact rule — deferred to v2 with US-09).
-- **US-11 (Industries list, AC-15) has no dedicated flow.** It is static, optional hero content with no interaction and no error branch — part of the Flow 1 scan. Present → rendered from the `industries` field; absent or collapsed on the phone viewport (§6 drop order) → the hero renders without it. Covered by `ux-flows.md` (Flow US-11) and `screens.md` SCR-01; a sequence diagram would add nothing.
+- **US-11 (Industries list, AC-15) has no dedicated flow.** It is static, optional hero content with no interaction and no error branch — part of the Flow 1 scan. Present → rendered from the `industries` field at every width (on the phone viewport it moves under the availability block — the §6 drop order was withdrawn 2026-09-22); absent or empty → the hero renders without it. Covered by `ux-flows.md` (Flow US-11) and `screens.md` SCR-01; a sequence diagram would add nothing.
 
 ## 7. Deployment view
 
@@ -348,16 +352,16 @@ ADR files live under `docs/features/personal-landing/adr/NNNN-<title>.md`.
 
 **QG-3. JS-optional, accessible, correctly-scaled delivery**
 - **When:** a Recruiter uses the page with JavaScript disabled, or with a keyboard / screen reader, on any viewport from 360 to 1920 px wide.
-- **Then:** every contact action works; the only script (the scroll-spy indicator, ADR-0009) is decorative and its absence leaves the page fully usable — only the active-link highlight is gone, with no layout shift or dead control; Lighthouse Accessibility ≥ 95; every interactive element is keyboard-reachable and operable; body text ≥ 16 px; interactive targets ≥ 44×44 px; no horizontal scroll at 360 / 768 / 1280 / 1920 px width; and every above-the-fold essential is visible with no scrolling at 1280×800 (reference laptop) and 390×844 (reference phone).
-- **How verify:** Lighthouse mobile audit + manual keyboard pass + manual responsive check at the four widths + manual above-the-fold check at 1280×800 and 390×844, all pre-launch.
+- **Then:** every contact action works; the only script (the scroll-spy indicator, ADR-0009) is decorative and its absence leaves the page fully usable — only the active-link highlight is gone, with no layout shift or dead control; Lighthouse Accessibility ≥ 95; every interactive element is keyboard-reachable and operable; body text ≥ 16 px; interactive targets ≥ 44×44 px; no horizontal scroll at 360 / 768 / 1280 / 1920 px width; and every AC-01 essential renders, in reading order, at 1280×800 (reference laptop) and 390×844 (reference phone) — no essential is required to fall within one viewport height, and nothing is dropped at any width.
+- **How verify:** Lighthouse mobile audit + manual keyboard pass + manual responsive check at the four widths + render-completeness check at 1280×800 and 390×844 (automated e2e + manual confirmation), all pre-launch.
 
 ## 11. Risks and technical debt
 
 | Risk / debt | Severity | Mitigation | Owner |
 |---|---|---|---|
-| Committed CV PDF drifts from the page (surname / headline / dates) — the "two divergent CVs" problem the feature exists to fix | Medium | ADR-0008: v1 ships a hand-committed PDF under `site/public/`; a missing file fails the build (postbuild "file exists" assertion). Manual page-vs-CV parity check each release + each content edit; revisit trigger = build-time generation returns (roadmap step 4 / v2) | Roman |
+| Committed CV PDF drifts from the page (surname / headline / contact email / "9+ years" claim) — the "two divergent CVs" problem the feature exists to fix | Medium | ADR-0008: v1 ships a hand-committed PDF under `site/public/`; a missing file fails the build (postbuild "file exists" assertion). Manual page-vs-CV parity check on every push to `master` touching the Profile content or the committed CV; revisit trigger = build-time generation returns (roadmap step 4 / v2) | Roman |
 | Headshot asset is ~2 MB — blows the 500 KB page-weight budget if shipped raw | Medium | `astro:assets` optimisation, responsive sizes, target < 100 KB at display size; checked in the QG-1 Lighthouse pass | Roman |
-| Optional `tagline` + `industries` list together push the header contact actions off the fold at 390×844 (AC-08) | Low | Schema caps `tagline` at ~300 chars (`data-model`); both fields optional so the tight layout is opt-in; §6 drop order (Industries → Tagline → top-stack truncates) + manual above-the-fold check at 390×844 in the QG-3 pass | Roman |
+| ~~Optional `tagline` + `industries` list together push the header contact actions off the fold at 390×844 (AC-08)~~ | Retired | Withdrawn 2026-09-22 with the fold constraint: the header is sticky (contact actions in reach at any scroll position), the essentials only need to render in reading order, and the §6 drop order is gone. `tagline` stays capped at ~300 chars (`data-model`) | Roman |
 | Lighthouse checks (and `astro check` on the deploy path) are manual / PR-only, not on push to `main` — quality can regress silently on a later direct content edit | Low | `tasks` adds `npm run check` + invariant unit tests to `deploy.yml`; document the pre-launch Lighthouse checklist; wire Lighthouse CI as a later improvement | Roman |
 | Ratified screens divergences (D-1 header contact / D-3 header+footer chrome / D-7 industries list / D-10 tagline absorbs positioning) landed after the SAD's first pass | Low | Resolved 2026-09-07 in spec §1/§4/§5 + `CONTEXT.md` + this re-sync; `screens.md` § Divergence tracks them as RESOLVED | Roman |
 
@@ -374,5 +378,5 @@ Domain terms are canonical in `CONTEXT.md` (Recruiter, Roman, Profile content, A
 | SSG (static site generation) | The whole page is rendered to HTML/CSS/images at build time; no server rendering, no client hydration, no router |
 | Content invariant | A rule the Profile content must satisfy to build — e.g. "all three contact channels present", "the About section is complete (non-empty narrative + at least one highlight)"; expressed as a Zod `.refine()` |
 | Actionable-only | A contact detail exposed only as an activatable control (a link), never as readable text on the landing page |
-| Reference viewport | 1280×800 (laptop) and 390×844 (phone) — the sizes "fits above the fold" and "no horizontal scroll" are checked against |
+| Reference viewport | 1280×800 (laptop) and 390×844 (phone) — the sizes render completeness (essentials in reading order, legible) and "no horizontal scroll" are checked against; not a fold-fit gate since 2026-09-22 |
 | LCP | Largest Contentful Paint — the render-speed metric in QG-1, target ≤ 2.5 s on the Lighthouse mobile preset |

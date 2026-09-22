@@ -15,7 +15,7 @@ feature_size: "S"
        - DROP `selectedProjects` + `selectedProject` + INV-05      → v2 (with US-09)
        - DROP `experienceEntry.startYear` / `endYear` + INV-06     → v2 (with US-04)
        - DROP `earlierBackground`                                  → v2 (with US-04)
-       ~ `topStack` min raised 1 → 4 (INV-07, spec/CONTEXT "min 4, max 8, build-enforced")
+       ~ `topStack` min raised 1 → 4 (INV-07); max is **12** (spec/CONTEXT "min 4, max 12, build-enforced" — reconciled 8 → 12 to the live schema, 2026-09-22)
        ~ `availability` gains optional `noticePeriod` (CONTEXT.md Availability block, spec §1)
      2026-09-07 (2nd edit — ratified screens divergences D-7 / D-10, folded in):
        + ADD optional `industries` list (D-7 — hero right column, US-11 / AC-15)
@@ -79,7 +79,7 @@ erDiagram
         string name
         string headline
         string tagline "* optional, max 300"
-        string_array topStack "* 4..8"
+        string_array topStack "* 4..12"
         string_array summary "† CV route, min 1"
         string_array competencies "† CV route"
     }
@@ -141,7 +141,7 @@ are embedded shapes, not separate entities.
 | `name` | `z.string().min(1)` | non-empty | feeds CV filename helper + hero (AC-05) |
 | `headline` | `z.string().min(1)` | **required, non-empty** (INV-01) | pipe-separated positioning line; source for CV filename |
 | `tagline` | `z.string().min(1).max(300).optional()` | absent OK; present-but-empty invalid (AC-06); ≤ 300 chars | **NEW** — optional short passage under the headline: a sentence or two (D-10 merged the old separate `positioning` block into this; the "one-line" limit is dropped, the ~300-char cap keeps the above-the-fold fit — spec §1, §6 drop order) |
-| `topStack` | `z.array(z.string().min(1)).min(4).max(8)` | **4–8 items** (INV-07) | **NEW** — hand-curated hero technology chips; *not* derived from `skills` (ADR-0005). Min raised 1→4 (spec/CONTEXT "min 4") |
+| `topStack` | `z.array(z.string().min(1)).min(4).max(12)` | **4–12 items** (INV-07) | **NEW** — hand-curated hero technology chips; *not* derived from `skills` (ADR-0005). Min raised 1→4 (spec/CONTEXT "min 4"); max reconciled 8 → 12 to the live schema, 2026-09-22 |
 | `industries` | `z.array(industry).max(6).optional()` | absent OK; ≤ 6 entries | **NEW** (D-7) — optional hero right-column list of the domains Roman has delivered in. Renders only when present; absent → the hero's second column is omitted, no build failure (US-11 / AC-15). Not an AC-01 essential. |
 | `contact` | `z.object({…})` | required | embedded — see below |
 | `availability` | `z.object({…})` | required | **NEW** embedded — see below |
@@ -244,7 +244,7 @@ offending field** (AC-05, AC-06).
 | INV-02 | Availability present | `availability.status` non-empty | AC-05 | base schema `.min(1)` |
 | INV-03 | All **three** contact channels present | `contact.email` valid **and** ≥ 1 `contact.links` entry whose `url` host is `linkedin.com` **and** the CV channel (`name` + `headline` present **and** the committed PDF exists at the expected path — postbuild "file exists" assertion, ADR-0008) | AC-05 | `.superRefine` (email + LinkedIn) + postbuild assertion (CV file) |
 | INV-04 | Field shapes valid | email contains `@`; every `url` parses; no empty required string; `topStack` ≤ 8; `tagline` ≤ 300; `industries` ≤ 6 (when present) | AC-06 | base Zod (`.email()`, `.url()`, `.min(1)`, `.max(…)`) |
-| INV-07 | Top stack size | `topStack.length` in **4..8** | AC-01, AC-06 | base schema `.min(4).max(8)` |
+| INV-07 | Top stack size | `topStack.length` in **4..12** | AC-01, AC-06 | base schema `.min(4).max(12)` |
 | INV-08 | No over-exposure fields | schema carries no `salary` / `rate` / `homeAddress` / recruiter-link-label key | AC-07 | structural (shape has no such key) — documented |
 | INV-09 | About section present | `about.narrative` non-empty **and** `about.highlights.length ≥ 1` with every entry non-empty | AC-05, AC-06, AC-14 | base schema (`.min(1)` on both) — `about` object is required, not `.optional()` |
 
@@ -261,7 +261,7 @@ offending field** (AC-05, AC-06).
 No SQL. `implement` applies this under the ADR-0005 / ADR-0007 tasks:
 
 1. **`site/src/content/config.ts`** — extend the `profile` Zod schema:
-   - add `tagline?` (`z.string().min(1).max(300).optional()`), `topStack` (`.min(4).max(8)`);
+   - add `tagline?` (`z.string().min(1).max(300).optional()`), `topStack` (`.min(4).max(12)`);
    - add `industries?` (`z.array(z.object({ domain: z.string().min(1), note: z.string().min(1).optional() })).max(6).optional()`);
    - add `availability: z.object({ status: z.string().min(1), noticePeriod: z.string().min(1).optional(), workAuthorization: z.string().min(1).optional() })` (required);
    - add `about: z.object({ narrative: z.string().min(1), highlights: z.array(z.string().min(1)).min(1) })` (required);
@@ -288,7 +288,7 @@ Current → target deltas:
 - `contact.availability: "Open to Remote & Hybrid Opportunities"` (string)
   → `availability: { "status": "Open to Remote & Hybrid Opportunities", "noticePeriod": "<Roman>", "workAuthorization": "<Roman, optional>" }`
 - add `about: { "narrative": "<reconciled from linkedin-about.md>", "highlights": ["…", "…"] }`
-- add `topStack` (4–8 items — **trim** the current ~11-item screens.md wording to the cap, spec §6 / CONTEXT D-9)
+- add `topStack` (4–12 items — the ~11-item screens.md wording fits the cap; max reconciled 8 → 12 on 2026-09-22, spec §6 / CONTEXT D-9)
 - `tagline` — **keep** the existing key; ensure ≤ 300 chars (D-10 — it now carries what the
   `positioning` block used to; the current value is fine).
 - **remove** the `positioning` key from `roman.json` (D-10 — merged into `tagline`; the

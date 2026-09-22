@@ -1,7 +1,7 @@
 ---
 status: draft
 feature_size: "S"
-updated_at: "2026-09-07"
+updated_at: "2026-09-22"
 ---
 
 # UX flows — personal-landing
@@ -19,6 +19,11 @@ updated_at: "2026-09-07"
 > move into a persistent sticky header (mobile: icons + a native-`<details>` menu); the hero gains
 > an optional **industries list** (US-11 / AC-15); "positioning block" is gone (merged into the
 > tagline).
+> **3rd re-sync 2026-09-22** (spec clarify sweep): the fold is no longer a layout gate — the
+> essentials render together at the top in reading order, none is required to fit one viewport
+> height, and nothing is dropped at narrow widths (the Industries → Tagline → top-stack drop
+> order is withdrawn); `topStack` cap is 12; the header's `Contact` item is the same email
+> Contact action as the email icon; AC-16 (scroll-spy active state) added.
 
 ## Platform decisions
 
@@ -28,7 +33,7 @@ updated_at: "2026-09-07"
   viewports: **390×844** (phone) and **1280×800** (laptop); no horizontal scroll at any width
   between them (and at 360 / 768 / 1920, §6 NFR).
 - **Single page, two sections, no routing.** The whole feature is one document: the **hero**
-  (above the fold) and the **About section** (one scroll below it). "Screens" below are those two
+  (the essentials, at the top in reading order) and the **About section** (directly below it). "Screens" below are those two
   sections of the page, not separate routes. The only navigations are in-page vertical scroll and
   three hand-offs that leave the page (mail client, LinkedIn tab, file download).
 - **Client JavaScript is one small progressive enhancement.** Every interaction is a plain link
@@ -36,7 +41,7 @@ updated_at: "2026-09-07"
   active-section indicator** (ADR-0009) — it marks the header "About me" link while the About
   section is in view; blocked/off ⇒ no highlight, nothing else changes. The phone-line
   disclosure is gone with the phone control; the one remaining disclosure is the **mobile header
-  menu** (a native `<details>` holding Download CV + an in-page About link). `design` owns the
+  menu** (a native `<details>` holding Download CV, the `Contact` email item + an in-page About link). `design` owns the
   formal call; this is the flow-level assumption the flows are drawn against.
 - **Persistent header.** The three contact actions live in a sticky, CSS-only header, in reach at
   any scroll position. On the laptop viewport all three are visible; on the phone viewport the
@@ -48,8 +53,8 @@ updated_at: "2026-09-07"
 
 | ID | Screen | Purpose | Entry | Exit |
 |---|---|---|---|---|
-| SCR-01 | Landing hero (above the fold) | The twenty-second scan: headshot, name, headline, optional tagline, availability block, top stack, optional industries list; a persistent sticky header carries the three contact actions (email · LinkedIn · Download CV) — on the phone viewport, email/LinkedIn as icon controls + a native-`<details>` menu for Download CV + About | The shared link (CV / LinkedIn / email / a labelled `/t/{label}` redirect — the redirect is roadmap step 5) | Mail client · LinkedIn tab · CV download · scroll to SCR-05 |
-| SCR-05 | About section (below the fold) | A short prose `narrative` + a `highlights` bullet list, both rendered straight from Profile content — a fuller sense of Roman's focus in his own words | Scroll down from SCR-01 | Scroll back up to a contact action · leave |
+| SCR-01 | Landing hero (top of page) | The twenty-second scan: headshot, name, headline, optional tagline, availability block, top stack, optional industries list; a persistent sticky header carries the three contact actions (email · LinkedIn · Download CV) — on the phone viewport, email/LinkedIn as icon controls + a native-`<details>` menu for Download CV, `Contact` (email) + About | The shared link (CV / LinkedIn / email / a labelled `/t/{label}` redirect — the redirect is roadmap step 5) | Mail client · LinkedIn tab · CV download · scroll to SCR-05 |
+| SCR-05 | About section (below the hero) | A short prose `narrative` + a `highlights` bullet list, both rendered straight from Profile content — a fuller sense of Roman's focus in his own words | Scroll down from SCR-01 | Scroll back up to a contact action · leave |
 
 **Retired ids (kept, not reused):** `SCR-02` (experience timeline) and `SCR-03` (selected
 projects) are **v2**; `SCR-04` (phone-line chooser) was **removed** with US-03. `SCR-05` keeps the
@@ -69,7 +74,7 @@ flowchart TD
 ```
 
 A Recruiter opens the link Roman placed in his CV, LinkedIn, or outreach email and lands on the
-hero (SCR-01). Without scrolling they see the headshot, name, headline, the optional tagline, the
+hero (SCR-01). At the top of the page, in reading order, they see the headshot, name, headline, the optional tagline, the
 availability block, the top stack, the optional industries list, and — in the persistent sticky
 header — the three contact actions. From that
 scan they either judge the fit good enough to contact Roman (into Flow US-02), scroll down to read
@@ -123,7 +128,7 @@ sees Roman's full contact details, and they initiate it deliberately.
 ```mermaid
 flowchart TD
     A["Recruiter opens the link on a phone"] --> B["SCR-01 hero at 390x844"]
-    B --> C{"Above-the-fold essentials fit with no horizontal scroll?"}
+    B --> C{"Essentials render in reading order with no horizontal scroll?"}
     C -->|"yes"| D["Same contact + scroll options as desktop — Flow US-02 / US-10"]
     C -->|"more content than one screen"| E["Scroll vertically, never horizontally, at any width"]
     E --> D
@@ -133,21 +138,22 @@ Opening the link on a phone lands on the same SCR-01, verified at the 390×844 r
 body text stays ≥ 16 px, every contact action is a ≥ 44×44 px tap target, and there is never
 horizontal scrolling at any width (AC-08). If the essentials do not all fit one phone screen the
 Recruiter scrolls vertically; the contact and About flows are identical to desktop (the header
-condenses to name + email/LinkedIn icons + a native-`<details>` menu for Download CV + About). At
-360 px only the no-horizontal-scroll guarantee is binding — optional elements (industries list →
-tagline → top-stack wrap) may drop below the fold in that order (§6).
+condenses to name + email/LinkedIn icons + a native-`<details>` menu for Download CV, the `Contact`
+email item and About). At 360 px the same guarantees hold — reading order, legibility, no
+horizontal scroll — and **nothing is dropped**: the industries list and the tagline still render
+(the drop order was withdrawn with the fold constraint, spec §6).
 
 ### Flow: US-10 — Read a short "about" in Roman's own words
 
 ```mermaid
 flowchart TD
-    A["SCR-01 hero"] -->|"scroll down one screen"| B["SCR-05 About section"]
+    A["SCR-01 hero"] -->|"scroll past the hero"| B["SCR-05 About section"]
     B --> C{"Narrative + highlights: focus and strengths convincing?"}
     C -->|"convinced"| D["Scroll back up to a contact action — Flow US-02"]
     C -->|"not convinced"| E["Leave"]
 ```
 
-One scroll below the fold the Recruiter reaches the About section (SCR-05): a short prose narrative
+Scrolling past the hero, the Recruiter reaches the About section (SCR-05): a short prose narrative
 (reconciled from `docs/reference/linkedin-about.md`) and a highlights bullet list (Roman's own
 text), both rendered straight from the Profile content — no hard-coded copy (AC-14). Both fields
 are build-required; a missing narrative or an empty highlights list fails the build (AC-05, AC-06),
@@ -161,7 +167,8 @@ No interaction — static hero content. When the Profile content carries an `ind
 hero renders it as a short column (right column on the laptop viewport, below the availability
 block on the phone viewport), straight from the content (AC-15). When the field is absent the hero
 renders without that column and the build still succeeds — `industries` is optional and is not an
-above-the-fold essential. No error branch, no Recruiter decision; it is part of the US-01 scan.
+above-the-fold essential. When present it renders at **every width, phone included** — it moves
+under the availability block, never disappears (the drop order was withdrawn 2026-09-22). No error branch, no Recruiter decision; it is part of the US-01 scan.
 
 ## Out of scope
 
@@ -189,8 +196,8 @@ above-the-fold essential. No error branch, no Recruiter decision; it is part of 
 
 | AC | Shown by | Notes |
 |---|---|---|
-| AC-01 | Flow US-01 → SCR-01, decision "twenty-second scan" | The above-the-fold scan itself; three contact actions in the persistent header |
-| AC-02 | Flow US-02 → "Email" branch | Mail client opens addressed to Roman (header email control / mobile icon) |
+| AC-01 | Flow US-01 → SCR-01, decision "twenty-second scan" | The essentials rendered together at the top, in reading order (no single-viewport-height requirement); three contact actions in the persistent header |
+| AC-02 | Flow US-02 → "Email" branch | Mail client opens addressed to Roman (header email control / mobile icon, or the `Contact` item — one Contact action, same channel marker) |
 | AC-03 | — | WITHDRAWN with US-03 (phone removed from v1) |
 | AC-04 | Flow US-05 → "File name" decision; Flow US-02 → "Download CV" | Filename derivation is build-time; the flow shows the download UX. Committed static PDF in v1 (ADR-0008) |
 | AC-05 | — | N/A: build-time gate, no Recruiter-facing screen (see Out of scope, US-08). Now also covers `about.narrative` / `about.highlights` |
@@ -204,3 +211,4 @@ above-the-fold essential. No error branch, no Recruiter decision; it is part of 
 | AC-13 | Flow US-02 → "LinkedIn" and "Download CV" branches | New tab / file download |
 | AC-14 | Flow US-10 → SCR-05 | About renders narrative + highlights from Profile content; reflows to one column on phone |
 | AC-15 | Flow US-11 → SCR-01 | Optional industries list renders from content when present; hero renders without it when absent, build still succeeds |
+| AC-16 | Flow US-10 → SCR-05 (header About control) | Progressive enhancement only (ADR-0009): the About control takes an active state while About is in the 30% / 45% reading band; unavailable ⇒ no active state, nothing else changes. Not a navigation step |
