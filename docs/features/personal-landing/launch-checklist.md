@@ -29,15 +29,20 @@ on both the PR and the deploy path). The rows below are **manual** and a miss
       weight ≤ 500 KB · Accessibility ≥ 95. A miss blocks launch (spec.md §6).
 - [ ] **Manual keyboard pass** — every interactive element reachable and
       operable; visible focus ring; one `<h1>`.
-- [ ] **Responsive check** at 360 / 768 / 1280 / 1920 px — no horizontal scroll;
-      at 360 px the essentials may reflow below the fold, drop order
-      Industries → Tagline → top-stack truncates.
-- [ ] **Above-the-fold fit** at 1280×800 and 390×844 — every AC-01 essential
-      visible without scrolling.
-- [ ] **Page ↔ committed CV parity** (accepted v1 debt, spec.md §7/§8): the live
-      page and `site/public/Roman-Hrupskyi-Senior-Java-Engineer-CV.pdf` agree on
-      surname, headline and dates. Retire this row when the CV is generated from
-      the profile content (roadmap step 4).
+- [ ] **Responsive check** at 360 / 768 / 1280 / 1920 px — no horizontal scroll,
+      text legible, reading order preserved; **nothing is dropped** at any width
+      (the Industries list and the Tagline still render at 360 px — the drop order
+      was withdrawn with the fold constraint, spec.md §6).
+- [ ] **Landing render completeness** at 1280×800 and 390×844 — every AC-01
+      essential rendered, in reading order, body text ≥ 16 px, no horizontal
+      scroll. No essential is required to fall within one viewport height
+      (spec.md §6, 2026-09-22).
+- [ ] **Page ↔ committed CV parity** (accepted v1 debt, spec.md §7/§8): on every
+      push to `master` that touches `site/src/data/profile/*.json` or the committed
+      CV, the live page and `site/public/Roman-Hrupskyi-Senior-Java-Engineer-CV.pdf`
+      agree on **surname, headline, contact email and the "9+ years" claim**
+      (employment dates re-enter with the v2 experience timeline). Retire this row
+      when the CV is generated from the profile content (roadmap step 4).
 
 ## Waivers
 

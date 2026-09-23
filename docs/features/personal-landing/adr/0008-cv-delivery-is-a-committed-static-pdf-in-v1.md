@@ -2,7 +2,7 @@
 status: Accepted
 owner: "Roman (Architect)"
 reviewers: ["Roman"]
-updated_at: "2026-09-07"
+updated_at: "2026-09-22"
 feature_size: "S"
 ticket: "roadmap step 3 — personal-landing"
 ---
@@ -88,6 +88,24 @@ third party's URL and hosting staying stable.
   unaffected; no schema change rides on this decision.
 - No impact on the tracker or on the existence of the `/cv` web route; `cv.astro` remains a
   viewable page.
+
+## Amendment — 2026-09-22 (spec clarify sweep)
+
+The decision is unchanged; two details in the Consequences above are superseded:
+
+- **Which file is committed.** There is exactly one committed CV —
+  `site/public/Roman-Hrupskyi-Senior-Java-Engineer-CV.pdf`, derived from
+  `docs/reference/cv-template-reference.pdf`. The "Classic" variant named above was superseded
+  by the 2026-09-07 template swap and is not the committed file; regenerate from the template
+  reference, not from "Classic".
+- **What the parity check compares, and when.** The v1 page renders no employment date ranges,
+  so the manual check compares **surname, headline, contact email and the "9+ years" claim**
+  (dates re-enter with the v2 experience timeline). It runs on every push to `master` that
+  touches `site/src/data/profile/*.json` or the committed CV — that push is what deploys, so
+  there is no separate release moment (spec §7 / §8, `launch-checklist.md`).
+- The scope wording "above-the-fold scan only" in Context / Options reflects the 2026-09-07
+  framing; the fold has since stopped being a layout gate (spec §1 / §6). It does not affect
+  this decision.
 
 ## Links
 
