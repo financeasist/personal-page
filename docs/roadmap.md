@@ -5,6 +5,8 @@ updated_at: "2026-09-09"
 # 2026-09-06: steps 5/6/7 (tracking-system) spec'd as one bundled M feature; D6 resolved.
 # 2026-09-08: mirrored to GitHub issues (financeasist/personal-page #6–#17); step/decision rows carry their issue link.
 # 2026-09-09: added steps 10 (recruiter-gated CV download, fog) and 11 (recommendations/testimonial section, S) — both backlog, next-version, not yet specified.
+# 2026-09-09: interview resolved step 10's mechanism (idea-brief.md §6/§8) — verification data source (scrape-then-API fallback), agency handling (one unified company field), check-failure handling (honest email fallback), and delivery (native no-JS form + tracker HTML response, not a JS async form) all decided; still fog-sized pending classify-size + a scraping feasibility spike.
+# 2026-09-09: added step 12 (synced popup-style gate response, fog) — a parked v2 idea for step 10's response page, blocked on finding a site/tracker content-sync mechanism that doesn't break "single source of truth" / "no direct code sharing".
 ---
 
 # Roadmap — personal-landing
@@ -37,15 +39,17 @@ A recruiter opens one link, judges Roman's fit in ~20 seconds, taps to call / em
 | 7 | View notification — Telegram "page viewed" message to Roman on every visit; a labelled visit names the recruiter, an unlabelled one carries city / referrer → [`docs/features/tracking-system/spec.md`](features/tracking-system/spec.md) | `idea-brief.md §7 Recommendation` + `architecture-map.md §Stack` (Notifications) | S | **spec'd** | [#12](https://github.com/financeasist/personal-page/issues/12) |
 | 8 | Site → tracker wiring — the inline `<script>` that beacons page-view + contact-click + `cv_download` to `/e`; the CV download proceeds regardless of the beacon (fire-and-forget) | `architecture-map.md §Frontend / UI foundation` (State / data-fetching) + `idea-brief.md §7 Recommendation` | S | idea | [#13](https://github.com/financeasist/personal-page/issues/13) |
 | 9 | Per-recruiter "why I fit you" intro → see [Not yet specified](#not-yet-specified) | `idea-brief.md §6 Risks` | fog | idea | [#14](https://github.com/financeasist/personal-page/issues/14) |
-| 10 | Recruiter-gated CV download — the Download-CV contact action becomes visible/available only to recruiters arriving via a Labelled link; anonymous visitors get some other (undecided) state → see [Not yet specified](#not-yet-specified) | `idea-brief.md §8 Open questions` | fog | idea | [#20](https://github.com/financeasist/personal-page/issues/20) |
+| 10 | Recruiter-gated CV download — visitors arriving via a Labelled link download unconditionally; anonymous visitors submit which company's role they're being considered for, the backend verifies it (scrape the company's careers page, fall back to a job-board API), and either the download proceeds, a "no matching role, reach out instead" message shows, or — if verification itself fails — an honest "couldn't verify automatically, leave your email" fallback → [`idea-brief.md §6/§8`](idea-brief.md) | `idea-brief.md §8 Open questions` | fog | idea | [#20](https://github.com/financeasist/personal-page/issues/20) |
 | 11 | Recommendations / testimonial section — below-the-fold quote/testimonial block on the landing page, deferred from step 3; additive to the `profile` schema, no quote material exists yet | `idea-brief.md §7 Recommendation` + `docs/features/personal-landing/spec.md` | S | idea | [#21](https://github.com/financeasist/personal-page/issues/21) |
+| 12 | Synced popup-style gate response — replace step 10's plain "back to home" reload with a CSS-only (`:target`, no JS) modal pre-opened over a tracker-rendered clone of the landing page, so closing it needs no reload → see [Not yet specified](#not-yet-specified) | `idea-brief.md §6 Risks` | fog | idea | — |
 
 ## Not yet specified
 
 | Area | What we'd have to learn | Blocks | How it gets sharpened |
 |---|---|:---:|---|
 | Per-recruiter "why I fit you" intro | Whether the intro is URL-param driven or tied to the `recruiter_link` label; whether its text lives in the content collection, in the tracker, or in the link query string; how it renders without flashing default content on a static page; whether it is even in v1 at all | 9 | A conversation with Roman, then a recon pass once the shape is chosen |
-| Recruiter-gated CV download | How the label reaches a statically-built page view (query param on the redirect? a sanctioned client-script exception? something else); whether it's all-or-nothing or a "locked" state shown to anonymous visitors; whether gating survives contact with the "zero client JS by default" constraint at all | 10 | A conversation with Roman on the mechanism, then a recon pass once the shape is chosen |
+| Synced popup-style gate response | A mechanism to keep a tracker-rendered clone of the landing page in sync with the real Astro-built one, without violating "content is the single source of truth" or "no direct code sharing between site and tracker" (`CLAUDE.md`) — e.g. a build step that exports a shareable fragment/design tokens, or some other approach nobody's proposed yet. Explicitly parked behind step 10 (idea-brief.md, 2026-09-09): Roman likes the idea but only once syncing is solved. | 12 | Find a sync mechanism first (open-ended); a recon pass once one exists |
+| Recruiter-gated CV download | **Resolved 2026-09-09 (idea-brief.md §6/§8):** labelled-link visitors bypass the gate unconditionally. Anonymous visitors fill one field — "which company's role are you presenting me for" (same field for in-house and agency recruiters, no agency detection branch) — submitted via a native HTML form (no client JS) straight to the tracker; the tracker scrapes that company's careers page server-side, falling back to a job-board aggregator API if inconclusive, then responds with a redirect to the CV (match), an HTML "reach out via LinkedIn/message instead" page (confirmed non-match), or an HTML "couldn't verify automatically, leave your email" page (verification failure, not folded into either match/non-match). Zero-client-JS posture confirmed compatible — chosen specifically over a JS async form because scripts can be blocked on a locked-down corporate recruiter laptop. Still open: real-world scrape hit-rate is unvalidated (a spike may show the email fallback carries most traffic), and the tracker gains a new HTML-response interaction shape alongside its existing JSON API — a `design`-level detail. | 10 | Ready for `classify-size` + `specify`; the scraping feasibility spike is the remaining risk to carry into that pass |
 
 ## Out of scope
 
@@ -95,6 +99,7 @@ flowchart LR
   s8["8 · site → tracker wiring"]
   s10["10 · gated CV download"]
   s11["11 · recommendations section"]
+  s12["12 · synced popup gate response"]
 
   s1 -->|"content collection + Zod schema must exist"| s2
   s1 -->|"Astro site skeleton must exist"| s3
@@ -110,6 +115,7 @@ flowchart LR
   s6 -->|"the /e endpoint must exist to beacon to"| s8
   s5 -->|"gating needs a labelled-visit signal to gate against"| s10
   s3 -->|"extends the already-shipped landing page"| s11
+  s10 -->|"replaces step 10's plain reload response, once syncing is solved"| s12
 ```
 
 ## Execution path
